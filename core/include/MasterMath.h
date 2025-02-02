@@ -22,14 +22,21 @@
 * SOFTWARE.
 */
 
+#ifndef MASTER_MATH_H
+#define MASTER_MATH_H
 
-#include "pch.h"
+#include <chrono>
 
-#include <locale>
-
-int main(int, char const**)
+namespace MasterMath
 {
-    std::locale::global(std::locale(""));
-
-    return 0;
+    class MasterMath final
+    {
+    public:
+        MasterMath(std::chrono::seconds timer);
+        ~MasterMath() = default;
+    private:
+        std::chrono::seconds m_timer;
+    };
 }
+
+#endif

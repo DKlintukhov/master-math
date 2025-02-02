@@ -21,3 +21,18 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
+
+
+#include "pch.h"
+
+#include "Operand.h"
+
+namespace MasterMath
+{
+    Constant::Constant(double value) : m_value{ value } {}
+
+    double Constant::GetValue() const noexcept
+    {
+        return m_value;
+    }
+}

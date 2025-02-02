@@ -34,12 +34,10 @@ target_link_libraries(${PACKAGE}
 target_include_directories(${PACKAGE}
     PRIVATE
         ${CMAKE_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/include
 )
 
-target_precompile_headers(${PACKAGE} 
-    PRIVATE
-        MasterMath.h
-)
+target_precompile_headers(${PACKAGE} PRIVATE pch.h)
 
 if (ENABLE_TESTS)
     enable_testing()

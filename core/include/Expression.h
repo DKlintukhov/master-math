@@ -23,13 +23,47 @@
 */
 
 
-#include "pch.h"
+#ifndef EXPRESSION_H
+#define EXPRESSION_H
 
-#include <locale>
+#include "Operand.h"
+#include "Answer.h"
 
-int main(int, char const**)
+namespace MasterMath
 {
-    std::locale::global(std::locale(""));
+    enum class Operator
+    {
+        Add,
+        Sub,
+        Div,
+        Mul
+    };
 
-    return 0;
+    class IExpression
+    {
+    public:
+        virtual bool CheckAnswer() const noexcept = 0;
+        virtual double GetAnswer() const noexcept = 0;
+        virtual void Solve() noexcept(false) = 0;
+        virtual ~IExpression() = default;
+    };
+
+    class SimpleExpression : public IExpression
+    {
+    public:
+        SimpleExpression(Constant a, Operator op, Constant b);
+
+        bool CheckAnswer() const noexcept override;
+        void Solve() noexcept(false) override;
+        double GetAnswer() const noexcept override;
+
+    private:
+        Constant m_a;
+        Operator m_op;
+        Constant m_b;
+        double m_answer;
+    };
 }
+
+
+#endif 
