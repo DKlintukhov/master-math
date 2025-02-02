@@ -25,11 +25,9 @@
 
 #include "pch.h"
 
-#include <locale>
+#include "MasterMath.h"
 
-int main(int, char const**)
+namespace MasterMath
 {
-    std::locale::global(std::locale(""));
-
-    return 0;
+    MasterMath::MasterMath(std::chrono::seconds timer) : m_timer{ timer } {}
 }

@@ -23,13 +23,27 @@
 */
 
 
-#include "pch.h"
+#ifndef OPERAND_H
+#define OPERAND_H
 
-#include <locale>
-
-int main(int, char const**)
+namespace MasterMath
 {
-    std::locale::global(std::locale(""));
+    class IOperand
+    {
+    public:
+        virtual double GetValue() const noexcept = 0;
+        virtual ~IOperand() = default;
+    };
 
-    return 0;
+    class Constant : public IOperand
+    {
+    public:
+        Constant(double value);
+        double GetValue() const noexcept override;
+
+    private:
+        const double m_value;
+    };
 }
+
+#endif

@@ -23,13 +23,11 @@
 */
 
 
-#include "pch.h"
+#ifndef PCH_H
+#define PCH_H
 
 #include <locale>
+#include <vector>
+#include <chrono>
 
-int main(int, char const**)
-{
-    std::locale::global(std::locale(""));
-
-    return 0;
-}
+#endif

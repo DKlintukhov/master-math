@@ -23,13 +23,23 @@
 */
 
 
-#include "pch.h"
+#ifndef ANSWER_H
+#define ANSWER_H
 
-#include <locale>
+#include "Operand.h"
 
-int main(int, char const**)
+namespace MasterMath
 {
-    std::locale::global(std::locale(""));
+    class IAnswer
+    {
+    public:
+        virtual ~IAnswer() = default;
+    };
 
-    return 0;
+    struct SimpleExpressionAnswer : IAnswer
+    {
+        double value;
+    };
 }
+
+#endif

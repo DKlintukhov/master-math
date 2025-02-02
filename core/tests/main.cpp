@@ -26,7 +26,14 @@
 #define BOOST_TEST_MODULE MasterMathTests
 #include <boost/test/included/unit_test.hpp>
 
+#include "Expression.h"
+
+using namespace MasterMath;
+
 BOOST_AUTO_TEST_CASE(SimpleTest)
 {
-    BOOST_ASSERT(1 == 1);
+    SimpleExpression expr(3.4, Operator::Add, 3.6);
+    expr.Solve();
+
+    BOOST_CHECK_EQUAL(expr.GetAnswer(), 7.0);
 }

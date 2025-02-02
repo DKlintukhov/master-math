@@ -25,11 +25,30 @@
 
 #include "pch.h"
 
-#include <locale>
+#include "Expression.h"
 
-int main(int, char const**)
+namespace MasterMath
 {
-    std::locale::global(std::locale(""));
 
-    return 0;
+    SimpleExpression::SimpleExpression(Constant a, Operator op, Constant b)
+        : m_a{ a }
+        , m_op{ op }
+        , m_b{ b }
+    {
+    }
+
+    bool SimpleExpression::CheckAnswer() const noexcept
+    {
+        return true;
+    }
+
+    void SimpleExpression::Solve() noexcept(false)
+    {
+        m_answer = m_a.GetValue() + m_b.GetValue();
+    }
+
+    double SimpleExpression::GetAnswer() const noexcept
+    {
+        return m_answer;
+    }
 }
