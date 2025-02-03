@@ -39,29 +39,30 @@ namespace MasterMath
         Mul
     };
 
+    template <class Answer>
     class IExpression
     {
     public:
-        virtual bool CheckAnswer() const noexcept = 0;
-        virtual double GetAnswer() const noexcept = 0;
+        virtual bool CheckAnswer(Answer answer) const noexcept = 0;
+        virtual Answer GetAnswer() const noexcept = 0;
         virtual void Solve() noexcept(false) = 0;
         virtual ~IExpression() = default;
     };
 
-    class SimpleExpression : public IExpression
+    class SimpleExpression : public IExpression<SimpleExpressionAnswer>
     {
     public:
-        SimpleExpression(Constant a, Operator op, Constant b);
+        SimpleExpression(Constant a, Constant b, Operator op);
 
-        bool CheckAnswer() const noexcept override;
+        bool CheckAnswer(SimpleExpressionAnswer answer) const noexcept override;
         void Solve() noexcept(false) override;
-        double GetAnswer() const noexcept override;
+        SimpleExpressionAnswer GetAnswer() const noexcept override;
 
     private:
         Constant m_a;
-        Operator m_op;
         Constant m_b;
-        double m_answer;
+        Operator m_op;
+        SimpleExpressionAnswer m_answer;
     };
 }
 

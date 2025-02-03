@@ -23,31 +23,40 @@
 */
 
 
-#ifndef ANSWER_H
-#define ANSWER_H
+#define BOOST_TEST_MODULE SimpleExpressionTestsModule
+#include <boost/test/included/unit_test.hpp>
 
-#include <string>
+#include "Expression.h"
+#include <limits>
 
-#include "Operand.h"
+using namespace MasterMath;
 
-namespace MasterMath
+BOOST_AUTO_TEST_CASE(SimpleExpressionTest)
 {
-    class IAnswer
     {
-    public:
-        auto operator<=>(const IAnswer& other) const = default;
-        virtual ~IAnswer() = default;
-    };
-
-    class SimpleExpressionAnswer : public IAnswer
+        SimpleExpression expr(3.4, 3.6, Operator::Add);
+        expr.Solve();
+        BOOST_CHECK(expr.GetAnswer() == SimpleExpressionAnswer(7.0));
+    }
     {
-    public:
-        SimpleExpressionAnswer() = default;
-        SimpleExpressionAnswer(double value);
-        auto operator<=>(const SimpleExpressionAnswer& other) const noexcept;
-    private:
-        double m_value;
-    };
+        SimpleExpression expr(3.4, 3.6, Operator::Sub);
+        expr.Solve();
+        BOOST_CHECK(expr.GetAnswer() == SimpleExpressionAnswer(-0.2));
+    }
+    {
+        SimpleExpression expr(10.0, 2.0, Operator::Div);
+        expr.Solve();
+        BOOST_CHECK(expr.GetAnswer() == SimpleExpressionAnswer(5.0));
+    }
+    {
+        try
+        {
+            SimpleExpression expr(10.0, 0, Operator::Div);
+            expr.Solve();
+        }
+        catch (const std::exception& e)
+        {
+            BOOST_CHECK(e.what() == std::string("Division by 0"));
+        }
+    }
 }
-
-#endif

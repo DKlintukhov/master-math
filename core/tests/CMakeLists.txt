@@ -3,9 +3,8 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 set(PACKAGE MasterMathTests)
 
 add_executable(${PACKAGE} 
-    main.cpp
-    ${CMAKE_SOURCE_DIR}/src/Expression.cpp
-    ${CMAKE_SOURCE_DIR}/src/Operand.cpp
+    SimpleExpressionTests.cpp
+    ${SRC}
 )
 target_include_directories(${PACKAGE}
     PRIVATE

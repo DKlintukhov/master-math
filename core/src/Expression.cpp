@@ -26,28 +26,51 @@
 #include "pch.h"
 
 #include "Expression.h"
-
+#include <iostream>
 namespace MasterMath
 {
 
-    SimpleExpression::SimpleExpression(Constant a, Operator op, Constant b)
+    SimpleExpression::SimpleExpression(Constant a, Constant b, Operator op)
         : m_a{ a }
-        , m_op{ op }
         , m_b{ b }
+        , m_op{ op }
     {
     }
 
-    bool SimpleExpression::CheckAnswer() const noexcept
+    bool SimpleExpression::CheckAnswer(SimpleExpressionAnswer answer) const noexcept
     {
-        return true;
+        return m_answer == answer;
     }
 
     void SimpleExpression::Solve() noexcept(false)
     {
-        m_answer = m_a.GetValue() + m_b.GetValue();
+        switch (m_op)
+        {
+        case Operator::Add:
+            m_answer = m_a.GetValue() + m_b.GetValue();
+            break;
+        case Operator::Sub:
+            m_answer = m_a.GetValue() - m_b.GetValue();
+            break;
+        case Operator::Div:
+        {
+            if (m_b.GetValue() == 0.0)
+            {
+                throw std::runtime_error("Division by 0");
+            }
+
+            m_answer = m_a.GetValue() / m_b.GetValue();
+            break;
+        }
+        case Operator::Mul:
+            m_answer = m_a.GetValue() * m_b.GetValue();
+            break;
+        default:
+            throw std::runtime_error("Unsupported operation");
+        }
     }
 
-    double SimpleExpression::GetAnswer() const noexcept
+    SimpleExpressionAnswer SimpleExpression::GetAnswer() const noexcept
     {
         return m_answer;
     }

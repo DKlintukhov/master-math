@@ -23,17 +23,20 @@
 */
 
 
-#define BOOST_TEST_MODULE MasterMathTests
-#include <boost/test/included/unit_test.hpp>
+#include "pch.h"
 
-#include "Expression.h"
+#include <limits>
+#include "Answer.h"
 
-using namespace MasterMath;
-
-BOOST_AUTO_TEST_CASE(SimpleTest)
+namespace MasterMath
 {
-    SimpleExpression expr(3.4, Operator::Add, 3.6);
-    expr.Solve();
+    SimpleExpressionAnswer::SimpleExpressionAnswer(double value)
+        : m_value{ value }
+    {
+    }
 
-    BOOST_CHECK_EQUAL(expr.GetAnswer(), 7.0);
+    auto SimpleExpressionAnswer::operator<=>(const SimpleExpressionAnswer& other) const noexcept
+    {
+        return std::abs(m_value - other.m_value) < std::numeric_limits<double>::epsilon();
+    }
 }
