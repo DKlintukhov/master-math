@@ -26,7 +26,13 @@ option(ENABLE_TESTS "Enable tests" ON)
 
 find_package(Threads REQUIRED)
 
-add_executable(${PACKAGE} main.cpp)
+set(SRC     
+    ${CMAKE_SOURCE_DIR}/src/Expression.cpp
+    ${CMAKE_SOURCE_DIR}/src/Operand.cpp
+    ${CMAKE_SOURCE_DIR}/src/Answer.cpp
+)
+
+add_executable(${PACKAGE} ${CMAKE_SOURCE_DIR}/main.cpp ${SRC})
 target_link_libraries(${PACKAGE}
     PRIVATE
         Threads::Threads

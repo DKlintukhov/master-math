@@ -29,5 +29,8 @@
 #include <locale>
 #include <vector>
 #include <chrono>
+#include <string>
+#include <exception>
+#include <limits>
 
 #endif
