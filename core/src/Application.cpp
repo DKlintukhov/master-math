@@ -22,21 +22,15 @@
 * SOFTWARE.
 */
 
-#ifndef MASTER_MATH_H
-#define MASTER_MATH_H
 
-#include <chrono>
+#include "pch.h"
+
+#include "Application.h"
 
 namespace MasterMath
 {
-    class MasterMath final
+    Application::Application(Config config)
+        : m_config{ std::move(config) }
     {
-    public:
-        MasterMath(std::chrono::seconds timer);
-        ~MasterMath() = default;
-    private:
-        std::chrono::seconds m_timer;
-    };
+    }
 }
-
-#endif
