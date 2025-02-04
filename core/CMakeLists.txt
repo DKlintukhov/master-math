@@ -18,7 +18,8 @@ set(CMAKE_C_EXTENSIONS OFF)
 project(
     ${PACKAGE}
     VERSION ${VERSION}
-    DESCRIPTION "MasterMath is an intuitive platform designed for math educators to effortlessly create, customize, and assign timed exercises, quizzes, and problem sets."
+    DESCRIPTION "MasterMath is an intuitive platform designed for math educators to 
+        effortlessly create, customize, and assign timed exercises, quizzes, and problem sets."
     LANGUAGES C CXX
 )
 
@@ -32,7 +33,11 @@ set(SRC
     ${CMAKE_SOURCE_DIR}/src/Answer.cpp
 )
 
-add_executable(${PACKAGE} ${CMAKE_SOURCE_DIR}/main.cpp ${SRC})
+add_executable(${PACKAGE} 
+    ${CMAKE_SOURCE_DIR}/main.cpp 
+    ${CMAKE_SOURCE_DIR}/src/Application.cpp 
+    ${SRC}
+)
 target_link_libraries(${PACKAGE}
     PRIVATE
         Threads::Threads

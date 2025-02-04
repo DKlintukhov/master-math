@@ -22,12 +22,36 @@
 * SOFTWARE.
 */
 
+#ifndef MASTER_MATH_H
+#define MASTER_MATH_H
 
-#include "pch.h"
-
-#include "MasterMath.h"
+#include <chrono>
 
 namespace MasterMath
 {
-    MasterMath::MasterMath(std::chrono::seconds timer) : m_timer{ timer } {}
+    enum class ExpressionType
+    {
+        Simple,
+        Any,
+    };
+
+    struct Config
+    {
+        ExpressionType type;
+        int expressionNum;
+        double minVal;
+        double maxVal;
+        std::chrono::seconds timeout;
+    };
+
+    class Application final
+    {
+    public:
+        explicit Application(Config config);
+        ~Application() = default;
+    private:
+        Config m_config;
+    };
 }
+
+#endif
