@@ -8,8 +8,8 @@ add_executable(${PACKAGE}
 )
 target_include_directories(${PACKAGE}
     PRIVATE
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/core
+        ${CMAKE_SOURCE_DIR}/core/include
         ${Boost_INCLUDE_DIR}
 )
 
