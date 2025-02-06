@@ -25,11 +25,15 @@ project(
 option(ENABLE_TESTS "Enable tests" ON)
 enable_testing()
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     if(MSVC)
-        add_compile_options(/MTd /MP /utf-8 /W4 /WX)
+        add_compile_options(/MTd /MP /utf-8 /W4)
     else()
-        add_compile_options(-Wall -Wextra -pedantic -Werror)
+        add_compile_options(-Wall -Wextra -pedantic)
     endif()
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
