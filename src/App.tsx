@@ -1,48 +1,84 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
 
   async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
     setGreetMsg(await invoke("greet", { name }));
   }
 
   return (
     <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
+      <Form
         className="row"
         onSubmit={(e) => {
           e.preventDefault();
           greet();
         }}
       >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
+        <>
+          <Form.Label htmlFor="inputTimeout">Время (мин.)</Form.Label>
+          <Form.Control
+            type="number"
+            id="inputTimeout"
+            onChange={(e) => setName(e.currentTarget.value)}
+            aria-describedby="timeoutHelpBlock"
+          />
+          <Form.Text id="timeoutHelpBlock" muted>
+            Введите время
+          </Form.Text>
+
+          <Form.Label htmlFor="inputTimeout">Минимум</Form.Label>
+          <Form.Control
+            type="number"
+            id="inputMin"
+            onChange={(e) => setName(e.currentTarget.value)}
+            aria-describedby="minHelpBlock"
+          />
+          <Form.Text id="minHelpBlock" muted>
+            Введите мнимальное число
+          </Form.Text>
+
+          <Form.Label htmlFor="inputTimeout">Максимальное</Form.Label>
+          <Form.Control
+            type="number"
+            id="inputMax"
+            onChange={(e) => setName(e.currentTarget.value)}
+            aria-describedby="maxHelpBlock"
+          />
+          <Form.Text id="mmaxHelpBlock" muted>
+            Введите максимальное число
+          </Form.Text>
+
+          <Form.Check
+            type="checkbox"
+            id="default-stacked"
+            label="+"
+          />
+          <Form.Check
+            type="checkbox"
+            id="default-stacked"
+            label="-"
+          />
+          <Form.Check
+            type="checkbox"
+            id="default-stacked"
+            label="*"
+          />
+          <Form.Check
+            type="checkbox"
+            id="default-stacked"
+            label=":"
+          />
+        </>
+        <Button type="submit">Начать</Button>
+      </Form>
       <p>{greetMsg}</p>
     </main>
   );

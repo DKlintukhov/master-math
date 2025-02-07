@@ -12,9 +12,9 @@
   "app": {
     "windows": [
       {
-        "title": "master-math",
-        "width": 800,
-        "height": 600
+        "title": "MM",
+        "width": 1024,
+        "height": 768
       }
     ],
     "security": {
