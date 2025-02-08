@@ -1,8 +1,17 @@
 mod models;
+use models::{ExerciseConfig, Operations, SimpleExpression, Response};
+
 
 #[tauri::command]
-fn start(config: models::ExerciseConfig) -> models::ExerciseConfig {
-    config
+fn start(config: ExerciseConfig) -> Response {
+    Response {
+        expressions: vec![
+            SimpleExpression::new(5.0, 12.0, Operations::Add),
+            SimpleExpression::new(5.0, 12.0, Operations::Sub),
+            SimpleExpression::new(5.0, 12.0, Operations::Div),
+            SimpleExpression::new(5.0, 12.0, Operations::Mul),
+        ],
+    }
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
