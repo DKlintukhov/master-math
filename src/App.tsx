@@ -1,100 +1,38 @@
-import { useState } from 'react';
-import { invoke } from '@tauri-apps/api/core';
-import './App.css';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import {
-  FormControl,
-  OutlinedInput,
-  InputLabel,
-  FormGroup,
-  FormControlLabel,
-  Checkbox
-} from '@mui/material';
-import { ExerciseConfig } from './models';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Container } from '@mui/material';
+import { Exercise, Main, Results } from './pages';
 
-function App() {
-  const [expressions, setExpressions] = useState<{ expressions: ExerciseConfig[] }>({ expressions: [] });
-  const [timeout, setTimeout] = useState(5);
-  const [amount, setAmount] = useState(5);
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(100);
-  const [useAdd, setUseAdd] = useState(true);
-  const [useSub, setUseSub] = useState(true);
-  const [useMul, setUseMul] = useState(false);
-  const [useDiv, setUseDiv] = useState(false);
+export function App() {
+    const navigate = useNavigate();
 
-  async function start() {
-    setExpressions(await invoke('start', {
-      config: {
-        amount,
-        min,
-        max,
-        useAdd,
-        useSub,
-        useMul,
-        useDiv
-      }
-    }));
-  }
+    const exerciseStarted = () => {
+        navigate('/exercise');
+    }
 
-  return (
-    <Container>
-      <Box>
-        <>
-          <FormControl variant='outlined'>
-            <InputLabel htmlFor='timeoutInput'>Время</InputLabel>
-            <OutlinedInput
-              label='Время'
-              id='timeoutInput'
-              defaultValue={timeout}
-              onChange={(e) => setTimeout(Number(e.target.value))}
-            />
-          </FormControl>
+    const exerciseReady = () => {
+        navigate('/results');
+    }
 
-          <FormControl variant='outlined'>
-            <InputLabel htmlFor='amountInput'>Количество примеров</InputLabel>
-            <OutlinedInput
-              label='Количество примеров'
-              id='amountInput'
-              defaultValue={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
-            />
-          </FormControl>
+    const exerciseFinished = () => {
+        navigate('/');
+    }
 
-          <FormControl variant='outlined'>
-            <InputLabel htmlFor='minInput'>Мин. число</InputLabel>
-            <OutlinedInput
-              label='Мин. число'
-              id='minInput'
-              defaultValue={min}
-              onChange={(e) => setMin(Number(e.target.value))}
-            />
-          </FormControl>
+    return (
+        <Container maxWidth='md'
+            style={{
+                height: '100vh',
+                width: '100vw',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflow: 'hidden'
+            }}>
+            <Routes>
+                <Route path='/' element={<Main started={exerciseStarted} />} />
+                <Route path='/exercise' element={<Exercise ready={exerciseReady} />} />
+                <Route path='/results' element={<Results finished={exerciseFinished} />} />
+            </Routes>
+        </Container>
 
-          <FormControl variant='outlined'>
-            <InputLabel htmlFor='maxInput'>Макс. число</InputLabel>
-            <OutlinedInput
-              label='Макс. число'
-              id='maxInput'
-              defaultValue={max}
-              onChange={(e) => setMax(Number(e.target.value))}
-            />
-          </FormControl>
-
-          <FormGroup>
-            <FormControlLabel control={<Checkbox checked={useAdd} onChange={(e) => setUseAdd(Boolean(e.target.value))} />} label='+' />
-            <FormControlLabel control={<Checkbox checked={useSub} onChange={(e) => setUseSub(Boolean(e.target.value))} />} label='-' />
-            <FormControlLabel control={<Checkbox checked={useMul} onChange={(e) => setUseMul(Boolean(e.target.value))} />} label='*' />
-            <FormControlLabel control={<Checkbox checked={useDiv} onChange={(e) => setUseDiv(Boolean(e.target.value))} />} label=':' />
-          </FormGroup>
-        </>
-        <Button variant='outlined' onClick={() => start()}>Начать</Button>
-        <Box>{JSON.stringify(expressions)}</Box>
-      </Box>
-    </Container>
-  );
+    );
 }
-
-export default App;
