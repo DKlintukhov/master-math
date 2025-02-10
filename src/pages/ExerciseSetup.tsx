@@ -9,14 +9,13 @@ import {
     Checkbox,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { SimpleExpression } from "../models";
+import { Operations, OperationSymbols, SimpleExpression } from "../models";
 
 interface Props {
-    started: Function;
+    onStarted: (timeout: number, expressions: SimpleExpression[]) => void;
 }
 
-export function Main({ started }: Props) {
-    const [expressions, setExpressions] = useState<{ expressions: SimpleExpression[] }>({ expressions: [] });
+export function ExerciseSetup({ onStarted }: Props) {
     const [timeout, setTimeout] = useState(5);
     const [amount, setAmount] = useState(15);
     const [min, setMin] = useState(0);
@@ -27,7 +26,7 @@ export function Main({ started }: Props) {
     const [useDiv, setUseDiv] = useState(false);
 
     async function start() {
-        setExpressions(await invoke("start", {
+        const { expressions } = await invoke<{ expressions: SimpleExpression[] }>("start", {
             config: {
                 amount,
                 min,
@@ -37,8 +36,8 @@ export function Main({ started }: Props) {
                 useMul,
                 useDiv
             }
-        }));
-        started();
+        });
+        onStarted(timeout, expressions);
     }
 
     return (
@@ -50,7 +49,7 @@ export function Main({ started }: Props) {
                         label="Время (мин.)"
                         id="timeoutInput"
                         defaultValue={timeout}
-                        onChange={(e) => setTimeout(Number(e.target.value))}
+                        onChange={(e) => setTimeout(Number(e.target.value) * 60000)}
                     />
                 </FormControl>
             </Grid>
@@ -97,16 +96,16 @@ export function Main({ started }: Props) {
             }}>
                 <FormControlLabel control={
                     <Checkbox checked={useAdd} onChange={(e) => setUseAdd(Boolean(e.target.value))} />
-                } label="Сложение +" />
+                } label={"Сложение " + OperationSymbols[Operations.Add]} />
                 <FormControlLabel control={
                     <Checkbox checked={useSub} onChange={(e) => setUseSub(Boolean(e.target.value))} />
-                } label="Вычитание -" />
+                } label={"Вычитание " + OperationSymbols[Operations.Sub]} />
                 <FormControlLabel control={
                     <Checkbox checked={useMul} onChange={(e) => setUseMul(Boolean(e.target.value))} />
-                } label={"Умножение " + "\u00B7"} />
+                } label={"Умножение " + OperationSymbols[Operations.Mul]} />
                 <FormControlLabel control={
                     <Checkbox checked={useDiv} onChange={(e) => setUseDiv(Boolean(e.target.value))} />
-                } label="Деление :" />
+                } label={"Деление " + OperationSymbols[Operations.Div]} />
             </Grid>
 
             <Grid size={12} style={{

@@ -1,19 +1,26 @@
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Container } from '@mui/material';
-import { Exercise, Main, Results } from './pages';
+import { Exercise, ExerciseSetup, Results } from './pages';
+import { useState } from 'react';
+import { SimpleExpression } from './models';
 
 export function App() {
     const navigate = useNavigate();
+    const [expressions, setExpressions] = useState<SimpleExpression[]>([]);
+    const [timeout, setTimeout] = useState<number>(0);
 
-    const exerciseStarted = () => {
+    const exerciseStarted = (timeout: number, expressions: SimpleExpression[]) => {
+        setTimeout(timeout);
+        setExpressions(expressions);
         navigate('/exercise');
     }
 
-    const exerciseReady = () => {
+    const exerciseFinished = (duration: number, answers: number[]) => {
+        console.log(duration, answers);
         navigate('/results');
     }
 
-    const exerciseFinished = () => {
+    const finished = () => {
         navigate('/');
     }
 
@@ -28,9 +35,9 @@ export function App() {
                 overflow: 'hidden'
             }}>
             <Routes>
-                <Route path='/' element={<Main started={exerciseStarted} />} />
-                <Route path='/exercise' element={<Exercise ready={exerciseReady} />} />
-                <Route path='/results' element={<Results finished={exerciseFinished} />} />
+                <Route path='/' element={<ExerciseSetup onStarted={exerciseStarted} />} />
+                <Route path='/exercise' element={<Exercise timeout={timeout} expressions={expressions} onFinished={exerciseFinished} />} />
+                <Route path='/results' element={<Results onFinished={finished} />} />
             </Routes>
         </Container>
 
