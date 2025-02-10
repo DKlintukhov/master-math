@@ -1,11 +1,11 @@
 import { Button } from "@mui/material";
 
 interface Props {
-    finished: Function;
+    onFinished: Function;
 }
 
-export function Results({ finished }: Props) {
+export function Results({ onFinished }: Props) {
     return (
-        <Button onClick={() => finished()}>Финиш</Button>
+        <Button variant="outlined" onClick={() => onFinished()}>Финиш</Button>
     );
 }
