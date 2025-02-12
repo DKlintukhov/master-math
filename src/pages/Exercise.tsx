@@ -21,14 +21,14 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
 
     const startDate = new Date();
 
-    // useEffect(() => {
-    //     const timerId = setTimeout(() => {
-    //         const duration = getDurationInSeconds(startDate);
-    //         onFinished(duration, answers);
-    //     }, timeout * 1000);
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            const duration = getDurationInSeconds(startDate);
+            onFinished(duration, answers);
+        }, timeout * 1000);
 
-    //     return () => clearTimeout(timerId);
-    // }, [timeout, onFinished, answers, startDate]);
+        return () => clearTimeout(timerId);
+    }, [timeout, onFinished]);
 
     const handleAnswerChange = (id: number, answer: number) => {
         setAnswers(prevAnswers => {
