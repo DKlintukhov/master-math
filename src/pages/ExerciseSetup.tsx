@@ -2,18 +2,23 @@ import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import Button from "@mui/material/Button";
 import {
-    FormControl,
-    OutlinedInput,
-    InputLabel,
     FormControlLabel,
     Checkbox,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Operations, OperationSymbols, SimpleExpression } from "../models";
+import { NumericInputControl } from "../components";
 
 interface Props {
     onStarted: (timeout: number, expressions: SimpleExpression[]) => void;
 }
+
+const MIN_VALUE = -10000;
+const MAX_VALUE = 10000;
+const MIN_EPXRESSIONS_AMOUNT = 1;
+const MAX_EPXRESSIONS_AMOUNT = 100;
+const MIN_TIMEOUT = 1;
+const MAX_TIMEOUT = 60;
 
 export function ExerciseSetup({ onStarted }: Props) {
     const [timeout, setTimeout] = useState(5);
@@ -43,51 +48,39 @@ export function ExerciseSetup({ onStarted }: Props) {
     return (
         <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 4 }}>
             <Grid size={6}>
-                <FormControl variant="outlined" fullWidth={true}>
-                    <InputLabel htmlFor="timeoutInput">Время (мин.)</InputLabel>
-                    <OutlinedInput
-                        label="Время (мин.)"
-                        id="timeoutInput"
-                        defaultValue={timeout}
-                        onChange={(e) => setTimeout(Number(e.target.value) * 60000)}
-                    />
-                </FormControl>
+                <NumericInputControl
+                    label="Время (мин.)"
+                    defaultValue={timeout}
+                    min={MIN_TIMEOUT}
+                    max={MAX_TIMEOUT}
+                    onChanged={setTimeout} />
             </Grid>
 
             <Grid size={6}>
-                <FormControl variant="outlined" fullWidth={true}>
-                    <InputLabel htmlFor="amountInput">Количество примеров</InputLabel>
-                    <OutlinedInput
-                        label="Количество примеров"
-                        id="amountInput"
-                        defaultValue={amount}
-                        onChange={(e) => setAmount(Number(e.target.value))}
-                    />
-                </FormControl>
+                <NumericInputControl
+                    label="Количество примеров"
+                    defaultValue={amount}
+                    min={MIN_EPXRESSIONS_AMOUNT}
+                    max={MAX_EPXRESSIONS_AMOUNT}
+                    onChanged={setAmount} />
             </Grid>
 
             <Grid size={6}>
-                <FormControl variant="outlined" fullWidth={true}>
-                    <InputLabel htmlFor="minInput">Мин. число</InputLabel>
-                    <OutlinedInput
-                        label="Мин. число"
-                        id="minInput"
-                        defaultValue={min}
-                        onChange={(e) => setMin(Number(e.target.value))}
-                    />
-                </FormControl>
+                <NumericInputControl
+                    label="Мин. число"
+                    defaultValue={min}
+                    min={MIN_VALUE}
+                    max={MAX_VALUE}
+                    onChanged={setMin} />
             </Grid>
 
             <Grid size={6}>
-                <FormControl variant="outlined" fullWidth={true}>
-                    <InputLabel htmlFor="maxInput">Макс. число</InputLabel>
-                    <OutlinedInput
-                        label="Макс. число"
-                        id="maxInput"
-                        defaultValue={max}
-                        onChange={(e) => setMax(Number(e.target.value))}
-                    />
-                </FormControl>
+                <NumericInputControl
+                    label="Макс. число"
+                    defaultValue={max}
+                    min={MIN_VALUE}
+                    max={MAX_VALUE}
+                    onChanged={setMax} />
             </Grid>
 
             <Grid size={12} style={{

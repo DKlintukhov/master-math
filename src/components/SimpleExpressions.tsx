@@ -24,4 +24,3 @@ export function SimpleExpressionWithInput({ id, expression, onAnswer }: Props) {
 
     );
 }
-
