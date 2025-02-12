@@ -1,5 +1,5 @@
 import { OutlinedInput } from "@mui/material";
-import { OperationSymbols, SimpleExpression } from "../models";
+import { OperatorsSymbols, SimpleExpression } from "../models";
 
 interface Props {
     id: number;
@@ -8,7 +8,7 @@ interface Props {
 }
 
 function formatExpression(id: number, expression: SimpleExpression): string {
-    const opSymbol = OperationSymbols[expression.op];
+    const opSymbol = OperatorsSymbols[expression.op];
     return `${id + 1}) ${expression.a} ${opSymbol} ${expression.b} = `;
 }
 

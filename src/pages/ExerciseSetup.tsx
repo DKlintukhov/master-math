@@ -1,13 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import Button from "@mui/material/Button";
-import {
-    FormControlLabel,
-    Checkbox,
-} from "@mui/material";
+
 import Grid from "@mui/material/Grid2";
-import { Operations, OperationSymbols, SimpleExpression } from "../models";
-import { NumericInputControl } from "../components";
+import { OperatorsToUse, SimpleExpression } from "../models";
+import { NumericInputControl, OperatorsSelector } from "../components";
 
 interface Props {
     onStarted: (timeout: number, expressions: SimpleExpression[]) => void;
@@ -21,14 +18,13 @@ const MIN_TIMEOUT = 1;
 const MAX_TIMEOUT = 60;
 
 export function ExerciseSetup({ onStarted }: Props) {
+    const [inputsInvalid, setInputsInvalid] = useState(false);
     const [timeout, setTimeout] = useState(5);
     const [amount, setAmount] = useState(15);
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(100);
-    const [useAdd, setUseAdd] = useState(true);
-    const [useSub, setUseSub] = useState(true);
-    const [useMul, setUseMul] = useState(false);
-    const [useDiv, setUseDiv] = useState(false);
+    const [operators, setOperators] = useState<OperatorsToUse>();
+    const [checkOperatorsError, setCheckOperatorsError] = useState<boolean>();
 
     async function start() {
         const { expressions } = await invoke<{ expressions: SimpleExpression[] }>("start", {
@@ -36,14 +32,20 @@ export function ExerciseSetup({ onStarted }: Props) {
                 amount,
                 min,
                 max,
-                useAdd,
-                useSub,
-                useMul,
-                useDiv
+                ...operators
             }
         });
         onStarted(timeout, expressions);
     }
+
+    useEffect(() => {
+        if (checkOperatorsError) {
+            setInputsInvalid(true);
+            return;
+        }
+
+        setInputsInvalid(false);
+    }, [checkOperatorsError]);
 
     return (
         <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 4 }}>
@@ -87,25 +89,14 @@ export function ExerciseSetup({ onStarted }: Props) {
                 display: "flex",
                 justifyContent: "center",
             }}>
-                <FormControlLabel control={
-                    <Checkbox checked={useAdd} onChange={(e) => setUseAdd(Boolean(e.target.value))} />
-                } label={"Сложение " + OperationSymbols[Operations.Add]} />
-                <FormControlLabel control={
-                    <Checkbox checked={useSub} onChange={(e) => setUseSub(Boolean(e.target.value))} />
-                } label={"Вычитание " + OperationSymbols[Operations.Sub]} />
-                <FormControlLabel control={
-                    <Checkbox checked={useMul} onChange={(e) => setUseMul(Boolean(e.target.value))} />
-                } label={"Умножение " + OperationSymbols[Operations.Mul]} />
-                <FormControlLabel control={
-                    <Checkbox checked={useDiv} onChange={(e) => setUseDiv(Boolean(e.target.value))} />
-                } label={"Деление " + OperationSymbols[Operations.Div]} />
+                <OperatorsSelector onChecked={setOperators} onError={setCheckOperatorsError} />
             </Grid>
 
             <Grid size={12} style={{
                 display: "flex",
                 justifyContent: "center",
             }}>
-                <Button variant="outlined" onClick={() => start()}>Начать</Button>
+                <Button disabled={inputsInvalid} variant="outlined" onClick={() => start()}>Начать</Button>
             </Grid>
         </Grid>
     );

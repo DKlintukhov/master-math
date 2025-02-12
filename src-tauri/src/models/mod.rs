@@ -11,7 +11,7 @@ pub struct ExerciseConfig {
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
-pub enum Operations {
+pub enum Operators {
     Add,
     Sub,
     Mul,
@@ -26,16 +26,16 @@ trait Expression {
 pub struct SimpleExpression {
     a: f32,
     b: f32,
-    op: Operations,
+    op: Operators,
 }
 
 impl Expression for SimpleExpression {
     fn solve(&self) -> Result<f32, &'static str> {
         match self.op {
-            Operations::Add => Ok(self.a + self.b),
-            Operations::Sub => Ok(self.a - self.b),
-            Operations::Mul => Ok(self.a * self.b),
-            Operations::Div => {
+            Operators::Add => Ok(self.a + self.b),
+            Operators::Sub => Ok(self.a - self.b),
+            Operators::Mul => Ok(self.a * self.b),
+            Operators::Div => {
                 if self.b == 0.0 {
                     return Err("Division by `0`");
                 }
@@ -47,7 +47,7 @@ impl Expression for SimpleExpression {
 }
 
 impl SimpleExpression {
-    pub fn new(a: f32, b: f32, op: Operations) -> Self {
+    pub fn new(a: f32, b: f32, op: Operators) -> Self {
         Self { a, b, op }
     }
 }
@@ -65,27 +65,27 @@ mod tests {
     #[test]
     fn test_simple_expression() {
         {
-            let se = SimpleExpression::new(5.0, 10.0, Operations::Add);
+            let se = SimpleExpression::new(5.0, 10.0, Operators::Add);
             let res = se.solve().unwrap();
             assert_eq!(res, 15.0);
         }
         {
-            let se = SimpleExpression::new(5.0, 10.0, Operations::Sub);
+            let se = SimpleExpression::new(5.0, 10.0, Operators::Sub);
             let res = se.solve().unwrap();
             assert_eq!(res, -5.0);
         }
         {
-            let se = SimpleExpression::new(5.0, 10.0, Operations::Mul);
+            let se = SimpleExpression::new(5.0, 10.0, Operators::Mul);
             let res = se.solve().unwrap();
             assert_eq!(res, 50.0);
         }
         {
-            let se = SimpleExpression::new(4.0, 2.0, Operations::Div);
+            let se = SimpleExpression::new(4.0, 2.0, Operators::Div);
             let res = se.solve().unwrap();
             assert_eq!(res, 2.0);
         }
         {
-            let se = SimpleExpression::new(4.0, 0.0, Operations::Div);
+            let se = SimpleExpression::new(4.0, 0.0, Operators::Div);
             let res = se.solve();
             assert_eq!(res.unwrap_err(), String::from("Division by `0`"));
         }
