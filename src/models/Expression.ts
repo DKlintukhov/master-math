@@ -1,19 +1,26 @@
-export enum Operations {
+export enum Operators {
     Add = "Add",
     Sub = "Sub",
     Mul = "Mul",
     Div = "Div",
 }
 
-export const OperationSymbols: { [key in Operations]: string } = {
-    [Operations.Add]: "+",
-    [Operations.Sub]: "-",
-    [Operations.Mul]: "\u00B7", // Multiplication dot symbol
-    [Operations.Div]: ":",
+export const OperatorsSymbols: { [key in Operators]: string } = {
+    [Operators.Add]: "+",
+    [Operators.Sub]: "-",
+    [Operators.Mul]: "\u00D7", // Multiplication x symbol
+    [Operators.Div]: ":",
 };
+
+export interface OperatorsToUse {
+    useAdd: boolean;
+    useSub: boolean;
+    useMul: boolean;
+    useDiv: boolean;
+}
 
 export interface SimpleExpression {
     a: number;
     b: number;
-    op: Operations;
+    op: Operators;
 }

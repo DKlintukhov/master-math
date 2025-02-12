@@ -11,7 +11,7 @@ interface Props {
 
 export function NumericInputControl({ label, defaultValue, min, max, onChanged }: Props) {
     const [input, setInput] = useState(defaultValue);
-    const [error, setError] = useState(false);
+    const [isError, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
@@ -32,14 +32,14 @@ export function NumericInputControl({ label, defaultValue, min, max, onChanged }
             <FormControl variant="outlined" fullWidth={true}>
                 <InputLabel>{label}</InputLabel>
                 <OutlinedInput
-                    error={error}
+                    error={isError}
                     label={label}
                     required
                     type="number"
                     defaultValue={input}
                     onChange={(e) => setInput(Number(e.target.value))}
                 />
-                {error && <FormHelperText>{errorMessage}</FormHelperText>}
+                {isError && <FormHelperText>{errorMessage}</FormHelperText>}
             </FormControl>
         </>
     );

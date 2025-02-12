@@ -1,15 +1,15 @@
 mod models;
-use models::{ExerciseConfig, Operations, SimpleExpression, Response};
+use models::{ExerciseConfig, Operators, SimpleExpression, Response};
 
 
 #[tauri::command]
 fn start(config: ExerciseConfig) -> Response {
     Response {
         expressions: vec![
-            SimpleExpression::new(5.0, 12.0, Operations::Add),
-            SimpleExpression::new(5.0, 12.0, Operations::Sub),
-            SimpleExpression::new(5.0, 12.0, Operations::Div),
-            SimpleExpression::new(5.0, 12.0, Operations::Mul),
+            SimpleExpression::new(5.0, 12.0, Operators::Add),
+            SimpleExpression::new(5.0, 12.0, Operators::Sub),
+            SimpleExpression::new(5.0, 12.0, Operators::Div),
+            SimpleExpression::new(5.0, 12.0, Operators::Mul),
         ],
     }
 }
