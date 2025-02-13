@@ -1,7 +1,6 @@
-import { Button } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Button, Container } from "@mui/material";
 import { SimpleExpression } from "../models";
-import { SimpleExpressionWithInput } from "../components";
+import { SimpleExpressionWithInput, CountdownTimer } from "../components";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -25,7 +24,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
         const timerId = setTimeout(() => {
             const duration = getDurationInSeconds(startDate);
             onFinished(duration, answers);
-        }, timeout * 1000);
+        }, timeout * 60 * 1000);
 
         return () => clearTimeout(timerId);
     }, [timeout, onFinished]);
@@ -39,25 +38,35 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
     };
 
     return (
-        <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 4 }}>
-            {expressions.map((expression, id) => (
-                <Grid key={id} size={6}>
+        <Container style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            height: "100vh"
+        }}>
+            <CountdownTimer timeout={timeout} onExpired={() => onFinished(getDurationInSeconds(startDate), answers)} />
+
+            <Container style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                flexWrap: "wrap",
+            }}>
+                {expressions.map((expression, id) => (
                     <SimpleExpressionWithInput
+                        key={id}
                         id={id}
                         expression={expression}
                         onAnswer={(answer) => handleAnswerChange(id, answer)}
                     />
-                </Grid>
-            ))}
-            <Grid size={12} style={{
-                display: "flex",
-                justifyContent: "center",
-            }}>
-                <Button variant="outlined" onClick={() => {
-                    const duration = getDurationInSeconds(startDate);
-                    onFinished(duration, answers);
-                }}>Готово</Button>
-            </Grid>
-        </Grid>
+                ))}
+            </Container>
+
+            <Button variant="outlined" onClick={() => {
+                const duration = getDurationInSeconds(startDate);
+                onFinished(duration, answers);
+            }}>Готово</Button>
+        </Container>
     );
 }

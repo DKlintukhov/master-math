@@ -15,12 +15,12 @@ function formatExpression(id: number, expression: SimpleExpression): string {
 export function SimpleExpressionWithInput({ id, expression, onAnswer }: Props) {
     const formattedExpression = formatExpression(id, expression);
     return (
-        <>
+        <div>
             <span>{formattedExpression}</span>
             <OutlinedInput
                 onChange={(e) => onAnswer(Number(e.target.value))}
             />
-        </>
+        </div>
 
     );
 }
