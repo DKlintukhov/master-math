@@ -37,7 +37,7 @@ export function CountdownTimer({ timeout, onExpired }: Props) {
     };
 
     return (
-        <Typography variant="h6">
+        <Typography variant="h3" color="primary">
             {formatTime(seconds)}
         </Typography>
     );

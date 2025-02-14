@@ -1,5 +1,6 @@
 import { Button, Container } from "@mui/material";
 import { SimpleExpression } from "../models";
+import Grid from "@mui/material/Grid2";
 import { SimpleExpressionWithInput, CountdownTimer } from "../components";
 import { useEffect, useState } from "react";
 
@@ -47,12 +48,17 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
         }}>
             <CountdownTimer timeout={timeout} onExpired={() => onFinished(getDurationInSeconds(startDate), answers)} />
 
-            <Container style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                flexWrap: "wrap",
-            }}>
+            <Grid container
+                style={{
+                    overflow: "hidden auto",
+                    maxHeight: "70%",
+                    minHeight: "15%",
+                }}
+                rowSpacing={2}
+                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                columns={{ xs: 1, sm: 2, md: 3 }}
+                gridAutoFlow="column"
+            >
                 {expressions.map((expression, id) => (
                     <SimpleExpressionWithInput
                         key={id}
@@ -61,12 +67,12 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
                         onAnswer={(answer) => handleAnswerChange(id, answer)}
                     />
                 ))}
-            </Container>
+            </Grid>
 
             <Button variant="outlined" onClick={() => {
                 const duration = getDurationInSeconds(startDate);
                 onFinished(duration, answers);
             }}>Готово</Button>
-        </Container>
+        </Container >
     );
 }
