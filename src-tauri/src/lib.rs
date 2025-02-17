@@ -1,67 +1,107 @@
 mod models;
-use models::{ExerciseConfig, Operators, SimpleExpression, Response};
-
+use models::{ExerciseConfig, Expression, Operation, Response};
 
 #[tauri::command]
 fn start(config: ExerciseConfig) -> Response {
     Response {
         expressions: vec![
-            SimpleExpression::new(500.0, 1244.0, Operators::Add),
-            SimpleExpression::new(511.0, 12222.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(5.0, 12.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(5.0, 12.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(5.0, 12.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(5.0, 12.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(5.0, 12.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(522.0, 121.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(500.0, 1244.0, Operators::Add),
-            SimpleExpression::new(511.0, 12222.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(5.0, 12.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(5.0, 12.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(5.0, 12.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(5.0, 12.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(5.0, 12.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
-            SimpleExpression::new(5.0, 12.0, Operators::Add),
-            SimpleExpression::new(522.0, 121.0, Operators::Sub),
-            SimpleExpression::new(5.0, 12.0, Operators::Div),
-            SimpleExpression::new(5.0, 12.0, Operators::Mul),
+            Expression::Binary(
+                Operation::Div,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Number(0.0)),
+            ),
+            Expression::Binary(
+                Operation::Add,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Binary(
+                    Operation::Mul,
+                    Box::new(Expression::Number(2.0)),
+                    Box::new(Expression::Number(3.0)),
+                )),
+            ),
+            Expression::Binary(
+                Operation::Div,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Number(0.0)),
+            ),
+            Expression::Binary(
+                Operation::Div,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Number(0.0)),
+            ),
+            Expression::Binary(
+                Operation::Div,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Number(0.0)),
+            ),
+            Expression::Binary(
+                Operation::Div,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Number(0.0)),
+            ),
+            Expression::Binary(
+                Operation::Add,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Binary(
+                    Operation::Mul,
+                    Box::new(Expression::Number(2.0)),
+                    Box::new(Expression::Number(3.0)),
+                )),
+            ),
+            Expression::Binary(
+                Operation::Add,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Binary(
+                    Operation::Mul,
+                    Box::new(Expression::Number(2.0)),
+                    Box::new(Expression::Number(3.0)),
+                )),
+            ),
+            Expression::Binary(
+                Operation::Add,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Binary(
+                    Operation::Mul,
+                    Box::new(Expression::Number(2.0)),
+                    Box::new(Expression::Number(3.0)),
+                )),
+            ),
+            Expression::Binary(
+                Operation::Add,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Binary(
+                    Operation::Mul,
+                    Box::new(Expression::Number(2.0)),
+                    Box::new(Expression::Number(3.0)),
+                )),
+            ),
+            Expression::Binary(
+                Operation::Add,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Binary(
+                    Operation::Mul,
+                    Box::new(Expression::Number(2.0)),
+                    Box::new(Expression::Number(3.0)),
+                )),
+            ),
+            Expression::Binary(
+                Operation::Add,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Binary(
+                    Operation::Mul,
+                    Box::new(Expression::Number(2.0)),
+                    Box::new(Expression::Number(3.0)),
+                )),
+            ),
+            Expression::Binary(
+                Operation::Add,
+                Box::new(Expression::Number(5.0)),
+                Box::new(Expression::Binary(
+                    Operation::Mul,
+                    Box::new(Expression::Number(2.0)),
+                    Box::new(Expression::Number(3.0)),
+                )),
+            ),
         ],
     }
 }

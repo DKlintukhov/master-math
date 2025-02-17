@@ -1,9 +1,9 @@
 import { Checkbox, Container, FormControlLabel, FormHelperText } from "@mui/material";
-import { Operators, OperatorsSymbols, OperatorsToUse, } from "../models";
+import { Operation, OperationToUse, OperationSymbols, } from "../models";
 import { useEffect, useState } from "react";
 
 interface Props {
-    onChecked: (ops: OperatorsToUse) => void;
+    onChecked: (ops: OperationToUse) => void;
     onError: (iisError: boolean) => void;
 }
 
@@ -38,16 +38,16 @@ export function OperatorsSelector({ onChecked, onError }: Props) {
             <div>
                 <FormControlLabel control={
                     <Checkbox checked={useAdd} onChange={(e) => setUseAdd(Boolean(e.target.checked))} />
-                } label={"Сложение " + OperatorsSymbols[Operators.Add]} />
+                } label={"Сложение " + OperationSymbols[Operation.Add]} />
                 <FormControlLabel control={
                     <Checkbox checked={useSub} onChange={(e) => setUseSub(Boolean(e.target.checked))} />
-                } label={"Вычитание " + OperatorsSymbols[Operators.Sub]} />
+                } label={"Вычитание " + OperationSymbols[Operation.Sub]} />
                 <FormControlLabel control={
                     <Checkbox checked={useMul} onChange={(e) => setUseMul(Boolean(e.target.checked))} />
-                } label={"Умножение " + OperatorsSymbols[Operators.Mul]} />
+                } label={"Умножение " + OperationSymbols[Operation.Mul]} />
                 <FormControlLabel control={
                     <Checkbox checked={useDiv} onChange={(e) => setUseDiv(Boolean(e.target.checked))} />
-                } label={"Деление " + OperatorsSymbols[Operators.Div]} />
+                } label={"Деление " + OperationSymbols[Operation.Div]} />
             </div>
             {isError && <FormHelperText error={true}>{errorMessage}</FormHelperText>}
         </Container>
