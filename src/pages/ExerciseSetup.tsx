@@ -3,11 +3,11 @@ import { invoke } from "@tauri-apps/api/core";
 import Button from "@mui/material/Button";
 
 import Grid from "@mui/material/Grid2";
-import { OperatorsToUse, SimpleExpression } from "../models";
+import { OperationToUse, Expression, mapExpression, ExpressionDTO } from "../models";
 import { NumericInputControl, OperatorsSelector } from "../components";
 
 interface Props {
-    onStarted: (timeout: number, expressions: SimpleExpression[]) => void;
+    onStarted: (timeout: number, expressions: Expression[]) => void;
 }
 
 const MIN_VALUE = -10000;
@@ -23,11 +23,11 @@ export function ExerciseSetup({ onStarted }: Props) {
     const [amount, setAmount] = useState(15);
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(100);
-    const [operators, setOperators] = useState<OperatorsToUse>();
+    const [operators, setOperators] = useState<OperationToUse>();
     const [checkOperatorsError, setCheckOperatorsError] = useState<boolean>();
 
     async function start() {
-        const { expressions } = await invoke<{ expressions: SimpleExpression[] }>("start", {
+        const { expressions } = await invoke<{ expressions: ExpressionDTO[] }>("start", {
             config: {
                 amount,
                 min,
@@ -35,7 +35,7 @@ export function ExerciseSetup({ onStarted }: Props) {
                 ...operators
             }
         });
-        onStarted(timeout, expressions);
+        onStarted(timeout, expressions.map(mapExpression));
     }
 
     useEffect(() => {

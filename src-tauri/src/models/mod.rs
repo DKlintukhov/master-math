@@ -11,51 +11,46 @@ pub struct ExerciseConfig {
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
-pub enum Operators {
+pub enum Operation {
     Add,
     Sub,
     Mul,
     Div,
 }
 
-trait Expression {
-    fn solve(&self) -> Result<f32, &'static str>;
-}
-
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
-pub struct SimpleExpression {
-    a: f32,
-    b: f32,
-    op: Operators,
+pub enum Expression {
+    Number(f32),
+    Binary(Operation, Box<Expression>, Box<Expression>),
 }
 
-impl Expression for SimpleExpression {
-    fn solve(&self) -> Result<f32, &'static str> {
-        match self.op {
-            Operators::Add => Ok(self.a + self.b),
-            Operators::Sub => Ok(self.a - self.b),
-            Operators::Mul => Ok(self.a * self.b),
-            Operators::Div => {
-                if self.b == 0.0 {
-                    return Err("Division by `0`");
+impl Expression {
+    pub fn evaluate(&self) -> Result<f32, &'static str> {
+        match self {
+            Expression::Number(n) => Ok(*n),
+            Expression::Binary(op, left, right) => {
+                let left_val = left.evaluate()?;
+                let right_val = right.evaluate()?;
+                match op {
+                    Operation::Add => Ok(left_val + right_val),
+                    Operation::Sub => Ok(left_val - right_val),
+                    Operation::Mul => Ok(left_val * right_val),
+                    Operation::Div => {
+                        if right_val == 0.0 {
+                            return Err("Division by `0`");
+                        }
+                        Ok(left_val / right_val)
+                    }
                 }
-
-                Ok(self.a / self.b)
             }
         }
-    }
-}
-
-impl SimpleExpression {
-    pub fn new(a: f32, b: f32, op: Operators) -> Self {
-        Self { a, b, op }
     }
 }
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Response {
-    pub expressions: Vec<SimpleExpression>,
+    pub expressions: Vec<Expression>,
 }
 
 #[cfg(test)]
@@ -63,31 +58,44 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_simple_expression() {
-        {
-            let se = SimpleExpression::new(5.0, 10.0, Operators::Add);
-            let res = se.solve().unwrap();
-            assert_eq!(res, 15.0);
-        }
-        {
-            let se = SimpleExpression::new(5.0, 10.0, Operators::Sub);
-            let res = se.solve().unwrap();
-            assert_eq!(res, -5.0);
-        }
-        {
-            let se = SimpleExpression::new(5.0, 10.0, Operators::Mul);
-            let res = se.solve().unwrap();
-            assert_eq!(res, 50.0);
-        }
-        {
-            let se = SimpleExpression::new(4.0, 2.0, Operators::Div);
-            let res = se.solve().unwrap();
-            assert_eq!(res, 2.0);
-        }
-        {
-            let se = SimpleExpression::new(4.0, 0.0, Operators::Div);
-            let res = se.solve();
-            assert_eq!(res.unwrap_err(), String::from("Division by `0`"));
-        }
+    fn test_devision_by_zero() {
+        let expression = Expression::Binary(
+            Operation::Div,
+            Box::new(Expression::Number(5.0)),
+            Box::new(Expression::Number(0.0)),
+        );
+        assert_eq!(expression.evaluate(), Err("Division by `0`"));
+    }
+
+    #[test]
+    fn test_add_and_mul() {
+        let expression = Expression::Binary(
+            Operation::Add,
+            Box::new(Expression::Number(5.0)),
+            Box::new(Expression::Binary(
+                Operation::Mul,
+                Box::new(Expression::Number(2.0)),
+                Box::new(Expression::Number(3.0)),
+            )),
+        );
+
+        let res = expression.evaluate().unwrap();
+        assert_eq!(res, 11.0);
+    }
+
+    #[test]
+    fn test_sub_and_div() {
+        let expression = Expression::Binary(
+            Operation::Sub,
+            Box::new(Expression::Number(10.0)),
+            Box::new(Expression::Binary(
+                Operation::Div,
+                Box::new(Expression::Number(10.0)),
+                Box::new(Expression::Number(2.0)),
+            )),
+        );
+
+        let res = expression.evaluate().unwrap();
+        assert_eq!(res, 5.0);
     }
 }

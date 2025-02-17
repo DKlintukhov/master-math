@@ -2,15 +2,15 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Container } from "@mui/material";
 import { Exercise, ExerciseSetup, Results } from "./pages";
 import { useEffect, useState } from "react";
-import { SimpleExpression } from "./models";
+import { Expression } from "./models";
 
 export function App() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [expressions, setExpressions] = useState<SimpleExpression[]>([]);
+    const [expressions, setExpressions] = useState<Expression[]>([]);
     const [timeout, setTimeout] = useState<number>(0);
 
-    const exerciseStarted = (timeout: number, expressions: SimpleExpression[]) => {
+    const exerciseStarted = (timeout: number, expressions: Expression[]) => {
         setTimeout(timeout);
         setExpressions(expressions);
         navigate("/exercise");

@@ -1,12 +1,12 @@
 import { Button, Container } from "@mui/material";
-import { SimpleExpression } from "../models";
+import { Expression } from "../models";
 import Grid from "@mui/material/Grid2";
-import { SimpleExpressionWithInput, CountdownTimer } from "../components";
+import { ExpressionInputControl, CountdownTimer } from "../components";
 import { useEffect, useState } from "react";
 
 interface Props {
     timeout: number;
-    expressions: SimpleExpression[];
+    expressions: Expression[];
     onFinished: (duration: number, answers: number[]) => void;
 }
 
@@ -48,26 +48,31 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
         }}>
             <CountdownTimer timeout={timeout} onExpired={() => onFinished(getDurationInSeconds(startDate), answers)} />
 
-            <Grid container
+            <Container
                 style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    gap: "5px",
                     overflow: "hidden auto",
                     maxHeight: "70%",
                     minHeight: "15%",
                 }}
-                rowSpacing={2}
-                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                columns={{ xs: 1, sm: 2, md: 3 }}
-                gridAutoFlow="column"
             >
                 {expressions.map((expression, id) => (
-                    <SimpleExpressionWithInput
-                        key={id}
-                        id={id}
-                        expression={expression}
-                        onAnswer={(answer) => handleAnswerChange(id, answer)}
-                    />
+                    <Container key={id} style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px"
+                    }}>
+                        <span style={{ width: "25px" }}>{id + 1})</span>
+                        <ExpressionInputControl
+                            expression={expression}
+                            onAnswer={(answer) => handleAnswerChange(id, answer)}
+                        />
+                    </Container>
                 ))}
-            </Grid>
+            </Container>
 
             <Button variant="outlined" onClick={() => {
                 const duration = getDurationInSeconds(startDate);
