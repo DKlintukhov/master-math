@@ -1,6 +1,5 @@
-import { Button, Container } from "@mui/material";
+import { Button, Container, OutlinedInput } from "@mui/material";
 import { Expression } from "../models";
-import Grid from "@mui/material/Grid2";
 import { ExpressionInputControl, CountdownTimer } from "../components";
 import { useEffect, useState } from "react";
 
@@ -68,7 +67,14 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
                         <span style={{ width: "25px" }}>{id + 1})</span>
                         <ExpressionInputControl
                             expression={expression}
-                            onAnswer={(answer) => handleAnswerChange(id, answer)}
+                            readOnly={true}
+                        />
+                        <span style={{ width: "7px" }}>=</span>
+                        <OutlinedInput
+                            style={{ height: "25px", width: "80px" }}
+                            size="small"
+                            type="number"
+                            onBlur={(e) => handleAnswerChange(id, Number(e.target.value))}
                         />
                     </Container>
                 ))}

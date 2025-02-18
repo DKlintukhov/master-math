@@ -3,18 +3,19 @@ import { OperationSymbols, Expression } from "../models";
 
 interface Props {
     expression: Expression;
-    onAnswer: (answer: number) => void;
+    readOnly: boolean,
 }
 
-export function ExpressionInputControl({ expression, onAnswer }: Props) {
+export function ExpressionInputControl({ expression, readOnly }: Props) {
     if (expression.type === "Number") {
         return (
             <OutlinedInput
                 style={{ height: "25px", width: "80px" }}
                 size="small"
                 type="number"
+                readOnly={readOnly}
                 defaultValue={expression.value}
-                onBlur={(e) => onAnswer(Number(e.target.value))}
+                // onBlur={(e) => onChange(Number(e.target.value))}
             />
         );
     } else {
@@ -24,9 +25,9 @@ export function ExpressionInputControl({ expression, onAnswer }: Props) {
         return (
             <>
                 <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                    <ExpressionInputControl expression={left} onAnswer={onAnswer} />
+                    <ExpressionInputControl expression={left} readOnly={readOnly} />
                     <span style={{ width: "7px", textAlign: "center" }}> {opSymbol} </span>
-                    <ExpressionInputControl expression={right} onAnswer={onAnswer} />
+                    <ExpressionInputControl expression={right} readOnly={readOnly} />
                 </div>
             </>
         );
