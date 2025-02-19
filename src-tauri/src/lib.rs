@@ -1,108 +1,12 @@
 mod models;
-use models::{ExerciseConfig, Expression, Operation, Response};
+mod generate_expressions;
+use generate_expressions::generate_expressions;
+use models::{ExerciseConfig, Response};
 
 #[tauri::command]
 fn start(config: ExerciseConfig) -> Response {
     Response {
-        expressions: vec![
-            Expression::Binary(
-                Operation::Div,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Number(0.0)),
-            ),
-            Expression::Binary(
-                Operation::Add,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Binary(
-                    Operation::Mul,
-                    Box::new(Expression::Number(2.0)),
-                    Box::new(Expression::Number(3.0)),
-                )),
-            ),
-            Expression::Binary(
-                Operation::Div,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Number(0.0)),
-            ),
-            Expression::Binary(
-                Operation::Div,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Number(0.0)),
-            ),
-            Expression::Binary(
-                Operation::Div,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Number(0.0)),
-            ),
-            Expression::Binary(
-                Operation::Div,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Number(0.0)),
-            ),
-            Expression::Binary(
-                Operation::Add,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Binary(
-                    Operation::Mul,
-                    Box::new(Expression::Number(2.0)),
-                    Box::new(Expression::Number(3.0)),
-                )),
-            ),
-            Expression::Binary(
-                Operation::Add,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Binary(
-                    Operation::Mul,
-                    Box::new(Expression::Number(2.0)),
-                    Box::new(Expression::Number(3.0)),
-                )),
-            ),
-            Expression::Binary(
-                Operation::Add,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Binary(
-                    Operation::Mul,
-                    Box::new(Expression::Number(2.0)),
-                    Box::new(Expression::Number(3.0)),
-                )),
-            ),
-            Expression::Binary(
-                Operation::Add,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Binary(
-                    Operation::Mul,
-                    Box::new(Expression::Number(2.0)),
-                    Box::new(Expression::Number(3.0)),
-                )),
-            ),
-            Expression::Binary(
-                Operation::Add,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Binary(
-                    Operation::Mul,
-                    Box::new(Expression::Number(2.0)),
-                    Box::new(Expression::Number(3.0)),
-                )),
-            ),
-            Expression::Binary(
-                Operation::Add,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Binary(
-                    Operation::Mul,
-                    Box::new(Expression::Number(2.0)),
-                    Box::new(Expression::Number(3.0)),
-                )),
-            ),
-            Expression::Binary(
-                Operation::Add,
-                Box::new(Expression::Number(5.0)),
-                Box::new(Expression::Binary(
-                    Operation::Mul,
-                    Box::new(Expression::Number(2.0)),
-                    Box::new(Expression::Number(3.0)),
-                )),
-            ),
-        ],
+        expressions: generate_expressions(&config),
     }
 }
 
