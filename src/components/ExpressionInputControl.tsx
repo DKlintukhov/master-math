@@ -10,7 +10,7 @@ export function ExpressionInputControl({ expression, readOnly }: Props) {
     if (expression.type === "Number") {
         return (
             <OutlinedInput
-                style={{ height: "25px", width: "80px" }}
+                style={{ height: "25px", width: "80px", textAlign: "center" }}
                 size="small"
                 type="number"
                 readOnly={readOnly}

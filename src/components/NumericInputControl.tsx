@@ -7,9 +7,10 @@ interface Props {
     min: number;
     max: number;
     onChanged: (time: number) => void;
+    onError: (isError: boolean) => void;
 }
 
-export function NumericInputControl({ label, defaultValue, min, max, onChanged }: Props) {
+export function NumericInputControl({ label, defaultValue, min, max, onChanged, onError }: Props) {
     const [input, setInput] = useState(defaultValue);
     const [isError, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -18,11 +19,13 @@ export function NumericInputControl({ label, defaultValue, min, max, onChanged }
         if (input < min || input > max) {
             setErrorMessage(`${label} должно быть >= ${min} <= ${max}`);
             setError(true);
+            onError(true);
             return;
         }
 
         setErrorMessage("");
         setError(false);
+        onError(false);
 
         onChanged(input)
     }, [input]);

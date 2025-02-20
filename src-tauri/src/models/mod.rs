@@ -10,7 +10,7 @@ pub struct ExerciseConfig {
     pub use_div: bool,
 }
 
-#[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, PartialOrd, serde::Serialize, serde::Deserialize)]
 pub enum Operation {
     Add,
     Sub,
@@ -18,7 +18,7 @@ pub enum Operation {
     Div,
 }
 
-#[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, PartialOrd, serde::Serialize, serde::Deserialize)]
 pub enum Expression {
     Number(f32),
     Binary(Operation, Box<Expression>, Box<Expression>),
