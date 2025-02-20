@@ -38,14 +38,22 @@ fn generate_binary_expression<R: Rng>(rng: &mut R, config: &ExerciseConfig) -> E
 
     let operation = available_operations.choose_mut(rng).unwrap();
 
-    let left = Box::new(generate_number(rng, config.min, config.max));
-    let right = Box::new(generate_number(rng, config.min, config.max));
+    let mut left = Box::new(generate_number(rng, config.min, config.max));
+    let mut right = Box::new(generate_number(rng, config.min, config.max));
 
     match operation {
         Operation::Add => Expression::Binary(Operation::Add, left, right),
-        Operation::Sub => Expression::Binary(Operation::Sub, left, right),
+        Operation::Sub => {
+            if *left < *right {
+                std::mem::swap(&mut *left, &mut *right);
+            }
+            Expression::Binary(Operation::Sub, left, right)
+        }
         Operation::Mul => Expression::Binary(Operation::Mul, left, right),
-        Operation::Div => Expression::Binary(Operation::Div, left, right),
+        Operation::Div => match right.evaluate().unwrap() {
+            0.0 => Expression::Binary(Operation::Div, left, Box::new(Expression::Number(1.0))),
+            _ => Expression::Binary(Operation::Div, left, right),
+        },
     }
 }
 
