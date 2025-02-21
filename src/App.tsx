@@ -1,33 +1,34 @@
+import { invoke } from "@tauri-apps/api/core";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Container } from "@mui/material";
 import { Exercise, ExerciseSetup, Results } from "./pages";
 import { useEffect, useState } from "react";
-import { Answer, Expression } from "./models";
+import { ExerciseConfig, Expression, mapExpression, TauriResponse } from "./models";
 
 export function App() {
     const navigate = useNavigate();
     const location = useLocation();
     const [expressions, setExpressions] = useState<Expression[]>([]);
-    const [answers, setAnswers] = useState<Answer[]>([]);
+    const [answers, setAnswers] = useState<number[]>([]);
+    const [correctAnswers, setCorrectAnswers] = useState<number[]>([]);
     const [timeout, setTimeout] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
 
-    const exerciseStarted = (timeout: number, expressions: Expression[]) => {
-        setTimeout(timeout);
-        setExpressions(expressions);
-        navigate("/exercise");
+    const exerciseStarted = async (config: ExerciseConfig, timeout: number) => {
+        try {
+            const { expressions, answers } = await invoke<TauriResponse>("start", { config });
+            setTimeout(timeout);
+            setExpressions(expressions.map(mapExpression));
+            setCorrectAnswers([...answers]);
+            navigate("/exercise");
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const exerciseFinished = (duration: number, answers: number[]) => {
-        console.log(duration, answers);
         setDuration(duration);
-        setAnswers([
-            { value: 1, correctValue: 1},
-            { value: 1, correctValue: 2 },
-            { value: 1, correctValue: 1 },
-            { value: 1, correctValue: 2 },
-            { value: 1, correctValue: 1 },
-        ]);
+        setAnswers([...answers]);
         navigate("/results");
     }
 
@@ -54,7 +55,7 @@ export function App() {
             <Routes>
                 <Route path="/" element={<ExerciseSetup onStarted={exerciseStarted} />} />
                 <Route path="/exercise" element={<Exercise timeout={timeout} expressions={expressions} onFinished={exerciseFinished} />} />
-                <Route path="/results" element={<Results expressions={expressions} duration={duration} answers={answers} onFinished={finished} />} />
+                <Route path="/results" element={<Results expressions={expressions} duration={duration} answers={answers} correctAnswers={correctAnswers} onFinished={finished} />} />
             </Routes>
         </Container>
 

@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
 import Button from "@mui/material/Button";
-
 import Grid from "@mui/material/Grid2";
-import { OperationToUse, Expression, mapExpression, ExpressionDTO } from "../models";
+import { OperationToUse, ExerciseConfig } from "../models";
 import { NumericInputControl, OperatorsSelector } from "../components";
 import { Container, FormHelperText } from "@mui/material";
 
 interface Props {
-    onStarted: (timeout: number, expressions: Expression[]) => void;
+    onStarted: (exerciseConf: ExerciseConfig, timeout: number) => void;
 }
 
 const MIN_VALUE = -10000;
@@ -25,19 +23,16 @@ export function ExerciseSetup({ onStarted }: Props) {
     const [min, setMin] = useState(0);
     const [max, setMax] = useState(100);
     const [minmaxInvalid, setMinMaxInvalid] = useState(false);
-    const [operators, setOperators] = useState<OperationToUse>();
+    const [operators, setOperators] = useState<OperationToUse>({
+        useAdd: true,
+        useSub: true,
+        useMul: false,
+        useDiv: false
+    });
     const [checkOperatorsError, setCheckOperatorsError] = useState<boolean>();
 
-    async function start() {
-        const { expressions } = await invoke<{ expressions: ExpressionDTO[] }>("start", {
-            config: {
-                amount,
-                min,
-                max,
-                ...operators
-            }
-        });
-        onStarted(timeout, expressions.map(mapExpression));
+    const handleStart = () => {
+        onStarted({ amount, min, max, ...operators }, timeout);
     }
 
     useEffect(() => {
@@ -117,7 +112,7 @@ export function ExerciseSetup({ onStarted }: Props) {
                     alignItems: "center",
                     flexDirection: "column"
                 }}>
-                    <Button disabled={inputsInvalid || minmaxInvalid} variant="outlined" onClick={() => start()}>Начать</Button>
+                    <Button disabled={inputsInvalid || minmaxInvalid} variant="outlined" onClick={handleStart}>Начать</Button>
                     {minmaxInvalid && <FormHelperText error={true}>{"Мин. не может быть >= чем Макс."}</FormHelperText>}
                 </Container>
             </Grid>
