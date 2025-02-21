@@ -29,6 +29,11 @@ export type ExpressionDTO =
     | { Binary: [Operation, ExpressionDTO, ExpressionDTO] };
 
 
+export interface Answer {
+    value: number;
+    correctValue: number;
+}
+
 export function mapExpression(jsonExpr: ExpressionDTO): Expression {
     if ("Number" in jsonExpr) {
         return { type: "Number", value: jsonExpr.Number };

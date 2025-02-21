@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
 import { useState, useEffect } from "react";
+import { Util } from "../util";
 
 interface Props {
     timeout: number;
@@ -28,17 +29,9 @@ export function CountdownTimer({ timeout, onExpired }: Props) {
         return () => clearInterval(interval);
     }, [seconds]);
 
-    const formatTime = (time: number) => {
-        const minutes = Math.floor(time / 60);
-        const remainingSeconds = time % 60;
-        const formattedMinutes = String(minutes).padStart(2, '0');
-        const formattedSeconds = String(remainingSeconds).padStart(2, '0');
-        return `${formattedMinutes}:${formattedSeconds}`;
-    };
-
     return (
         <Typography variant="h3" color="primary">
-            {formatTime(seconds)}
+            {Util.formatTime(seconds)}
         </Typography>
     );
 }
