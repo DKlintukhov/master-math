@@ -1,11 +1,12 @@
 import { Button, Container, OutlinedInput, Typography } from "@mui/material";
-import { Answer, Expression } from "../models";
+import { Expression } from "../models";
 import { ExpressionInputControl } from "../components";
 import { Util } from "../util";
 
 interface Props {
     expressions: Expression[];
-    answers: Answer[];
+    answers: number[];
+    correctAnswers: number[];
     duration: number;
     onFinished: () => void;
 }
@@ -14,15 +15,15 @@ function toPercents(a: number, b: number): string {
     return (a / b * 100).toFixed() + "%";
 }
 
-export function Results({ expressions, answers, duration, onFinished }: Props) {
+export function Results({ expressions, answers, correctAnswers, duration, onFinished }: Props) {
     const expressionsAmount = answers.length;
-    let correctAnswers = 0;
-    let incorrectAnswers = 0;
-    answers.forEach(({ value, correctValue }) => {
-        if (value == correctValue)
-            ++correctAnswers;
+    let correctAnswersAmount = 0;
+    let incorrectAnswersAmount = 0;
+    answers.forEach((value, idx) => {
+        if (value == correctAnswers[idx])
+            ++correctAnswersAmount;
         else
-            ++incorrectAnswers;
+            ++incorrectAnswersAmount;
     });
 
     return (
@@ -40,17 +41,17 @@ export function Results({ expressions, answers, duration, onFinished }: Props) {
                     justifyContent: "center",
                     gap: "5px",
                     overflow: "hidden auto",
-                    maxHeight: "70%",
+                    maxHeight: "85%",
                     minHeight: "15%",
                 }}
             >
-                {expressions.map((expression, id) => (
-                    <Container key={id} style={{
+                {expressions.map((expression, idx) => (
+                    <Container key={idx} style={{
                         display: "flex",
                         alignItems: "center",
                         gap: "5px"
                     }}>
-                        <span style={{ width: "25px" }}>{id + 1})</span>
+                        <span style={{ width: "25px" }}>{idx + 1})</span>
                         <ExpressionInputControl
                             expression={expression}
                             readOnly={true}
@@ -59,14 +60,14 @@ export function Results({ expressions, answers, duration, onFinished }: Props) {
                         <OutlinedInput
                             style={{ height: "25px", width: "80px" }}
                             size="small"
-                            value={answers[id].value}
-                            error={answers[id].value == answers[id].correctValue}
+                            value={answers[idx]}
+                            error={answers[idx] != correctAnswers[idx]}
                             readOnly={true}
                         />
                         <OutlinedInput
                             style={{ height: "25px", width: "80px" }}
                             size="small"
-                            value={answers[id].correctValue}
+                            value={correctAnswers[idx] === null ? NaN : correctAnswers[idx]}
                             readOnly={true}
                         />
                     </Container>
@@ -82,10 +83,10 @@ export function Results({ expressions, answers, duration, onFinished }: Props) {
                     Время: {Util.formatTime(duration)}
                 </Typography>
                 <Typography variant="h4" component="h2" color="success">
-                    Правильные ответы: {correctAnswers} ({toPercents(correctAnswers, expressionsAmount)})
+                    Правильные ответы: {correctAnswersAmount} ({toPercents(correctAnswersAmount, expressionsAmount)})
                 </Typography>
                 <Typography variant="h4" component="h2" color="error">
-                    Неправильные ответы: {incorrectAnswers} ({toPercents(incorrectAnswers, expressionsAmount)})
+                    Неправильные ответы: {incorrectAnswersAmount} ({toPercents(incorrectAnswersAmount, expressionsAmount)})
                 </Typography>
 
                 <Button variant="outlined" onClick={() => onFinished()}>Финиш</Button>

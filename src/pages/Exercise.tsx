@@ -27,7 +27,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
         }, timeout * 60 * 1000);
 
         return () => clearTimeout(timerId);
-    }, [timeout, onFinished]);
+    }, [timeout]);
 
     const handleAnswerChange = (id: number, answer: number) => {
         setAnswers(prevAnswers => {
@@ -35,6 +35,10 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
             newAnswers[id] = answer;
             return newAnswers;
         });
+    };
+
+    const handleOnFinish = () => {
+        onFinished(getDurationInSeconds(startDate), answers);
     };
 
     return (
@@ -45,7 +49,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
             justifyContent: "space-evenly",
             height: "100vh"
         }}>
-            <CountdownTimer timeout={timeout} onExpired={() => onFinished(getDurationInSeconds(startDate), answers)} />
+            <CountdownTimer timeout={timeout} onExpired={handleOnFinish} />
 
             <Container
                 style={{
@@ -80,10 +84,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
                 ))}
             </Container>
 
-            <Button variant="outlined" onClick={() => {
-                const duration = getDurationInSeconds(startDate);
-                onFinished(duration, answers);
-            }}>Готово</Button>
+            <Button variant="outlined" onClick={handleOnFinish}>Готово</Button>
         </Container >
     );
 }

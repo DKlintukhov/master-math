@@ -28,10 +28,9 @@ export type ExpressionDTO =
     | { Number: number }
     | { Binary: [Operation, ExpressionDTO, ExpressionDTO] };
 
-
-export interface Answer {
-    value: number;
-    correctValue: number;
+export interface TauriResponse {
+    expressions: ExpressionDTO[];
+    answers: number[];
 }
 
 export function mapExpression(jsonExpr: ExpressionDTO): Expression {

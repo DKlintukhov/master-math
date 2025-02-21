@@ -51,6 +51,7 @@ impl Expression {
 #[serde(rename_all = "camelCase")]
 pub struct Response {
     pub expressions: Vec<Expression>,
+    pub answers: Vec<f32>,
 }
 
 #[cfg(test)]

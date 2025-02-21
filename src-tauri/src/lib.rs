@@ -1,12 +1,18 @@
-mod models;
 mod generate_expressions;
+mod models;
 use generate_expressions::generate_expressions;
 use models::{ExerciseConfig, Response};
 
 #[tauri::command]
 fn start(config: ExerciseConfig) -> Response {
+    let expressions = generate_expressions(&config);
+    let answers = expressions
+        .iter()
+        .map(|expr| expr.evaluate().unwrap())
+        .collect();
     Response {
-        expressions: generate_expressions(&config),
+        expressions,
+        answers,
     }
 }
 
