@@ -26,7 +26,7 @@
     "targets": "all",
     "windows": {
       "webviewInstallMode": {
-        "type": "offlineInstaller"
+        "type": "embedBootstrapper"
       }
     },
     "icon": [
