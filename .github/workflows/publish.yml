@@ -1,10 +1,8 @@
-name: 'publish'
+name: Build release binary
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 
 jobs:
   publish-tauri:
