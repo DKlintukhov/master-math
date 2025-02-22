@@ -58,14 +58,15 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
                     justifyContent: "center",
                     gap: "5px",
                     overflow: "hidden auto",
-                    maxHeight: "70%",
-                    minHeight: "15%",
+                    height: "80%",
+                    minHeight: "20%",
                 }}
             >
                 {expressions.map((expression, id) => (
                     <Container key={id} style={{
                         display: "flex",
                         alignItems: "center",
+                        justifyContent: "center",
                         gap: "5px"
                     }}>
                         <span style={{ width: "25px" }}>{id + 1})</span>
@@ -75,7 +76,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
                         />
                         <span style={{ width: "7px" }}>=</span>
                         <OutlinedInput
-                            style={{ height: "25px", width: "80px" }}
+                            style={{ height: "25px", width: "90px", textAlignLast: "center" }}
                             size="small"
                             type="number"
                             onBlur={(e) => handleAnswerChange(id, Number(e.target.value))}
