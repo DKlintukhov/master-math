@@ -41,14 +41,15 @@ export function Results({ expressions, answers, correctAnswers, duration, onFini
                     justifyContent: "center",
                     gap: "5px",
                     overflow: "hidden auto",
-                    maxHeight: "85%",
-                    minHeight: "15%",
+                    height: "80%",
+                    minHeight: "25%",
                 }}
             >
                 {expressions.map((expression, idx) => (
                     <Container key={idx} style={{
                         display: "flex",
                         alignItems: "center",
+                        justifyContent: "center",
                         gap: "5px"
                     }}>
                         <span style={{ width: "25px" }}>{idx + 1})</span>
@@ -58,14 +59,14 @@ export function Results({ expressions, answers, correctAnswers, duration, onFini
                         />
                         <span style={{ width: "7px" }}>=</span>
                         <OutlinedInput
-                            style={{ height: "25px", width: "80px" }}
+                            style={{ height: "25px", width: "90px", textAlignLast: "center" }}
                             size="small"
-                            value={answers[idx]}
+                            value={answers[idx] === null ? "" : answers[idx]}
                             error={answers[idx] != correctAnswers[idx]}
                             readOnly={true}
                         />
                         <OutlinedInput
-                            style={{ height: "25px", width: "80px" }}
+                            style={{ height: "25px", width: "90px", textAlignLast: "center" }}
                             size="small"
                             value={correctAnswers[idx] === null ? NaN : correctAnswers[idx]}
                             readOnly={true}
