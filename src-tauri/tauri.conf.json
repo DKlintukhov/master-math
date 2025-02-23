@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "MM",
+        "title": "MasterMath-v0.1.0",
         "width": 1024,
         "height": 768
       }
