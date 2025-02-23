@@ -59,6 +59,7 @@ jobs:
 
       - name: Build Tauri App (Release) - Cargo
         run: |
+          cargo install tauri-cli --version "^2.0.0" --locked
           cargo tauri build --release
 
         env:
