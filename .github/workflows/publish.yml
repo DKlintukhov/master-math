@@ -11,10 +11,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
+        platform:
           - {
               target: x86_64-pc-windows-msvc,
-              platform: windows-latest,
+              os: windows-latest,
               toolchain: '1.77.2',
               args: ''
             }
