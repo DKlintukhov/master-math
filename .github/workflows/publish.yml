@@ -42,7 +42,7 @@ jobs:
           #     command: 'build'
           #   }
 
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.platform.os }}
     steps:
       - uses: actions/checkout@v4
 
@@ -82,5 +82,5 @@ jobs:
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: false
-          args: ${{ matrix.args }}
+          args: ${{ matrix.platform.args }}
           path: src-tauri/target/release/bundle # path to the built application
