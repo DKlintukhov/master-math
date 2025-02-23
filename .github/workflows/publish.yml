@@ -31,7 +31,6 @@ jobs:
           #    args: '--target aarch64-apple-darwin',
           #  }
 
-    runs-on: ${{ matrix.platform.os }}
     steps:
       - uses: actions/checkout@v4
 
@@ -54,18 +53,19 @@ jobs:
           workspaces: './src-tauri -> target'
 
       - name: Install Frontend Dependencies
-        run: npm install # or pnpm install or yarn install
+        run: npm install
 
-      - name: Build Tauri App (Release)
+      - name: Build Tauri App (Release) - Cargo
         run: |
-          npm run tauri build --release # Add --target if needed for cross-compilation
+          cargo tauri build --release
+
         env:
           TAURI_PLATFORM: ${{ matrix.platform.target }} # Specify the target platform for Tauri
 
       - name: Create Tauri Release
         uses: tauri-apps/tauri-action@v0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Make sure this is properly set in your repository
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
           #TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }} # For signing (optional)
           #TAURI_SIGNING_PASSWORD: ${{ secrets.TAURI_SIGNING_PASSWORD }} # For signing (optional)
         with:
