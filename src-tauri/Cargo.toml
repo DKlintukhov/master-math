@@ -15,11 +15,11 @@ name = "master_math_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2", features = [] }
+tauri-build = { version = "2.0.5", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = [] }
-tauri-plugin-opener = "2"
+tauri = { version = "2.2.5", features = [] }
+tauri-plugin-opener = "2.2.5"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 rand = "0.9.0"
