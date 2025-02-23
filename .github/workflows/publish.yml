@@ -1,8 +1,10 @@
 name: Build release binary
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - develop
+      - main
 
 jobs:
   publish-tauri:
@@ -11,15 +13,34 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          # - platform: 'macos-latest' # for Arm based macs (M1 and above).
-          #   args: '--target aarch64-apple-darwin'
-          # - platform: 'macos-latest' # for Intel based macs.
-          #   args: '--target x86_64-apple-darwin'
-          # - platform: 'ubuntu-22.04'
-          #   args: ''
-          - platform: 'windows-latest'
-            args: ''
+        platform:
+          - {
+              target: x86_64-pc-windows-msvc,
+              os: windows-latest,
+              toolchain: '1.77.2',
+              args: ''
+            }
+          # - {
+          #     target: x86_64-unknown-linux-gnu,
+          #     os: ubuntu-latest,
+          #     toolchain: '1.77.2',
+          #     cross: false,
+          #     command: 'test'
+          #   }
+          # - {
+          #     target: aarch64-apple-darwin,
+          #     os: macos-14,
+          #     toolchain: '1.77.2',
+          #     cross: false,
+          #     command: 'test'
+          #   }
+          # - {
+          #     target: aarch64-apple-ios,
+          #     os: macos-latest,
+          #     toolchain: '1.77.2',
+          #     cross: false,
+          #     command: 'build'
+          #   }
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -37,11 +58,11 @@ jobs:
           node-version: lts/*
           cache: 'npm'
 
-      - name: install Rust stable
-        uses: dtolnay/rust-toolchain@stable
-        # with:
-        #   # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
-        #   targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      - name: install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.platform.toolchain }}
+          targets: ${{ matrix.platform.target }}
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
