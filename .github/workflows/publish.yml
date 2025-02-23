@@ -31,51 +31,44 @@ jobs:
           #    args: '--target aarch64-apple-darwin',
           #  }
 
-    runs-on: ${{ matrix.platform.os }}
-
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
+
+      # - name: install dependencies (ubuntu only)
+      #   if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'yarn' # Set this to npm, yarn or pnpm.
 
       - name: Install Rust Toolchain ${{ matrix.platform.toolchain }}
         uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: ${{ matrix.platform.toolchain }}
           target: ${{ matrix.platform.target }}
-          components: rustfmt, clippy
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-          cache: 'npm'
-
-      - name: Rust Cache
+      - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
 
-      - name: Install Frontend Dependencies
-        run: npm install
+      - name: install frontend dependencies
+        # If you don't have `beforeBuildCommand` configured you may want to build your frontend here too.
+        run: npm install # change this to npm or pnpm depending on which one you use.
 
-      - name: Build Tauri App (Release) - Cargo
-        run: |
-          cargo install tauri-cli --version "^2.0.0" --locked
-          cargo tauri build --release
-
+      - uses: tauri-apps/tauri-action@v0
         env:
-          TAURI_PLATFORM: ${{ matrix.platform.target }} # Specify the target platform for Tauri
-
-      - name: Create Tauri Release
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-          #TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }} # For signing (optional)
-          #TAURI_SIGNING_PASSWORD: ${{ secrets.TAURI_SIGNING_PASSWORD }} # For signing (optional)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: "v__VERSION__" # Tag name must have v prefix
-          releaseName: "MasterMath v__VERSION__"
-          releaseBody: "See the assets to download this version and install."
-          releaseDraft: false
+          tagName: master-math-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
+          releaseName: 'MasterMath v__VERSION__'
+          releaseBody: 'See the assets to download this version and install.'
+          releaseDraft: true
           prerelease: false
-          args: ${{ matrix.platform.args }}
-          path: src-tauri/target/release/bundle # path to the built application
+          args: ${{ matrix.args }}
