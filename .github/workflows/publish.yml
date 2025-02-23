@@ -31,7 +31,7 @@ jobs:
           #    args: '--target aarch64-apple-darwin',
           #  }
 
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.platform.os }}
     steps:
       - uses: actions/checkout@v4
 
