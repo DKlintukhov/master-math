@@ -14,9 +14,9 @@ jobs:
         platform:
           - {
               target: x86_64-pc-windows-msvc,
-              os: windows-latest,
+              os: windows-2019,
               toolchain: '1.77.2',
-              args: ''
+              args: '--target x86_64-pc-windows-msvc'
             }
           # - {  # Example configuration for Ubuntu (adjust as needed)
           #    target: x86_64-unknown-linux-gnu,
