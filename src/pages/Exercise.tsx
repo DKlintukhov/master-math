@@ -1,7 +1,7 @@
 import { Button, Container, OutlinedInput } from "@mui/material";
 import { Expression } from "../models";
 import { ExpressionInputControl, CountdownTimer } from "../components";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
     timeout: number;
@@ -18,7 +18,8 @@ function getDurationInSeconds(startDate: Date): number {
 export function Exercise({ timeout, expressions, onFinished }: Props) {
     const [answers, setAnswers] = useState<number[]>(() => Array(expressions.length).fill(null));
 
-    const startDate = new Date();
+    const startDateRef = useRef(new Date());
+    const startDate = startDateRef.current;
 
     useEffect(() => {
         const timerId = setTimeout(() => {
@@ -29,7 +30,14 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
         return () => clearTimeout(timerId);
     }, [timeout]);
 
-    const handleAnswerChange = (id: number, answer: number) => {
+    const handleAnswerChange = (id: number, rawAnswer: string) => {
+        if (rawAnswer.trim() === "")
+            return;
+
+        const answer = Number(rawAnswer);
+        if (isNaN(answer))
+            return;
+
         setAnswers(prevAnswers => {
             const newAnswers = [...prevAnswers];
             newAnswers[id] = answer;
@@ -78,8 +86,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
                         <OutlinedInput
                             style={{ height: "25px", width: "90px", textAlignLast: "center" }}
                             size="small"
-                            type="number"
-                            onBlur={(e) => handleAnswerChange(id, Number(e.target.value))}
+                            onBlur={(e) => handleAnswerChange(id, e.target.value)}
                         />
                     </Container>
                 ))}
