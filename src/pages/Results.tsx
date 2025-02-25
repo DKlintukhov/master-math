@@ -8,6 +8,7 @@ interface Props {
     answers: number[];
     correctAnswers: number[];
     duration: number;
+    onReplay: () => void;
     onFinished: () => void;
 }
 
@@ -15,7 +16,7 @@ function toPercents(a: number, b: number): string {
     return (a / b * 100).toFixed() + "%";
 }
 
-export function Results({ expressions, answers, correctAnswers, duration, onFinished }: Props) {
+export function Results({ expressions, answers, correctAnswers, duration, onReplay, onFinished }: Props) {
     const expressionsAmount = answers.length;
     let correctAnswersAmount = 0;
     let incorrectAnswersAmount = 0;
@@ -78,7 +79,8 @@ export function Results({ expressions, answers, correctAnswers, duration, onFini
             <Container style={{
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center"
+                alignItems: "center",
+                padding: "5px"
             }}>
                 <Typography variant="h4" component="h2" color="info">
                     Время: {Util.formatTime(duration)}
@@ -90,7 +92,16 @@ export function Results({ expressions, answers, correctAnswers, duration, onFini
                     Неправильные ответы: {incorrectAnswersAmount} ({toPercents(incorrectAnswersAmount, expressionsAmount)})
                 </Typography>
 
-                <Button variant="outlined" onClick={() => onFinished()}>Финиш</Button>
+                <Container style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "5px",
+                }}>
+                    <Button variant="outlined" onClick={onReplay}>Повтор</Button>
+                    <Button variant="outlined" onClick={() => onFinished()}>Закончить</Button>
+                </Container>
             </Container>
         </Container >
     );

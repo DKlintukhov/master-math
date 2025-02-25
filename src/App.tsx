@@ -55,9 +55,15 @@ export function App() {
             <Routes>
                 <Route path="/" element={<ExerciseSetup onStarted={exerciseStarted} />} />
                 <Route path="/exercise" element={<Exercise timeout={timeout} expressions={expressions} onFinished={exerciseFinished} />} />
-                <Route path="/results" element={<Results expressions={expressions} duration={duration} answers={answers} correctAnswers={correctAnswers} onFinished={finished} />} />
+                <Route path="/results" element={<Results
+                    expressions={expressions}
+                    duration={duration}
+                    answers={answers}
+                    correctAnswers={correctAnswers}
+                    onReplay={() => navigate("/exercise")}
+                    onFinished={finished} />}
+                />
             </Routes>
         </Container>
-
     );
 }
