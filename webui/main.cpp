@@ -104,9 +104,12 @@ int main(int, char const**)
     std::locale::global(std::locale(""));
 
     webui::window win;
-    win.bind("start", Start);
 
-    win.show("index.html");
+    win.set_size(1024, 768);
+
+    win.bind("start", Start);
+    win.show_browser("index.html", static_cast<unsigned int>(win.get_best_browser()));
+
     webui::wait();
 
     return 0;
