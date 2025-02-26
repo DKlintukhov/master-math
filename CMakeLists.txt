@@ -23,7 +23,9 @@ project(
 )
 
 option(ENABLE_TESTS "Enable tests" ON)
-enable_testing()
+if (ENABLE_TESTS)
+    enable_testing()
+endif()
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)

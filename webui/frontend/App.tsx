@@ -17,9 +17,6 @@ export function App() {
         try {
             const json = await window.webui.call('start', JSON.stringify(config));
             const { error, expressions, answers } = JSON.parse(json);
-            console.log(json)
-            console.log(expressions);
-            console.log(answers);
             if (error) {
                 throw error.message;
             }
