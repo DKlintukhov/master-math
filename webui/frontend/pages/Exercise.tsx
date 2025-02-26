@@ -77,7 +77,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
                         justifyContent: "center",
                         gap: "5px"
                     }}>
-                        <span style={{ width: "25px" }}>{id + 1})</span>
+                        <span style={{ width: "30px" }}>{id + 1})</span>
                         <ExpressionInputControl
                             expression={expression}
                             readOnly={true}
