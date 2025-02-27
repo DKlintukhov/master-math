@@ -28,9 +28,9 @@
 #include <random>
 #include "ExpressionGenerator.h"
 
-namespace MasterMath
+namespace Core
 {
-    ExpressionGenerator::ExpressionGenerator(ExpressionGeneratorConfig conf)
+    ExpressionGenerator::ExpressionGenerator(Config conf)
         : m_config{ conf }
         , m_generator{ std::random_device{}() }
         , m_intDist(conf.min, conf.max)

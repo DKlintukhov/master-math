@@ -26,10 +26,9 @@
 #include "pch.h"
 
 #include "Expression.h"
-#include <iostream>
 #include <numeric>
 
-namespace MasterMath
+namespace Core
 {
 
     Constant::Constant(double val) : m_value(val) {}

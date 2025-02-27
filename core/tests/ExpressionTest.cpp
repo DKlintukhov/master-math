@@ -27,7 +27,7 @@
 
 #include "Expression.h"
 
-using namespace MasterMath;
+using namespace Core;
 
 BOOST_AUTO_TEST_CASE(SimpleNumber)
 {

@@ -20,18 +20,5 @@ export interface OperationToUse {
 }
 
 export type Expression =
-    | { type: "constant"; value: number }
-    | { type: "binary"; left: Expression; right: Expression; op: Operation; };
-
-export type ExpressionDTO =
     | { constant: number }
-    | { binary: [ExpressionDTO, ExpressionDTO, Operation] };
-
-export interface Response {
-    expressions: ExpressionDTO[];
-    answers: number[];
-}
-
-export interface ErrorResponse {
-    error: string;
-}
+    | { binary: [Expression, Expression, Operation] };

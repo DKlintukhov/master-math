@@ -21,7 +21,7 @@ export function ExerciseSetup({ onStarted }: Props) {
     const [timeout, setTimeout] = useState(5);
     const [amount, setAmount] = useState(15);
     const [min, setMin] = useState(0);
-    const [max, setMax] = useState(100);
+    const [max, setMax] = useState(25);
     const [minmaxInvalid, setMinMaxInvalid] = useState(false);
     const [operators, setOperators] = useState<OperationToUse>({
         useAdd: true,

@@ -28,7 +28,7 @@
 
 #include <boost/json.hpp>
 
-namespace MasterMath
+namespace Core
 {
     enum class Operation
     {

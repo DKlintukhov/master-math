@@ -2,7 +2,7 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Container } from "@mui/material";
 import { Exercise, ExerciseSetup, Results } from "./pages";
 import { useEffect, useState } from "react";
-import { ExerciseConfig, Expression } from "./models";
+import { ExerciseConfig, Expression, Response } from "./models";
 
 export function App() {
     const navigate = useNavigate();
@@ -16,10 +16,11 @@ export function App() {
     const exerciseStarted = async (config: ExerciseConfig, timeout: number) => {
         try {
             const json = await window.webui.call('start', JSON.stringify(config));
-            const { error, expressions, answers } = JSON.parse(json);
+            const { error, expressions, answers } = JSON.parse(json) as Response;
             if (error) {
-                throw error.message;
+                throw error;
             }
+
             setTimeout(timeout);
             setExpressions(expressions);
             setCorrectAnswers([...answers]);

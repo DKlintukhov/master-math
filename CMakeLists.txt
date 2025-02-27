@@ -4,8 +4,8 @@ if (PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message(FATAL_ERROR "In-source builds are not allowed. You should create separate directory for build files.")
 endif()
 
-set(VERSION 0.0.1)
-set(TARGET MasterMath)
+set(VERSION 0.1.0)
+set(TARGET MasterMath-v${VERSION})
 
 set(PACKAGE_BUGREPORT "https://github.com/DKlintukhov/MasterMath/issues")
 set(CMAKE_CXX_STANDARD 20)
@@ -23,6 +23,7 @@ project(
 )
 
 option(ENABLE_TESTS "Enable tests" ON)
+option(USE_MBEDTLS ON)
 if (ENABLE_TESTS)
     enable_testing()
 endif()
@@ -63,3 +64,23 @@ FetchContent_MakeAvailable(libwebui)
 
 add_subdirectory(core)
 add_subdirectory(webui)
+
+add_executable(${TARGET} main.cpp)
+target_link_libraries(${TARGET} 
+    PRIVATE
+        libwebui
+)
+target_include_directories(${TARGET} 
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/webui/include
+)
+
+if (WIN32)
+    # hide the console in the Release build
+    if (MSVC AND NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+    endif()
+
+    target_compile_options(${TARGET} PRIVATE /DWIN32 /D_WINDOWS)
+    target_sources(${TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/windows/resource.rc)
+endif()
