@@ -63,6 +63,7 @@ namespace Core
             {
                 throw std::runtime_error("Division by 0");
             }
+
             return left / right;
         default:
             throw std::runtime_error("Invalid Operation");

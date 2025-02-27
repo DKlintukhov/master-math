@@ -54,17 +54,58 @@ namespace Core
         Constant a = GenerateConstant();
         Constant b = GenerateConstant();
 
-        if (op == Operation::Sub && a.Evaluate() < b.Evaluate())
+        if (op == Operation::Sub)
         {
-            return BinaryExpression(std::make_unique<Constant>(b), std::make_unique<Constant>(a), op);
+            return NormalizeSubBinaryExpression(a, b);
         }
 
-        if (op == Operation::Div && b.Evaluate() == 0.0)
+        if (op == Operation::Div)
         {
-            return BinaryExpression(std::make_unique<Constant>(b), std::make_unique<Constant>(a), op);
+            return NormalizeDivBinaryExpression(a, b);
         }
 
         return BinaryExpression(std::make_unique<Constant>(a), std::make_unique<Constant>(b), op);
+    }
+
+    BinaryExpression ExpressionGenerator::NormalizeSubBinaryExpression(Constant a, Constant b)
+    {
+        if (a.Evaluate() < b.Evaluate())
+        {
+            return BinaryExpression(std::make_unique<Constant>(b), std::make_unique<Constant>(a), Operation::Sub);
+        }
+
+        return BinaryExpression(std::make_unique<Constant>(a), std::make_unique<Constant>(b), Operation::Sub);
+    }
+
+    BinaryExpression ExpressionGenerator::NormalizeDivBinaryExpression(Constant a, Constant b)
+    {
+        double aVal = a.Evaluate();
+        double bVal = b.Evaluate();
+
+        if (aVal < bVal) {
+            std::swap(aVal, bVal);
+            std::swap(a, b);
+        }
+
+        if (bVal == 0.0)
+        {
+            if (aVal == 0.0)
+            {
+                return BinaryExpression(std::make_unique<Constant>(0.0), std::make_unique<Constant>(static_cast<double>(m_config.max)), Operation::Div);
+            }
+            else
+            {
+                return BinaryExpression(std::make_unique<Constant>(b), std::make_unique<Constant>(a), Operation::Div);
+            }
+        }
+
+        double divisionResult = aVal / bVal;
+        if (std::trunc(divisionResult) == divisionResult)
+        {
+            return BinaryExpression(std::make_unique<Constant>(a), std::make_unique<Constant>(b), Operation::Div);
+        }
+
+        return BinaryExpression(std::make_unique<Constant>(Constant(aVal * bVal)), std::make_unique<Constant>(b), Operation::Div);
     }
 
     Constant ExpressionGenerator::GenerateConstant()

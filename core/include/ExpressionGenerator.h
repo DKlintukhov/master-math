@@ -49,6 +49,8 @@ namespace Core
 
         std::unique_ptr<Expression> GenerateExpression();
         BinaryExpression GenerateBinaryExpression();
+        BinaryExpression NormalizeSubBinaryExpression(Constant a, Constant b);
+        BinaryExpression NormalizeDivBinaryExpression(Constant a, Constant b);
         Constant GenerateConstant();
         Operation GenerateOperation();
 

@@ -75,45 +75,74 @@ BOOST_AUTO_TEST_CASE(GenerateOperationTest) {
     BOOST_CHECK(op == Operation::Add || op == Operation::Mul);
 }
 
-// BOOST_AUTO_TEST_CASE(GenerateBinaryExpressionTest_SubtractionAvoidance) {
-//     ExpressionGeneratorConfig config;
-//     config.min = 1.0;
-//     config.max = 2.0;
-//     config.useAdd = false;
-//     config.useSub = true;
-//     config.useMul = false;
-//     config.useDiv = false;
-//     config.useFloats = false;
+BOOST_AUTO_TEST_CASE(GenerateBinaryExpressionTest_NormalizeSubBinaryExpression) {
+    ExpressionGenerator::Config config;
+    config.min = 1.0;
+    config.max = 20.0;
+    config.useAdd = false;
+    config.useSub = true;
+    config.useMul = false;
+    config.useDiv = false;
+    config.useFloats = false;
 
-//     ExpressionGenerator generator(config);
-//     BinaryExpression binaryExpr = generator.GenerateBinaryExpression();
+    ExpressionGenerator generator(config);
+    {
+        BinaryExpression expr = generator.NormalizeSubBinaryExpression(Constant(5), Constant(10));
+        BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
+    }
 
-//     if (binaryExpr.m_op == Operation::Sub) {
-//         double leftValue = binaryExpr.m_left->Evaluate();
-//         double rightValue = binaryExpr.m_right->Evaluate();
-//         BOOST_CHECK(leftValue >= rightValue);
-//     }
-// }
+    {
+        BinaryExpression expr = generator.NormalizeSubBinaryExpression(Constant(10), Constant(5));
+        BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
+    }
+}
 
-// BOOST_AUTO_TEST_CASE(GenerateBinaryExpressionTest_DivisionByZeroAvoidance) {
-//     ExpressionGeneratorConfig config;
-//     config.min = 0.0;
-//     config.max = 1.0;
-//     config.useAdd = false;
-//     config.useSub = false;
-//     config.useMul = false;
-//     config.useDiv = true;
-//     config.useFloats = true;
+BOOST_AUTO_TEST_CASE(GenerateBinaryExpressionTest_NormalizeDivBinaryExpression) {
+    ExpressionGenerator::Config config;
+    config.min = 0.0;
+    config.max = 10.0;
+    config.useAdd = false;
+    config.useSub = false;
+    config.useMul = false;
+    config.useDiv = true;
+    config.useFloats = true;
 
-//     ExpressionGenerator generator(config);
-//     BinaryExpression binaryExpr = generator.GenerateBinaryExpression();
+    ExpressionGenerator generator(config);
+    {
+        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(5.0), Constant(10.0));
+        BOOST_CHECK_EQUAL(expr.Evaluate(), 2.0);
+    }
 
-//     if (binaryExpr.m_op == Operation::Div) {
-//         double rightValue = binaryExpr.m_right->Evaluate();
-//         BOOST_CHECK(rightValue != 0.0); // Ensure right value is not zero
-//         BOOST_CHECK(!std::isnan(binaryExpr.Evaluate())); //Ensure evaluation does not return Nan when dividing.
-//     }
-// }
+    {
+        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(5.0), Constant(5.0));
+        BOOST_CHECK_EQUAL(expr.Evaluate(), 1.0);
+    }
+
+    {
+        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(0.0), Constant(5.0));
+        BOOST_CHECK_EQUAL(expr.Evaluate(), 0.0);
+    }
+
+    {
+        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(5.0), Constant(0.0));
+        BOOST_CHECK_EQUAL(expr.Evaluate(), 0.0);
+    }
+
+    {
+        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(0.0), Constant(0.0));
+        BOOST_CHECK_EQUAL(expr.Evaluate(), 0.0);
+    }
+
+    {
+        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(5.0), Constant(3.0));
+        BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
+    }
+
+    {
+        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(3.0), Constant(5.0));
+        BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
+    }
+}
 
 BOOST_AUTO_TEST_CASE(GenerateExpressionTest) {
     ExpressionGenerator::Config config;
