@@ -13,7 +13,7 @@ export function ExpressionInputControl({ expression, readOnly }: Props) {
             <OutlinedInput
                 style={{ height: "25px", width: "90px", textAlign: "center", textAlignLast: "center" }}
                 size="small"
-                type="number"
+                type={readOnly ? "text" : "number"}
                 readOnly={readOnly}
                 defaultValue={expression.value}
             // onBlur={(e) => onChange(Number(e.target.value))}
