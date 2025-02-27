@@ -46,7 +46,7 @@ void Start(webui::window::event* event)
     {
         std::string json = event->get_string(0);
         boost::json::value value = boost::json::parse(json);
-        std::cout << value << std::endl;
+
         ExpressionGeneratorConfig config;
         int64_t amount = value.at("amount").as_int64();
         config.min = value.at("min").as_int64();
@@ -85,7 +85,6 @@ void Start(webui::window::event* event)
         jsonObj["answers"] = std::move(answersArrObj);
 
         std::string serializedJson = boost::json::serialize(jsonObj);
-        std::cout << serializedJson << std::endl;
 
         event->return_string(serializedJson);
     }

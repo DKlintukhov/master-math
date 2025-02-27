@@ -33,17 +33,29 @@ export function Results({ expressions, answers, correctAnswers, duration, onRepl
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "space-evenly",
-            height: "100vh"
+            height: "100%"
         }}>
+            <Container style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "15px 0"
+            }}>
+                <Typography variant="h4" component="h2" color="info">
+                    Время: {Util.formatTime(duration)}
+                </Typography>
+                <Typography variant="h4" component="h2" color="success">
+                    Правильные ответы: {correctAnswersAmount} ({toPercents(correctAnswersAmount, expressionsAmount)})
+                </Typography>
+                <Typography variant="h4" component="h2" color="error">
+                    Неправильные ответы: {incorrectAnswersAmount} ({toPercents(incorrectAnswersAmount, expressionsAmount)})
+                </Typography>
+            </Container>
+
             <Container
                 style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    gap: "5px",
                     overflow: "hidden auto",
-                    height: "80%",
-                    minHeight: "25%",
+                    padding: "10px 0"
                 }}
             >
                 {expressions.map((expression, idx) => (
@@ -51,7 +63,8 @@ export function Results({ expressions, answers, correctAnswers, duration, onRepl
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        gap: "5px"
+                        gap: "5px",
+                        padding: "5px 0"
                     }}>
                         <span style={{ width: "25px" }}>{idx + 1})</span>
                         <ExpressionInputControl
@@ -78,30 +91,13 @@ export function Results({ expressions, answers, correctAnswers, duration, onRepl
 
             <Container style={{
                 display: "flex",
-                flexDirection: "column",
+                gap: "10px",
                 alignItems: "center",
-                padding: "5px"
+                justifyContent: "center",
+                padding: "15px 0",
             }}>
-                <Typography variant="h4" component="h2" color="info">
-                    Время: {Util.formatTime(duration)}
-                </Typography>
-                <Typography variant="h4" component="h2" color="success">
-                    Правильные ответы: {correctAnswersAmount} ({toPercents(correctAnswersAmount, expressionsAmount)})
-                </Typography>
-                <Typography variant="h4" component="h2" color="error">
-                    Неправильные ответы: {incorrectAnswersAmount} ({toPercents(incorrectAnswersAmount, expressionsAmount)})
-                </Typography>
-
-                <Container style={{
-                    display: "flex",
-                    gap: "10px",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "5px",
-                }}>
-                    <Button variant="outlined" onClick={onReplay}>Повтор</Button>
-                    <Button variant="outlined" onClick={() => onFinished()}>Закончить</Button>
-                </Container>
+                <Button variant="outlined" onClick={onReplay}>Повтор</Button>
+                <Button variant="outlined" onClick={() => onFinished()}>Закончить</Button>
             </Container>
         </Container >
     );

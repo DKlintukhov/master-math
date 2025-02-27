@@ -55,19 +55,16 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "space-evenly",
-            height: "100vh"
+            gap: "15px",
+            height: "100%",
+            padding: "10px 0"
         }}>
             <CountdownTimer timeout={timeout} onExpired={handleOnFinish} />
 
             <Container
                 style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    gap: "5px",
                     overflow: "hidden auto",
-                    height: "80%",
-                    minHeight: "20%",
+                    padding: "10px 0"
                 }}
             >
                 {expressions.map((expression, id) => (
@@ -75,7 +72,8 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        gap: "5px"
+                        gap: "5px",
+                        padding: "5px 0"
                     }}>
                         <span style={{ width: "30px" }}>{id + 1})</span>
                         <ExpressionInputControl
@@ -86,6 +84,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
                         <OutlinedInput
                             style={{ height: "25px", width: "90px", textAlignLast: "center" }}
                             size="small"
+                            type="number"
                             onBlur={(e) => handleAnswerChange(id, e.target.value)}
                         />
                     </Container>
