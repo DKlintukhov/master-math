@@ -22,43 +22,23 @@
 * SOFTWARE.
 */
 
-#ifndef EXPRESSION_GENERATOR_H
-#define EXPRESSION_GENERATOR_H
 
-#include <random>
-#include <vector>
-#include "Expression.h"
+#include <locale>
+#include <webui.hpp>
+#include <StartHandler.h>
 
-namespace Core
+int main(int, char const**)
 {
-    class ExpressionGenerator final
-    {
-    public:
+    std::locale::global(std::locale(""));
 
-    struct Config
-    {
-        int64_t min = 0;
-        int64_t max = 100;
-        bool useAdd = true;
-        bool useSub = true;
-        bool useMul = false;
-        bool useDiv = false;
-        bool useFloats = false;
-    };
-        explicit ExpressionGenerator(Config conf);
+    webui::window win;
 
-        std::unique_ptr<Expression> GenerateExpression();
-        BinaryExpression GenerateBinaryExpression();
-        Constant GenerateConstant();
-        Operation GenerateOperation();
+    win.set_size(1024, 768);
 
-    private:
-        Config m_config;
-        std::vector<Operation> m_ops;
-        std::mt19937 m_generator;
-        std::uniform_int_distribution<int64_t> m_intDist;
-        std::uniform_real_distribution<double> m_floatDist;
-    };
+    win.bind("start", Webui::StartHandler);
+    win.show_browser("index.html", static_cast<unsigned int>(win.get_best_browser()));
+
+    webui::wait();
+
+    return 0;
 }
-
-#endif

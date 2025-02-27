@@ -28,11 +28,11 @@
 #include "Expression.h"
 #include "ExpressionGenerator.h"
 
-using namespace MasterMath;
+using namespace Core;
 
 
 BOOST_AUTO_TEST_CASE(GenerateConstantTest) {
-    ExpressionGeneratorConfig config;
+    ExpressionGenerator::Config config;
     config.min = 1;
     config.max = 10;
     config.useAdd = true;
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(GenerateConstantTest) {
 }
 
 BOOST_AUTO_TEST_CASE(GenerateOperationTest) {
-    ExpressionGeneratorConfig config;
+    ExpressionGenerator::Config config;
     config.min = 1;
     config.max = 10;
     config.useAdd = true;
@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE(GenerateOperationTest) {
 // }
 
 BOOST_AUTO_TEST_CASE(GenerateExpressionTest) {
-    ExpressionGeneratorConfig config;
+    ExpressionGenerator::Config config;
     config.min = 1;
     config.max = 10;
     config.useAdd = true;
