@@ -43,12 +43,12 @@ namespace Core
         if (m_config.useDiv) m_ops.push_back(Operation::Div);
     }
 
-    std::unique_ptr<Expression> ExpressionGenerator::GenerateExpression()
+    Expression ExpressionGenerator::GenerateExpression()
     {
-        return std::make_unique<BinaryExpression>(GenerateBinaryExpression());
+        return GenerateBinaryOperation();
     }
 
-    BinaryExpression ExpressionGenerator::GenerateBinaryExpression()
+    BinaryOperation ExpressionGenerator::GenerateBinaryOperation()
     {
         Operation op = GenerateOperation();
         Constant a = GenerateConstant();
@@ -56,28 +56,28 @@ namespace Core
 
         if (op == Operation::Sub)
         {
-            return NormalizeSubBinaryExpression(a, b);
+            return NormalizeSubBinaryOperation(a, b);
         }
 
         if (op == Operation::Div)
         {
-            return NormalizeDivBinaryExpression(a, b);
+            return NormalizeDivBinaryOperation(a, b);
         }
 
-        return BinaryExpression(std::make_unique<Constant>(a), std::make_unique<Constant>(b), op);
+        return BinaryOperation(op, a, b);
     }
 
-    BinaryExpression ExpressionGenerator::NormalizeSubBinaryExpression(Constant a, Constant b)
+    BinaryOperation ExpressionGenerator::NormalizeSubBinaryOperation(Constant a, Constant b)
     {
         if (a.Evaluate() < b.Evaluate())
         {
-            return BinaryExpression(std::make_unique<Constant>(b), std::make_unique<Constant>(a), Operation::Sub);
+            return BinaryOperation(Operation::Sub, b, a);
         }
 
-        return BinaryExpression(std::make_unique<Constant>(a), std::make_unique<Constant>(b), Operation::Sub);
+        return BinaryOperation(Operation::Sub, a, b);
     }
 
-    BinaryExpression ExpressionGenerator::NormalizeDivBinaryExpression(Constant a, Constant b)
+    BinaryOperation ExpressionGenerator::NormalizeDivBinaryOperation(Constant a, Constant b)
     {
         double aVal = a.Evaluate();
         double bVal = b.Evaluate();
@@ -91,31 +91,31 @@ namespace Core
         {
             if (aVal == 0.0)
             {
-                return BinaryExpression(std::make_unique<Constant>(0.0), std::make_unique<Constant>(static_cast<double>(m_config.max)), Operation::Div);
+                return BinaryOperation(Operation::Div, Constant(0.0), Constant(static_cast<double>(m_config.max)));
             }
             else
             {
-                return BinaryExpression(std::make_unique<Constant>(b), std::make_unique<Constant>(a), Operation::Div);
+                return BinaryOperation(Operation::Div, b, a);
             }
         }
 
         double divisionResult = aVal / bVal;
         if (std::trunc(divisionResult) == divisionResult)
         {
-            return BinaryExpression(std::make_unique<Constant>(a), std::make_unique<Constant>(b), Operation::Div);
+            return BinaryOperation(Operation::Div, a, b);
         }
 
-        return BinaryExpression(std::make_unique<Constant>(Constant(aVal * bVal)), std::make_unique<Constant>(b), Operation::Div);
+        return BinaryOperation(Operation::Div, Constant(aVal * bVal), b);
     }
 
     Constant ExpressionGenerator::GenerateConstant()
     {
         if (m_config.useFloats)
         {
-            return m_floatDist(m_generator) * (m_config.max - m_config.min) + m_config.min;
+            return Constant(m_floatDist(m_generator) * (m_config.max - m_config.min) + m_config.min);
         }
 
-        return static_cast<double>(m_intDist(m_generator));
+        return Constant(static_cast<double>(m_intDist(m_generator)));
     }
 
     Operation ExpressionGenerator::GenerateOperation()

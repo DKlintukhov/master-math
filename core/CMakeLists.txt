@@ -5,11 +5,7 @@ set(SRC
 
 set(TARGET libcore)
 
-add_library(${TARGET} STATIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Expression.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/ExpressionGenerator.cpp
-    ${SRC}
-)
+add_library(${TARGET} STATIC ${SRC})
 target_link_libraries(${TARGET}
     PRIVATE
         Threads::Threads

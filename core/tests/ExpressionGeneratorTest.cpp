@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(GenerateOperationTest) {
     BOOST_CHECK(op == Operation::Add || op == Operation::Mul);
 }
 
-BOOST_AUTO_TEST_CASE(GenerateBinaryExpressionTest_NormalizeSubBinaryExpression) {
+BOOST_AUTO_TEST_CASE(GenerateBinaryOperationTest_NormalizeSubBinaryOperation) {
     ExpressionGenerator::Config config;
     config.min = 1.0;
     config.max = 20.0;
@@ -87,17 +87,17 @@ BOOST_AUTO_TEST_CASE(GenerateBinaryExpressionTest_NormalizeSubBinaryExpression) 
 
     ExpressionGenerator generator(config);
     {
-        BinaryExpression expr = generator.NormalizeSubBinaryExpression(Constant(5), Constant(10));
+        BinaryOperation expr = generator.NormalizeSubBinaryOperation(Constant(5), Constant(10));
         BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
     }
 
     {
-        BinaryExpression expr = generator.NormalizeSubBinaryExpression(Constant(10), Constant(5));
+        BinaryOperation expr = generator.NormalizeSubBinaryOperation(Constant(10), Constant(5));
         BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
     }
 }
 
-BOOST_AUTO_TEST_CASE(GenerateBinaryExpressionTest_NormalizeDivBinaryExpression) {
+BOOST_AUTO_TEST_CASE(GenerateBinaryOperationTest_NormalizeDivBinaryOperation) {
     ExpressionGenerator::Config config;
     config.min = 0.0;
     config.max = 10.0;
@@ -109,53 +109,37 @@ BOOST_AUTO_TEST_CASE(GenerateBinaryExpressionTest_NormalizeDivBinaryExpression) 
 
     ExpressionGenerator generator(config);
     {
-        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(5.0), Constant(10.0));
+        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(5.0), Constant(10.0));
         BOOST_CHECK_EQUAL(expr.Evaluate(), 2.0);
     }
 
     {
-        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(5.0), Constant(5.0));
+        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(5.0), Constant(5.0));
         BOOST_CHECK_EQUAL(expr.Evaluate(), 1.0);
     }
 
     {
-        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(0.0), Constant(5.0));
+        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(0.0), Constant(5.0));
         BOOST_CHECK_EQUAL(expr.Evaluate(), 0.0);
     }
 
     {
-        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(5.0), Constant(0.0));
+        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(5.0), Constant(0.0));
         BOOST_CHECK_EQUAL(expr.Evaluate(), 0.0);
     }
 
     {
-        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(0.0), Constant(0.0));
+        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(0.0), Constant(0.0));
         BOOST_CHECK_EQUAL(expr.Evaluate(), 0.0);
     }
 
     {
-        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(5.0), Constant(3.0));
+        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(5.0), Constant(3.0));
         BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
     }
 
     {
-        BinaryExpression expr = generator.NormalizeDivBinaryExpression(Constant(3.0), Constant(5.0));
+        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(3.0), Constant(5.0));
         BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
     }
-}
-
-BOOST_AUTO_TEST_CASE(GenerateExpressionTest) {
-    ExpressionGenerator::Config config;
-    config.min = 1;
-    config.max = 10;
-    config.useAdd = true;
-    config.useSub = true;
-    config.useMul = true;
-    config.useDiv = true;
-    config.useFloats = true;
-
-    ExpressionGenerator generator(config);
-
-    std::unique_ptr<Expression> expression = generator.GenerateExpression();
-    BOOST_CHECK(expression != nullptr);
 }

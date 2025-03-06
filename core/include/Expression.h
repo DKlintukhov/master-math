@@ -27,10 +27,13 @@
 #define EXPRESSION_H
 
 #include <memory>
+#include <variant>
 #include <boost/json.hpp>
 
 namespace Core
 {
+    using Json = boost::json::object;
+
     enum class Operation
     {
         Add,
@@ -39,42 +42,37 @@ namespace Core
         Div
     };
 
-    class Expression
-    {
-    public:
-        virtual boost::json::object ToJson() const = 0;
-        virtual double Evaluate() const = 0;
-        virtual ~Expression() = default;
-    };
+    class Constant;
+    class BinaryOperation;
 
-    class Constant final : public Expression
+    using Expression = std::variant<Constant, BinaryOperation>;
+
+    class Constant final
     {
     public:
-        Constant(double value);
-        boost::json::object ToJson() const override;
-        double Evaluate() const override;
+        explicit Constant(double value);
+        double Evaluate() const;
+        Json ToJson() const;
 
     private:
         double m_value;
     };
 
-    class BinaryExpression final : public Expression
+    class BinaryOperation final
     {
     public:
-        BinaryExpression(
-            std::unique_ptr<Expression> left,
-            std::unique_ptr<Expression> right,
-            Operation op
-        );
-
-        boost::json::object ToJson() const override;
-        double Evaluate() const override;
+        BinaryOperation(Operation op, Expression left, Expression right);
+        Json ToJson() const;
+        double Evaluate() const;
 
     private:
         Operation m_op;
         std::unique_ptr<Expression> m_left;
         std::unique_ptr<Expression> m_right;
     };
+
+    Json ToJson(const Expression& expr);
+    double Evaluate(const Expression& expr);
 }
 
 #endif

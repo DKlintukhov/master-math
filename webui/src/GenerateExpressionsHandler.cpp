@@ -24,11 +24,15 @@
 
 #include "pch.h"
 
+#include <Expression.h>
+#include <ExpressionGenerator.h>
+#include "GenerateExpressionsHandler.h"
+
 using namespace Core;
 
 namespace Webui
 {
-    void StartHandler(webui::window::event* event) noexcept
+    void GenerateExpressionsHandler(webui::window::event* event) noexcept
     {
         try
         {
@@ -63,9 +67,9 @@ namespace Webui
 
             for (int i = 0; i < amount; ++i)
             {
-                std::unique_ptr<Expression> expr = generator.GenerateExpression();
-                expressionsArrObj.push_back(expr->ToJson());
-                double answer = expr->Evaluate();
+                Expression expr = generator.GenerateExpression();
+                expressionsArrObj.push_back(ToJson(expr));
+                double answer = Evaluate(expr);
                 answersArrObj.push_back(answer);
             }
 

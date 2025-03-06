@@ -26,10 +26,18 @@
 #include "pch.h"
 
 #include "Expression.h"
-#include <numeric>
 
 namespace Core
 {
+    Json ToJson(const Expression& expr)
+    {
+        return std::visit([](const auto& e) { return e.ToJson(); }, expr);
+    }
+
+    double Evaluate(const Expression& expr)
+    {
+        return std::visit([](const auto& e) { return e.Evaluate(); }, expr);
+    }
 
     Constant::Constant(double val) : m_value(val) {}
 
@@ -38,21 +46,21 @@ namespace Core
         return m_value;
     }
 
-    BinaryExpression::BinaryExpression(
-        std::unique_ptr<Expression> left,
-        std::unique_ptr<Expression> right,
-        Operation op
+    BinaryOperation::BinaryOperation(
+        Operation op,
+        Expression left,
+        Expression right
     )
-        : m_left(std::move(left))
-        , m_right(std::move(right))
-        , m_op(op)
+        : m_op(op)
+        , m_left(std::make_unique<Expression>(std::move(left)))
+        , m_right(std::make_unique<Expression>(std::move(right)))
     {
     }
 
-    double BinaryExpression::Evaluate() const
+    double BinaryOperation::Evaluate() const
     {
-        const double left = m_left->Evaluate();
-        const double right = m_right->Evaluate();
+        const double left = std::visit([](const auto& e) { return e.Evaluate(); }, *m_left);
+        const double right = std::visit([](const auto& e) { return e.Evaluate(); }, *m_right);
         switch (m_op)
         {
         case Operation::Add: return left + right;
@@ -70,21 +78,21 @@ namespace Core
         }
     }
 
-    boost::json::object BinaryExpression::ToJson() const
+    Json BinaryOperation::ToJson() const
     {
-        boost::json::object obj;
-        obj["type"] = "binary";
-        obj["op"] = static_cast<int>(m_op);
-        obj["left"] = m_left->ToJson();
-        obj["right"] = m_right->ToJson();
-        return obj;
+        Json json;
+        json["type"] = "binary";
+        json["op"] = static_cast<int>(m_op);
+        json["left"] = std::visit([](const auto& e) { return e.ToJson(); }, *m_left);
+        json["right"] = std::visit([](const auto& e) { return e.ToJson(); }, *m_right);
+        return json;
     }
 
-    boost::json::object Constant::ToJson() const
+    Json Constant::ToJson() const
     {
-        boost::json::object obj;
-        obj["type"] = "constant";
-        obj["value"] = m_value;
-        return obj;
+        Json json;
+        json["type"] = "constant";
+        json["value"] = m_value;
+        return json;
     }
 }

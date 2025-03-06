@@ -47,10 +47,10 @@ namespace Core
     };
         explicit ExpressionGenerator(Config conf);
 
-        std::unique_ptr<Expression> GenerateExpression();
-        BinaryExpression GenerateBinaryExpression();
-        BinaryExpression NormalizeSubBinaryExpression(Constant a, Constant b);
-        BinaryExpression NormalizeDivBinaryExpression(Constant a, Constant b);
+        Expression GenerateExpression();
+        BinaryOperation GenerateBinaryOperation();
+        BinaryOperation NormalizeSubBinaryOperation(Constant a, Constant b);
+        BinaryOperation NormalizeDivBinaryOperation(Constant a, Constant b);
         Constant GenerateConstant();
         Operation GenerateOperation();
 

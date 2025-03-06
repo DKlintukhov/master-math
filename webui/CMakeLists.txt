@@ -4,7 +4,7 @@ set(TARGET libwebui)
 set(SRC "")
 
 add_library(${TARGET} STATIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/StartHandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GenerateExpressionsHandler.cpp
     ${SRC}
 )
 
