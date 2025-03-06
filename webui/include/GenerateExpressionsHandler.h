@@ -23,14 +23,14 @@
 */
 
 
-#ifndef START_HANDLER_H
-#define START_HANDLER_H
+#ifndef GENERATE_EXPRESSIONS_HANDLER_H
+#define GENERATE_EXPRESSIONS_HANDLER_H
 
 #include <webui.hpp>
 
 namespace Webui
 {
-    void StartHandler(webui::window::event* event) noexcept;
+    void GenerateExpressionsHandler(webui::window::event* event) noexcept;
 }
 
 #endif

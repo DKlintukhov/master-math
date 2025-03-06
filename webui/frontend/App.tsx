@@ -15,7 +15,7 @@ export function App() {
 
     const exerciseStarted = async (config: ExerciseConfig, timeout: number) => {
         try {
-            const json = await window.webui.call('start', JSON.stringify(config));
+            const json = await window.webui.call('GenerateExpressions', JSON.stringify(config));
             const { error, expressions, answers } = JSON.parse(json) as Response;
             if (error) {
                 throw error;

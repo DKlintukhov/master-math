@@ -25,7 +25,7 @@
 
 #include <locale>
 #include <webui.hpp>
-#include <StartHandler.h>
+#include <GenerateExpressionsHandler.h>
 
 int main(int, char const**)
 {
@@ -35,7 +35,7 @@ int main(int, char const**)
 
     win.set_size(1024, 768);
 
-    win.bind("start", Webui::StartHandler);
+    win.bind("GenerateExpressions", Webui::GenerateExpressionsHandler);
     win.show_browser("index.html", static_cast<unsigned int>(win.get_best_browser()));
 
     webui::wait();

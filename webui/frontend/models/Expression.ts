@@ -21,4 +21,4 @@ export interface OperationToUse {
 
 export type Expression =
     | { constant: number }
-    | { binary: [Expression, Expression, Operation] };
+    | { binary: [Operation, Expression, Expression] };
