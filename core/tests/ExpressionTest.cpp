@@ -199,3 +199,47 @@ BOOST_AUTO_TEST_CASE(BinaryOperationToJson) {
     BOOST_TEST(rightRight.at("type").as_string() == "constant");
     BOOST_TEST(rightRight.at("value").as_double() == 1.0);
 }
+
+BOOST_AUTO_TEST_CASE(FromJsonStrTest) {
+    std::string jsonStr = R"({
+        "type": "binary",
+        "op": 2,
+        "left": {
+            "type": "binary",
+            "op": 1,
+            "left": {
+                "type": "binary",
+                "op": 3,
+                "left": {
+                    "type": "constant",
+                    "value": 10.0
+                },
+                "right": {
+                    "type": "constant",
+                    "value": 2.0
+                }
+            },
+            "right": {
+                "type": "constant",
+                "value": 1.0
+            }
+        },
+        "right": {
+            "type": "binary",
+            "op": 0,
+            "left": {
+                "type": "constant",
+                "value": 3.0
+            },
+            "right": {
+                "type": "constant",
+                "value": 1.0
+            }
+        }
+    })";
+
+    Json json = boost::json::parse(jsonStr).as_object();
+    Expression expr = ExpressionFromJson(json);
+
+    BOOST_CHECK_CLOSE(std::visit([](const auto& e) { return e.Evaluate(); }, expr), 16.0, 1e-6);
+}

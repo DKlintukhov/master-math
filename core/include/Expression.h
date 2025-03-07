@@ -53,6 +53,7 @@ namespace Core
         explicit Constant(double value);
         double Evaluate() const;
         Json ToJson() const;
+        static Constant FromJson(const Json& json);
 
     private:
         double m_value;
@@ -62,8 +63,9 @@ namespace Core
     {
     public:
         BinaryOperation(Operation op, Expression left, Expression right);
-        Json ToJson() const;
         double Evaluate() const;
+        Json ToJson() const;
+        static BinaryOperation FromJson(const Json& json);
 
     private:
         Operation m_op;
@@ -71,6 +73,7 @@ namespace Core
         std::unique_ptr<Expression> m_right;
     };
 
+    Expression ExpressionFromJson(const Json& json);
     Json ToJson(const Expression& expr);
     double Evaluate(const Expression& expr);
 }

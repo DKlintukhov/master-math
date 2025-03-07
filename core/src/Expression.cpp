@@ -39,7 +39,35 @@ namespace Core
         return std::visit([](const auto& e) { return e.Evaluate(); }, expr);
     }
 
+    Expression ExpressionFromJson(const Json& json)
+    {
+        auto type = json.at("type").as_string();
+        if (type == "constant")
+        {
+            return Constant::FromJson(json);
+        }
+        else if (type == "binary")
+        {
+            return BinaryOperation::FromJson(json);
+        }
+        else
+        {
+            throw std::runtime_error("Unknown type: " + std::string(type));
+        }
+    }
+
     Constant::Constant(double val) : m_value(val) {}
+
+    Constant Constant::FromJson(const Json& json)
+    {
+        if (json.at("type").as_string() != "constant")
+        {
+            throw std::runtime_error("Invalid type: expected 'constant'");
+        }
+
+        double value = json.at("value").as_double();
+        return Constant(value);
+    }
 
     double Constant::Evaluate() const
     {
@@ -55,6 +83,19 @@ namespace Core
         , m_left(std::make_unique<Expression>(std::move(left)))
         , m_right(std::make_unique<Expression>(std::move(right)))
     {
+    }
+
+    BinaryOperation BinaryOperation::FromJson(const Json& json)
+    {
+        if (json.at("type").as_string() != "binary")
+        {
+            throw std::runtime_error("Invalid type: expected 'binary'");
+        }
+
+        Operation op = static_cast<Operation>(json.at("op").as_int64());
+        Expression left = ExpressionFromJson(json.at("left").as_object());
+        Expression right = ExpressionFromJson(json.at("right").as_object());
+        return BinaryOperation(op, std::move(left), std::move(right));
     }
 
     double BinaryOperation::Evaluate() const
