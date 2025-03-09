@@ -1,8 +1,9 @@
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { Container } from "@mui/material";
-import { Exercise, ExerciseSetup, Results } from "./pages";
+import { Button, Container } from "@mui/material";
+import { Exercise, ExerciseBuilder, ExerciseSetup, Results } from "./pages";
 import { useEffect, useState } from "react";
 import { ExerciseConfig, Expression, Response } from "./models";
+import { Main } from "./pages/Main";
 
 export function App() {
     const navigate = useNavigate();
@@ -13,7 +14,8 @@ export function App() {
     const [timeout, setTimeout] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
 
-    const exerciseStarted = async (config: ExerciseConfig, timeout: number) => {
+    const generatedExerciseStarted = async (config: ExerciseConfig, timeout: number) => {
+        navigate("/");
         try {
             const json = await window.webui.call('GenerateExpressions', JSON.stringify(config));
             const { error, expressions, answers } = JSON.parse(json) as Response;
@@ -30,6 +32,14 @@ export function App() {
         }
     }
 
+    const generatedExcersizeNavigated = () => {
+        navigate("/exercise-setup");
+    }
+
+    const excersizeBuilderNavigated = () => {
+        navigate("/builder");
+    }
+
     const exerciseFinished = (duration: number, answers: number[]) => {
         setDuration(duration);
         setAnswers([...answers]);
@@ -37,6 +47,10 @@ export function App() {
     }
 
     const finished = () => {
+        navigate("/");
+    }
+
+    const mainNaviaged = () => {
         navigate("/");
     }
 
@@ -57,8 +71,13 @@ export function App() {
                 overflow: "hidden"
             }}>
             <Routes>
-                <Route path="/" element={<ExerciseSetup onStarted={exerciseStarted} />} />
-                <Route path="/exercise" element={<Exercise timeout={timeout} expressions={expressions} onFinished={exerciseFinished} />} />
+                <Route path="/" element={
+                    <Main onGeneratedExcersizeNavigated={generatedExcersizeNavigated}
+                        onExcersizeBuilderNavigated={excersizeBuilderNavigated} />
+                } />
+                <Route path="/exercise-setup" element={<ExerciseSetup onStart={generatedExerciseStarted} onCancel={finished} />} />
+                <Route path="/builder" element={<ExerciseBuilder onCancel={finished} />} />
+                <Route path="/exercise" element={<Exercise timeout={timeout} expressions={expressions} onFinish={exerciseFinished} />} />
                 <Route path="/results" element={<Results
                     expressions={expressions}
                     duration={duration}
