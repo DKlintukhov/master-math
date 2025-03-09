@@ -4,14 +4,14 @@ import { Util } from "../util";
 
 interface Props {
     timeout: number;
-    onExpired: () => void;
+    onExpire: () => void;
 }
 
 function minsToSecs(mins: number): number {
     return mins * 60;
 }
 
-export function CountdownTimer({ timeout, onExpired }: Props) {
+export function CountdownTimer({ timeout, onExpire }: Props) {
     const [seconds, setSeconds] = useState(minsToSecs(timeout));
 
     useEffect(() => {
@@ -23,7 +23,7 @@ export function CountdownTimer({ timeout, onExpired }: Props) {
             }, 1000);
         } else {
             clearInterval(interval);
-            onExpired();
+            onExpire();
         }
 
         return () => clearInterval(interval);

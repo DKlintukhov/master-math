@@ -3,11 +3,11 @@ import { Operation, OperationToUse, OperationSymbols, } from "../models";
 import { useEffect, useState } from "react";
 
 interface Props {
-    onChecked: (ops: OperationToUse) => void;
+    onCheck: (ops: OperationToUse) => void;
     onError: (iisError: boolean) => void;
 }
 
-export function OperatorsSelector({ onChecked, onError }: Props) {
+export function OperationMultiSelect({ onCheck, onError }: Props) {
     const [useAdd, setUseAdd] = useState(true);
     const [useSub, setUseSub] = useState(true);
     const [useMul, setUseMul] = useState(false);
@@ -26,7 +26,7 @@ export function OperatorsSelector({ onChecked, onError }: Props) {
         setErrorMessage("");
         onError(false);
         setError(false);
-        onChecked({ useAdd, useSub, useMul, useDiv });
+        onCheck({ useAdd, useSub, useMul, useDiv });
     }, [useAdd, useSub, useMul, useDiv]);
 
     return (

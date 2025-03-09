@@ -1,4 +1,5 @@
 export * from "./ExpressionInputControl";
 export * from "./NumericInputControl";
-export * from "./OperatorsSelector";
+export * from "./OperationMultiSelect";
+export * from "./OperationSelector";
 export * from "./CountdownTimer";

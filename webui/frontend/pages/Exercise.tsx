@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 interface Props {
     timeout: number;
     expressions: Expression[];
-    onFinished: (duration: number, answers: number[]) => void;
+    onFinish: (duration: number, answers: number[]) => void;
 }
 
 function getDurationInSeconds(startDate: Date): number {
@@ -15,7 +15,7 @@ function getDurationInSeconds(startDate: Date): number {
     return differenceInMilliseconds / 1000;
 }
 
-export function Exercise({ timeout, expressions, onFinished }: Props) {
+export function Exercise({ timeout, expressions, onFinish }: Props) {
     const [answers, setAnswers] = useState<number[]>(() => Array(expressions.length).fill(null));
 
     const startDateRef = useRef(new Date());
@@ -24,7 +24,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
     useEffect(() => {
         const timerId = setTimeout(() => {
             const duration = getDurationInSeconds(startDate);
-            onFinished(duration, answers);
+            onFinish(duration, answers);
         }, timeout * 60 * 1000);
 
         return () => clearTimeout(timerId);
@@ -46,7 +46,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
     };
 
     const handleOnFinish = () => {
-        onFinished(getDurationInSeconds(startDate), answers);
+        onFinish(getDurationInSeconds(startDate), answers);
     };
 
     return (
@@ -59,7 +59,7 @@ export function Exercise({ timeout, expressions, onFinished }: Props) {
             height: "100%",
             padding: "10px 0"
         }}>
-            <CountdownTimer timeout={timeout} onExpired={handleOnFinish} />
+            <CountdownTimer timeout={timeout} onExpire={handleOnFinish} />
 
             <Container
                 style={{

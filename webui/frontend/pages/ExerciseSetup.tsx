@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
 import { OperationToUse, ExerciseConfig } from "../models";
-import { NumericInputControl, OperatorsSelector } from "../components";
+import { NumericInputControl, OperationMultiSelect } from "../components";
 import { Container, FormHelperText } from "@mui/material";
 
 interface Props {
-    onStarted: (exerciseConf: ExerciseConfig, timeout: number) => void;
+    onStart: (exerciseConf: ExerciseConfig, timeout: number) => void;
+    onCancel: () => void;
 }
 
 const MIN_VALUE = -10000;
@@ -16,7 +17,7 @@ const MAX_EPXRESSIONS_AMOUNT = 100;
 const MIN_TIMEOUT = 1;
 const MAX_TIMEOUT = 60;
 
-export function ExerciseSetup({ onStarted }: Props) {
+export function ExerciseSetup({ onStart, onCancel }: Props) {
     const [inputsInvalid, setInputsInvalid] = useState(false);
     const [timeout, setTimeout] = useState(5);
     const [amount, setAmount] = useState(15);
@@ -32,7 +33,7 @@ export function ExerciseSetup({ onStarted }: Props) {
     const [checkOperatorsError, setCheckOperatorsError] = useState<boolean>();
 
     const handleStart = () => {
-        onStarted({ amount, min, max, ...operators }, timeout);
+        onStart({ amount, min, max, ...operators }, timeout);
     }
 
     useEffect(() => {
@@ -65,7 +66,7 @@ export function ExerciseSetup({ onStarted }: Props) {
                     defaultValue={timeout}
                     min={MIN_TIMEOUT}
                     max={MAX_TIMEOUT}
-                    onChanged={setTimeout}
+                    onChange={setTimeout}
                     onError={handleInputsError} />
             </Grid>
 
@@ -75,7 +76,7 @@ export function ExerciseSetup({ onStarted }: Props) {
                     defaultValue={amount}
                     min={MIN_EPXRESSIONS_AMOUNT}
                     max={MAX_EPXRESSIONS_AMOUNT}
-                    onChanged={setAmount}
+                    onChange={setAmount}
                     onError={handleInputsError} />
             </Grid>
 
@@ -85,7 +86,7 @@ export function ExerciseSetup({ onStarted }: Props) {
                     defaultValue={min}
                     min={MIN_VALUE}
                     max={MAX_VALUE}
-                    onChanged={setMin}
+                    onChange={setMin}
                     onError={handleInputsError} />
             </Grid>
 
@@ -95,7 +96,7 @@ export function ExerciseSetup({ onStarted }: Props) {
                     defaultValue={max}
                     min={MIN_VALUE}
                     max={MAX_VALUE}
-                    onChanged={setMax}
+                    onChange={setMax}
                     onError={handleInputsError} />
             </Grid>
 
@@ -103,17 +104,19 @@ export function ExerciseSetup({ onStarted }: Props) {
                 display: "flex",
                 justifyContent: "center",
             }}>
-                <OperatorsSelector onChecked={setOperators} onError={setCheckOperatorsError} />
+                <OperationMultiSelect onCheck={setOperators} onError={setCheckOperatorsError} />
             </Grid>
 
             <Grid size={12}>
                 <Container style={{
                     display: "flex",
                     alignItems: "center",
-                    flexDirection: "column"
+                    flexDirection: "column",
+                    gap: "15px"
                 }}>
                     <Button disabled={inputsInvalid || minmaxInvalid} variant="outlined" onClick={handleStart}>Начать</Button>
                     {minmaxInvalid && <FormHelperText error={true}>{"Мин. не может быть >= чем Макс."}</FormHelperText>}
+                    <Button variant="outlined" onClick={onCancel}>Отмена</Button>
                 </Container>
             </Grid>
         </Grid>

@@ -6,11 +6,11 @@ interface Props {
     defaultValue: number;
     min: number;
     max: number;
-    onChanged: (time: number) => void;
+    onChange: (time: number) => void;
     onError: (isError: boolean) => void;
 }
 
-export function NumericInputControl({ label, defaultValue, min, max, onChanged, onError }: Props) {
+export function NumericInputControl({ label, defaultValue, min, max, onChange, onError }: Props) {
     const [input, setInput] = useState(defaultValue);
     const [isError, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -27,7 +27,7 @@ export function NumericInputControl({ label, defaultValue, min, max, onChanged, 
         setError(false);
         onError(false);
 
-        onChanged(input)
+        onChange(input)
     }, [input]);
 
     return (
