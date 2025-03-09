@@ -1,12 +1,12 @@
 option(USE_MBEDTLS ON)
 
 set(TARGET libwebui)
-set(SRC "")
-
-add_library(${TARGET} STATIC
+set(SRC 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/GenerateExpressionsHandler.cpp
-    ${SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/SolveExpressionsHandler.cpp
 )
+
+add_library(${TARGET} STATIC ${SRC})
 
 target_link_libraries(${TARGET}
     PUBLIC

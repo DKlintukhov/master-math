@@ -23,23 +23,15 @@
 */
 
 
-#include <locale>
+#ifndef EVENT_HANDLERS_H
+#define EVENT_HANDLERS_H
+
 #include <webui.hpp>
-#include <EventHandlers.h>
 
-int main(int, char const**)
+namespace Webui
 {
-    std::locale::global(std::locale(""));
-
-    webui::window win;
-
-    win.set_size(1024, 768);
-
-    win.bind("GenerateExpressions", Webui::GenerateExpressionsHandler);
-    win.bind("SolveExpressions", Webui::SolveExpressionsHandler);
-    win.show_browser("index.html", static_cast<unsigned int>(win.get_best_browser()));
-
-    webui::wait();
-
-    return 0;
+    void GenerateExpressionsHandler(webui::window::event* event) noexcept;
+    void SolveExpressionsHandler(webui::window::event* event) noexcept;
 }
+
+#endif

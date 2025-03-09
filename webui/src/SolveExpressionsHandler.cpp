@@ -22,15 +22,40 @@
 * SOFTWARE.
 */
 
+#include "pch.h"
 
-#ifndef GENERATE_EXPRESSIONS_HANDLER_H
-#define GENERATE_EXPRESSIONS_HANDLER_H
+#include <Expression.h>
+#include <ExpressionGenerator.h>
+#include "EventHandlers.h"
 
-#include <webui.hpp>
+using namespace Core;
 
 namespace Webui
 {
-    void GenerateExpressionsHandler(webui::window::event* event) noexcept;
-}
+    void SolveExpressionsHandler(webui::window::event* event) noexcept
+    {
+        try
+        {
+            std::string jsonStr = event->get_string(0);
+            boost::json::array arrayJson = boost::json::parse(jsonStr).as_array();
+            boost::json::array arrayJsonResp;
 
-#endif
+            for (const auto& expr : arrayJson)
+            {
+                Json json = expr.as_object();
+                Expression expr = ExpressionFromJson(json);
+                arrayJsonResp.push_back(Evaluate(expr));
+            }
+
+           std::string serializedJson = boost::json::serialize(arrayJsonResp);
+
+            event->return_string(serializedJson);
+        }
+        catch (const std::exception& e)
+        {
+            boost::json::object errJson;
+            errJson["error"] = e.what();
+            event->return_string(boost::json::serialize(errJson));
+        }
+    }
+}

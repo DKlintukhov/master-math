@@ -65,8 +65,11 @@ namespace Core
             throw std::runtime_error("Invalid type: expected 'constant'");
         }
 
-        double value = json.at("value").as_double();
-        return Constant(value);
+        auto doubleOpt = json.at("value").try_as_double();
+        if (doubleOpt)
+            return Constant(doubleOpt.value());
+        
+        return Constant(json.at("value").as_int64());
     }
 
     double Constant::Evaluate() const
