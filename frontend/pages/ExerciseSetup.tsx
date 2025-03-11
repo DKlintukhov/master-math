@@ -1,12 +1,14 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
-import { OperationToUse, ExerciseConfig } from "../models";
+import { OperationToUse } from "../models";
 import { NumericInputControl, OperationMultiSelect } from "../components";
 import { Container, FormHelperText } from "@mui/material";
+import { GenerateExpressionsConfig } from "../services";
 
 interface Props {
-    onStart: (exerciseConf: ExerciseConfig, timeout: number) => void;
+    onStart: (genExpressionsConf: GenerateExpressionsConfig, timeout: number) => void;
     onCancel: () => void;
 }
 

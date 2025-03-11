@@ -1,12 +1,11 @@
+import React from "react";
 import { Button, Container, OutlinedInput, Typography } from "@mui/material";
-import { Expression } from "../models";
-import { ExpressionInputControl } from "../components";
 import { Util } from "../util";
 
 interface Props {
-    expressions: Expression[];
-    answers: number[];
-    correctAnswers: number[];
+    expressions: string[];
+    answers: string[];
+    correctAnswers: string[];
     duration: number;
     onReplay: () => void;
     onFinished: () => void;
@@ -21,7 +20,7 @@ export function Results({ expressions, answers, correctAnswers, duration, onRepl
     let correctAnswersAmount = 0;
     let incorrectAnswersAmount = 0;
     answers.forEach((value, idx) => {
-        if (value == correctAnswers[idx])
+        if (value === correctAnswers[idx])
             ++correctAnswersAmount;
         else
             ++incorrectAnswersAmount;
@@ -67,10 +66,7 @@ export function Results({ expressions, answers, correctAnswers, duration, onRepl
                         padding: "5px 0"
                     }}>
                         <span style={{ width: "25px" }}>{idx + 1})</span>
-                        <ExpressionInputControl
-                            expression={expression}
-                            readOnly={true}
-                        />
+                        {expression}
                         <span style={{ width: "7px" }}>=</span>
                         <OutlinedInput
                             style={{ height: "25px", width: "90px", textAlignLast: "center" }}

@@ -25,7 +25,6 @@
 
 #include "pch.h"
 
-#include <random>
 #include "ExpressionGenerator.h"
 
 namespace Core
@@ -41,18 +40,24 @@ namespace Core
         if (m_config.useSub) m_ops.push_back(Operation::Sub);
         if (m_config.useMul) m_ops.push_back(Operation::Mul);
         if (m_config.useDiv) m_ops.push_back(Operation::Div);
+
+        m_opToChar[Operation::Add] = "+";
+        m_opToChar[Operation::Sub] = "-";
+        m_opToChar[Operation::Mul] = "*";
+        m_opToChar[Operation::Div] = "/";
     }
 
-    Expression ExpressionGenerator::GenerateExpression()
+    std::string ExpressionGenerator::GenerateExpression()
     {
         return GenerateBinaryOperation();
     }
 
-    BinaryOperation ExpressionGenerator::GenerateBinaryOperation()
+    std::string ExpressionGenerator::GenerateBinaryOperation()
     {
+        std::stringstream ss;
         Operation op = GenerateOperation();
-        Constant a = GenerateConstant();
-        Constant b = GenerateConstant();
+        double a = GenerateConstant();
+        double b = GenerateConstant();
 
         if (op == Operation::Sub)
         {
@@ -64,63 +69,83 @@ namespace Core
             return NormalizeDivBinaryOperation(a, b);
         }
 
-        return BinaryOperation(op, a, b);
+        ss << std::setprecision(3) << std::noshowpoint << a;
+        ss << m_opToChar[op];
+        ss << std::setprecision(3) << std::noshowpoint << b;
+        return ss.str();
     }
 
-    BinaryOperation ExpressionGenerator::NormalizeSubBinaryOperation(Constant a, Constant b)
+    std::string ExpressionGenerator::NormalizeSubBinaryOperation(double a, double b)
     {
-        if (a.Evaluate() < b.Evaluate())
+        std::stringstream ss;
+
+        if (a < b)
         {
-            return BinaryOperation(Operation::Sub, b, a);
+            ss << std::setprecision(3) << std::noshowpoint << b;
+            ss << m_opToChar[Operation::Sub];
+            ss << std::setprecision(3) << std::noshowpoint << a;
+            return ss.str();
         }
 
-        return BinaryOperation(Operation::Sub, a, b);
+        ss << std::setprecision(3) << std::noshowpoint << a;
+        ss << m_opToChar[Operation::Sub];
+        ss << std::setprecision(3) << std::noshowpoint << b;
+        return ss.str();
     }
 
-    BinaryOperation ExpressionGenerator::NormalizeDivBinaryOperation(Constant a, Constant b)
+    std::string ExpressionGenerator::NormalizeDivBinaryOperation(double a, double b)
     {
-        double aVal = a.Evaluate();
-        double bVal = b.Evaluate();
-
-        if (aVal < bVal) {
-            std::swap(aVal, bVal);
+        if (a < b) {
             std::swap(a, b);
         }
 
-        if (bVal == 0.0)
+        if (b == 0.0)
         {
-            if (aVal == 0.0)
+            if (a == 0.0)
             {
-                return BinaryOperation(Operation::Div, Constant(0.0), Constant(static_cast<double>(m_config.max)));
+                return ExpressionToString(Operation::Div, 0.0, static_cast<double>(m_config.max));
             }
             else
             {
-                return BinaryOperation(Operation::Div, b, a);
+                return ExpressionToString(Operation::Div, b, a);
             }
         }
 
-        double divisionResult = aVal / bVal;
-        if (std::trunc(divisionResult) == divisionResult)
+        double res = a / b;
+        if (std::trunc(res) == res)
         {
-            return BinaryOperation(Operation::Div, a, b);
+            return ExpressionToString(Operation::Div, a, b);
         }
 
-        return BinaryOperation(Operation::Div, Constant(aVal * bVal), b);
+        return ExpressionToString(Operation::Div, a * b, b);
     }
 
-    Constant ExpressionGenerator::GenerateConstant()
+    double ExpressionGenerator::GenerateConstant()
     {
         if (m_config.useFloats)
         {
-            return Constant(m_floatDist(m_generator) * (m_config.max - m_config.min) + m_config.min);
+            return m_floatDist(m_generator) * (m_config.max - m_config.min) + m_config.min;
         }
 
-        return Constant(static_cast<double>(m_intDist(m_generator)));
+        return static_cast<double>(m_intDist(m_generator));
     }
 
     Operation ExpressionGenerator::GenerateOperation()
     {
         std::uniform_int_distribution<size_t> dist(0, m_ops.size() - 1);
         return m_ops[dist(m_generator)];
+    }
+
+    std::string ExpressionGenerator::ExpressionToString(Operation op, double a, double b)
+    {
+        m_sstream << std::setprecision(3) << std::noshowpoint << a;
+        m_sstream << m_opToChar[op];
+        m_sstream << std::setprecision(3) << std::noshowpoint << b;
+
+        std::string expr = m_sstream.str();
+
+        m_sstream.str("");
+
+        return expr;
     }
 }

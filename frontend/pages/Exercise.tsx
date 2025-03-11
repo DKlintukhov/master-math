@@ -1,12 +1,12 @@
 import { Button, Container, OutlinedInput } from "@mui/material";
-import { Expression } from "../models";
-import { ExpressionInputControl, CountdownTimer } from "../components";
+import { CountdownTimer, ExpressionInputControl } from "../components";
 import { useEffect, useRef, useState } from "react";
+import React from "react";
 
 interface Props {
     timeout: number;
-    expressions: Expression[];
-    onFinish: (duration: number, answers: number[]) => void;
+    expressions: string[];
+    onFinish: (duration: number, answers: string[]) => void;
 }
 
 function getDurationInSeconds(startDate: Date): number {
@@ -16,7 +16,7 @@ function getDurationInSeconds(startDate: Date): number {
 }
 
 export function Exercise({ timeout, expressions, onFinish }: Props) {
-    const [answers, setAnswers] = useState<number[]>(() => Array(expressions.length).fill(null));
+    const [answers, setAnswers] = useState<string[]>(() => Array(expressions.length).fill(null));
 
     const startDateRef = useRef(new Date());
     const startDate = startDateRef.current;
@@ -30,14 +30,7 @@ export function Exercise({ timeout, expressions, onFinish }: Props) {
         return () => clearTimeout(timerId);
     }, [timeout]);
 
-    const handleAnswerChange = (id: number, rawAnswer: string) => {
-        if (rawAnswer.trim() === "")
-            return;
-
-        const answer = Number(rawAnswer);
-        if (isNaN(answer))
-            return;
-
+    const answerChanged = (id: number, answer: string) => {
         setAnswers(prevAnswers => {
             const newAnswers = [...prevAnswers];
             newAnswers[id] = answer;
@@ -45,7 +38,7 @@ export function Exercise({ timeout, expressions, onFinish }: Props) {
         });
     };
 
-    const handleOnFinish = () => {
+    const finished = () => {
         onFinish(getDurationInSeconds(startDate), answers);
     };
 
@@ -59,39 +52,34 @@ export function Exercise({ timeout, expressions, onFinish }: Props) {
             height: "100%",
             padding: "10px 0"
         }}>
-            <CountdownTimer timeout={timeout} onExpire={handleOnFinish} />
+            <CountdownTimer timeout={timeout} onExpire={finished} />
 
             <Container
                 style={{
                     overflow: "hidden auto",
-                    padding: "10px 0"
                 }}
             >
                 {expressions.map((expression, id) => (
                     <Container key={id} style={{
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
-                        gap: "5px",
+                        justifyContent: "space-between",
+                        width: "fit-content",
+                        gap: "10px",
                         padding: "5px 0"
                     }}>
-                        <span style={{ width: "30px" }}>{id + 1})</span>
+                        <span style={{ width: "20px", fontSize: "large" }}>{id + 1})</span>
                         <ExpressionInputControl
                             expression={expression}
+                            answer={""}
                             readOnly={true}
-                        />
-                        <span style={{ width: "7px" }}>=</span>
-                        <OutlinedInput
-                            style={{ height: "25px", width: "90px", textAlignLast: "center" }}
-                            size="small"
-                            type="number"
-                            onBlur={(e) => handleAnswerChange(id, e.target.value)}
-                        />
+                            onAnswer={(answer) => answerChanged(id, answer)}
+                        ></ExpressionInputControl>
                     </Container>
                 ))}
             </Container>
 
-            <Button variant="outlined" onClick={handleOnFinish}>Готово</Button>
+            <Button variant="outlined" onClick={finished}>Готово</Button>
         </Container >
     );
 }

@@ -24,13 +24,10 @@
 
 #include "pch.h"
 
-#include <Expression.h>
-#include <ExpressionGenerator.h>
+#include "ExpressionGenerator.h"
 #include "EventHandlers.h"
 
-using namespace Core;
-
-namespace Webui
+namespace Core
 {
     void GenerateExpressionsHandler(webui::window::event* event) noexcept
     {
@@ -59,6 +56,7 @@ namespace Webui
             // std::cout << "useDiv: " << config.useDiv << std::endl;
             // std::cout << "useFloats: " << config.useFloats << std::endl;
 
+            mu::Parser parser;
             ExpressionGenerator generator(config);
 
             boost::json::object jsonObj;
@@ -67,9 +65,10 @@ namespace Webui
 
             for (int i = 0; i < amount; ++i)
             {
-                Expression expr = generator.GenerateExpression();
-                expressionsArrObj.push_back(ToJson(expr));
-                double answer = Evaluate(expr);
+                std::string expr = generator.GenerateExpression();
+                parser.SetExpr(expr);
+                int answer = parser.Eval();
+                expressionsArrObj.emplace_back(expr);
                 answersArrObj.push_back(answer);
             }
 

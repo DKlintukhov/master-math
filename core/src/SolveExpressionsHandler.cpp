@@ -24,13 +24,11 @@
 
 #include "pch.h"
 
-#include <Expression.h>
-#include <ExpressionGenerator.h>
+
+#include "ExpressionGenerator.h"
 #include "EventHandlers.h"
 
-using namespace Core;
-
-namespace Webui
+namespace Core
 {
     void SolveExpressionsHandler(webui::window::event* event) noexcept
     {
@@ -42,9 +40,9 @@ namespace Webui
 
             for (const auto& expr : arrayJson)
             {
-                Json json = expr.as_object();
-                Expression expr = ExpressionFromJson(json);
-                arrayJsonResp.push_back(Evaluate(expr));
+                // Json json = expr.as_object();
+                // Expression expr = ExpressionFromJson(json);
+                // arrayJsonResp.push_back(Evaluate(expr));
             }
 
            std::string serializedJson = boost::json::serialize(arrayJsonResp);

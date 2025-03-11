@@ -27,39 +27,54 @@
 
 #include <random>
 #include <vector>
-#include "Expression.h"
+#include <string>
+#include <unordered_map>
+#include <sstream>
 
 namespace Core
 {
+    enum class Operation
+    {
+        Add,
+        Sub,
+        Mul,
+        Div
+    };
+
     class ExpressionGenerator final
     {
     public:
 
-    struct Config
-    {
-        int64_t min = 0;
-        int64_t max = 100;
-        bool useAdd = true;
-        bool useSub = true;
-        bool useMul = false;
-        bool useDiv = false;
-        bool useFloats = false;
-    };
+        struct Config
+        {
+            int64_t min = 0;
+            int64_t max = 100;
+            bool useAdd = true;
+            bool useSub = true;
+            bool useMul = false;
+            bool useDiv = false;
+            bool useFloats = false;
+        };
         explicit ExpressionGenerator(Config conf);
 
-        Expression GenerateExpression();
-        BinaryOperation GenerateBinaryOperation();
-        BinaryOperation NormalizeSubBinaryOperation(Constant a, Constant b);
-        BinaryOperation NormalizeDivBinaryOperation(Constant a, Constant b);
-        Constant GenerateConstant();
+        std::string GenerateExpression();
+        std::string GenerateBinaryOperation();
+        std::string NormalizeSubBinaryOperation(double a, double b);
+        std::string NormalizeDivBinaryOperation(double a, double b);
+        double GenerateConstant();
         Operation GenerateOperation();
 
     private:
+        std::string ExpressionToString(Operation op, double a, double b);
+
+    private:
         Config m_config;
+        std::stringstream m_sstream;
         std::vector<Operation> m_ops;
         std::mt19937 m_generator;
         std::uniform_int_distribution<int64_t> m_intDist;
         std::uniform_real_distribution<double> m_floatDist;
+        std::unordered_map<Operation, std::string> m_opToChar;
     };
 }
 

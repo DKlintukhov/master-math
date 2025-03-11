@@ -25,11 +25,9 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "Expression.h"
 #include "ExpressionGenerator.h"
 
 using namespace Core;
-
 
 BOOST_AUTO_TEST_CASE(GenerateConstantTest) {
     ExpressionGenerator::Config config;
@@ -43,16 +41,14 @@ BOOST_AUTO_TEST_CASE(GenerateConstantTest) {
 
     ExpressionGenerator generator(config);
 
-    Constant constant = generator.GenerateConstant();
-    double value = constant.Evaluate();
+    double value = generator.GenerateConstant();
     BOOST_CHECK(value >= config.min);
     BOOST_CHECK(value <= config.max);
 
     config.useFloats = false;
     ExpressionGenerator intGenerator(config);
 
-    Constant intConstant = intGenerator.GenerateConstant();
-    double intValue = intConstant.Evaluate();
+    double intValue = intGenerator.GenerateConstant();
     BOOST_CHECK(intValue >= config.min);
     BOOST_CHECK(intValue <= config.max);
 
@@ -85,15 +81,18 @@ BOOST_AUTO_TEST_CASE(GenerateBinaryOperationTest_NormalizeSubBinaryOperation) {
     config.useDiv = false;
     config.useFloats = false;
 
+    mu::Parser parser;
     ExpressionGenerator generator(config);
     {
-        BinaryOperation expr = generator.NormalizeSubBinaryOperation(Constant(5), Constant(10));
-        BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
+        std::string expr = generator.NormalizeSubBinaryOperation(5.0, 10.0);
+        parser.SetExpr(expr);
+        BOOST_CHECK_EQUAL(parser.Eval(), 5.0);
     }
 
     {
-        BinaryOperation expr = generator.NormalizeSubBinaryOperation(Constant(10), Constant(5));
-        BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
+        std::string expr = generator.NormalizeSubBinaryOperation(10.0, 5.0);
+        parser.SetExpr(expr);
+        BOOST_CHECK_EQUAL(parser.Eval(), 5.0);
     }
 }
 
@@ -107,39 +106,47 @@ BOOST_AUTO_TEST_CASE(GenerateBinaryOperationTest_NormalizeDivBinaryOperation) {
     config.useDiv = true;
     config.useFloats = true;
 
+    mu::Parser parser;
     ExpressionGenerator generator(config);
     {
-        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(5.0), Constant(10.0));
-        BOOST_CHECK_EQUAL(expr.Evaluate(), 2.0);
+        std::string expr = generator.NormalizeDivBinaryOperation(5.0, 10.0);
+        parser.SetExpr(expr);
+        BOOST_CHECK_EQUAL(parser.Eval(), 2.0);
     }
 
     {
-        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(5.0), Constant(5.0));
-        BOOST_CHECK_EQUAL(expr.Evaluate(), 1.0);
+        std::string expr = generator.NormalizeDivBinaryOperation(5.0, 5.0);
+        parser.SetExpr(expr);
+        BOOST_CHECK_EQUAL(parser.Eval(), 1.0);
     }
 
     {
-        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(0.0), Constant(5.0));
-        BOOST_CHECK_EQUAL(expr.Evaluate(), 0.0);
+        std::string expr = generator.NormalizeDivBinaryOperation(0.0, 5.0);
+        parser.SetExpr(expr);
+        BOOST_CHECK_EQUAL(parser.Eval(), 0.0);
     }
 
     {
-        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(5.0), Constant(0.0));
-        BOOST_CHECK_EQUAL(expr.Evaluate(), 0.0);
+        std::string expr = generator.NormalizeDivBinaryOperation(5.0, 0.0);
+        parser.SetExpr(expr);
+        BOOST_CHECK_EQUAL(parser.Eval(), 0.0);
     }
 
     {
-        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(0.0), Constant(0.0));
-        BOOST_CHECK_EQUAL(expr.Evaluate(), 0.0);
+        std::string expr = generator.NormalizeDivBinaryOperation(0.0, 0.0);
+        parser.SetExpr(expr);
+        BOOST_CHECK_EQUAL(parser.Eval(), 0.0);
     }
 
     {
-        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(5.0), Constant(3.0));
-        BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
+        std::string expr = generator.NormalizeDivBinaryOperation(5.0, 3.0);
+        parser.SetExpr(expr);
+        BOOST_CHECK_EQUAL(parser.Eval(), 5.0);
     }
 
     {
-        BinaryOperation expr = generator.NormalizeDivBinaryOperation(Constant(3.0), Constant(5.0));
-        BOOST_CHECK_EQUAL(expr.Evaluate(), 5.0);
+        std::string expr = generator.NormalizeDivBinaryOperation(3.0, 5.0);
+        parser.SetExpr(expr);
+        BOOST_CHECK_EQUAL(parser.Eval(), 5.0);
     }
 }

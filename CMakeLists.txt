@@ -5,7 +5,7 @@ if (PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
 endif()
 
 set(VERSION 0.1.0)
-set(TARGET MasterMath-v${VERSION})
+set(TARGET MasterMath)
 
 set(PACKAGE_BUGREPORT "https://github.com/DKlintukhov/MasterMath/issues")
 set(CMAKE_CXX_STANDARD 20)
@@ -14,6 +14,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_C_EXTENSIONS OFF)
+
+if(MSVC)
+    set(OUTPUT_DIR ${CMAKE_BINARY_DIR}/)
+else()
+    set(OUTPUT_DIR ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
+endif()
 
 project(
     ${TARGET}
@@ -24,7 +30,7 @@ project(
 
 option(ENABLE_TESTS "Enable tests" ON)
 option(USE_MBEDTLS ON)
-if (ENABLE_TESTS)
+if(ENABLE_TESTS)
     enable_testing()
 endif()
 
@@ -34,7 +40,7 @@ endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-DWEBUI_LOG)
-    set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
+    #set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
     if(MSVC)
         set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreadedDebug)
     endif()
@@ -46,41 +52,31 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     endif()
 endif()
 
-find_package(Threads REQUIRED)
-find_package(Boost COMPONENTS json REQUIRED)
-
-include(FetchContent)
-set(FETCHCONTENT_QUIET FALSE)
-
-FetchContent_Declare(
-    libwebui
-    GIT_REPOSITORY https://github.com/webui-dev/webui.git
-    GIT_TAG        main
-    TLS_VERIFY 	   TRUE
-    GIT_SHALLOW    TRUE
-    GIT_PROGRESS   TRUE
-)
-FetchContent_MakeAvailable(libwebui)
-
 add_subdirectory(core)
-add_subdirectory(webui)
 
-add_executable(${TARGET} main.cpp)
-target_link_libraries(${TARGET} 
-    PRIVATE
-        libwebui
+set_target_properties(${TARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIR})
+
+set(FRONTEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/frontend)
+set(FRONTEND_BUILD_DIR ${CMAKE_BINARY_DIR}/dist)
+file(MAKE_DIRECTORY ${FRONTEND_BUILD_DIR})
+
+add_custom_target(install-frontend-deps
+    COMMAND ${NPM_CMD} install
+    WORKING_DIRECTORY ${FRONTEND_DIR}
+    COMMENT "Installing frontend dependencies..."
+    VERBATIM
 )
-target_include_directories(${TARGET} 
-    PRIVATE
-        ${CMAKE_SOURCE_DIR}/webui/include
+
+add_custom_target(build-frontend
+    COMMAND ${NPM_CMD} run build
+    WORKING_DIRECTORY ${FRONTEND_DIR}
+    COMMENT "Building frontend..."
+    VERBATIM
 )
 
-if (WIN32)
-    # hide the console in the Release build
-    if (MSVC AND NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-    endif()
-
-    target_compile_options(${TARGET} PRIVATE /DWIN32 /D_WINDOWS)
-    target_sources(${TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/windows/resource.rc)
-endif()
+# Copy the files from the npm build folder into the target
+add_custom_command(
+  TARGET build-frontend
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${FRONTEND_DIR}/dist ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}
+  WORKING_DIRECTORY ${FRONTEND_DIR}/dist
+)
