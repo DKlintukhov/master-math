@@ -25,11 +25,21 @@
 
 #include "pch.h"
 
-#include <locale>
+#include "EventHandlers.h"
 
 int main(int, char const**)
 {
     std::locale::global(std::locale(""));
+
+    webui::window win;
+
+    win.set_size(1024, 768);
+
+    win.bind("GenerateExpressions", Core::GenerateExpressionsHandler);
+    win.bind("SolveExpressions", Core::SolveExpressionsHandler);
+    win.show_browser("index.html", static_cast<unsigned int>(win.get_best_browser()));
+
+    webui::wait();
 
     return 0;
 }

@@ -19,7 +19,7 @@ export function OperationSelector({ onSelect }: Props) {
     }
 
     return (
-        <FormControl>
+        <FormControl size="medium">
             <Select
                 value={operation}
                 onChange={selectHandler}

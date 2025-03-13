@@ -1,27 +1,26 @@
+import React from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Button, Container } from "@mui/material";
 import { Exercise, ExerciseBuilder, ExerciseSetup, Results } from "./pages";
 import { useEffect, useState } from "react";
-import { ExerciseConfig, Expression, Response } from "./models";
 import { Main } from "./pages/Main";
+import { CoreService, GenerateExpressionsConfig } from "./services";
+import { CoreController } from "./controllers";
 
 export function App() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [expressions, setExpressions] = useState<Expression[]>([]);
-    const [answers, setAnswers] = useState<number[]>([]);
-    const [correctAnswers, setCorrectAnswers] = useState<number[]>([]);
+    const [expressions, setExpressions] = useState<string[]>([]);
+    const [answers, setAnswers] = useState<string[]>([]);
+    const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
     const [timeout, setTimeout] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
 
-    const generatedExerciseStarted = async (config: ExerciseConfig, timeout: number) => {
+    const generatedExerciseStarted = async (config: GenerateExpressionsConfig, timeout: number) => {
         navigate("/");
         try {
-            const json = await window.webui.call('GenerateExpressions', JSON.stringify(config));
-            const { error, expressions, answers } = JSON.parse(json) as Response;
-            if (error) {
-                throw error;
-            }
+            const response = await CoreService.GenerateExpressions(config);
+            const { expressions, answers } = CoreController.GeneratedExpressionsToView(response);
 
             setTimeout(timeout);
             setExpressions(expressions);
@@ -40,7 +39,7 @@ export function App() {
         navigate("/builder");
     }
 
-    const exerciseFinished = (duration: number, answers: number[]) => {
+    const exerciseFinished = (duration: number, answers: string[]) => {
         setDuration(duration);
         setAnswers([...answers]);
         navigate("/results");
@@ -76,7 +75,7 @@ export function App() {
                         onExcersizeBuilderNavigated={excersizeBuilderNavigated} />
                 } />
                 <Route path="/exercise-setup" element={<ExerciseSetup onStart={generatedExerciseStarted} onCancel={finished} />} />
-                <Route path="/builder" element={<ExerciseBuilder onCancel={finished} />} />
+                {/*<<Route path="/builder" element={<ExerciseBuilder onCancel={finished} />} />*/}
                 <Route path="/exercise" element={<Exercise timeout={timeout} expressions={expressions} onFinish={exerciseFinished} />} />
                 <Route path="/results" element={<Results
                     expressions={expressions}

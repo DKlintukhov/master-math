@@ -23,59 +23,15 @@
 */
 
 
-#ifndef EXPRESSION_H
-#define EXPRESSION_H
+#ifndef EVENT_HANDLERS_H
+#define EVENT_HANDLERS_H
 
-#include <memory>
-#include <variant>
-#include <boost/json.hpp>
+#include <webui.hpp>
 
 namespace Core
 {
-    using Json = boost::json::object;
-
-    enum class Operation
-    {
-        Add,
-        Sub,
-        Mul,
-        Div
-    };
-
-    class Constant;
-    class BinaryOperation;
-
-    using Expression = std::variant<Constant, BinaryOperation>;
-
-    class Constant final
-    {
-    public:
-        explicit Constant(double value);
-        double Evaluate() const;
-        Json ToJson() const;
-        static Constant FromJson(const Json& json);
-
-    private:
-        double m_value;
-    };
-
-    class BinaryOperation final
-    {
-    public:
-        BinaryOperation(Operation op, Expression left, Expression right);
-        double Evaluate() const;
-        Json ToJson() const;
-        static BinaryOperation FromJson(const Json& json);
-
-    private:
-        Operation m_op;
-        std::unique_ptr<Expression> m_left;
-        std::unique_ptr<Expression> m_right;
-    };
-
-    Expression ExpressionFromJson(const Json& json);
-    Json ToJson(const Expression& expr);
-    double Evaluate(const Expression& expr);
+    void GenerateExpressionsHandler(webui::window::event* event) noexcept;
+    void SolveExpressionsHandler(webui::window::event* event) noexcept;
 }
 
 #endif

@@ -27,11 +27,16 @@
 #define PCH_H
 
 #include <locale>
-#include <vector>
+#include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <random>
 #include <string>
-#include <exception>
-#include <limits>
-#include <memory>
-#include <variant>
+#include <unordered_map>
+
+#include <webui.hpp>
+#include <boost/json.hpp>
+#include <muParser.h>
 
 #endif
