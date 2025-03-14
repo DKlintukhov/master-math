@@ -24,7 +24,7 @@ export function App() {
 
             setTimeout(timeout);
             setExpressions(expressions);
-            setCorrectAnswers([...answers]);
+            setCorrectAnswers(answers);
             navigate("/exercise");
         } catch (e) {
             console.error(e);
@@ -41,7 +41,7 @@ export function App() {
 
     const exerciseFinished = (duration: number, answers: string[]) => {
         setDuration(duration);
-        setAnswers([...answers]);
+        setAnswers(answers);
         navigate("/results");
     }
 
@@ -49,8 +49,11 @@ export function App() {
         navigate("/");
     }
 
-    const mainNaviaged = () => {
-        navigate("/");
+    const excersiseBuilt = (expressions: string[], answers: string[]) => {
+        setExpressions(expressions);
+        setCorrectAnswers(answers);
+        setTimeout(5);
+        navigate("/exercise");
     }
 
     useEffect(() => {
@@ -75,7 +78,7 @@ export function App() {
                         onExcersizeBuilderNavigated={excersizeBuilderNavigated} />
                 } />
                 <Route path="/exercise-setup" element={<ExerciseSetup onStart={generatedExerciseStarted} onCancel={finished} />} />
-                {/*<<Route path="/builder" element={<ExerciseBuilder onCancel={finished} />} />*/}
+                <Route path="/builder" element={<ExerciseBuilder onBuilt={excersiseBuilt} onCancel={finished} />} />
                 <Route path="/exercise" element={<Exercise timeout={timeout} expressions={expressions} onFinish={exerciseFinished} />} />
                 <Route path="/results" element={<Results
                     expressions={expressions}
