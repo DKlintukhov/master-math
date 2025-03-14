@@ -60,19 +60,21 @@ export function Exercise({ timeout, expressions, onFinish }: Props) {
                 }}
             >
                 {expressions.map((expression, id) => (
-                    <Container key={id} style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        width: "fit-content",
-                        gap: "10px",
-                        padding: "5px 0"
-                    }}>
+                    <Container key={id}
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            width: "fit-content",
+                            gap: "10px",
+                            padding: "5px 0"
+                        }}>
                         <span style={{ width: "20px", fontSize: "large" }}>{id + 1})</span>
                         <ExpressionInputControl
                             expression={expression}
                             answer={""}
                             readOnly={true}
+                            onChange={(expr: string) => { }}
                             onAnswer={(answer) => answerChanged(id, answer)}
                         ></ExpressionInputControl>
                     </Container>
