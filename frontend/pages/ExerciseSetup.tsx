@@ -2,24 +2,18 @@ import React from "react";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid2";
-import { OperationToUse } from "../models";
+import { ExerciseLimits, OperationToUse } from "../models";
 import { NumericInputControl, OperationMultiSelect } from "../components";
 import { Container, FormHelperText } from "@mui/material";
 import { GenerateExpressionsConfig } from "../services";
 
 interface Props {
-    onStart: (genExpressionsConf: GenerateExpressionsConfig, timeout: number) => void;
+    onStart: (genExpressionsConf: GenerateExpressionsConfig) => void;
     onCancel: () => void;
 }
 
-const MIN_VALUE = -10000;
-const MAX_VALUE = 10000;
-const MIN_EPXRESSIONS_AMOUNT = 1;
-const MAX_EPXRESSIONS_AMOUNT = 100;
-const MIN_TIMEOUT = 1;
-const MAX_TIMEOUT = 60;
-
 export function ExerciseSetup({ onStart, onCancel }: Props) {
+    const name = "";
     const [inputsInvalid, setInputsInvalid] = useState(false);
     const [timeout, setTimeout] = useState(5);
     const [amount, setAmount] = useState(15);
@@ -35,7 +29,7 @@ export function ExerciseSetup({ onStart, onCancel }: Props) {
     const [checkOperatorsError, setCheckOperatorsError] = useState<boolean>();
 
     const handleStart = () => {
-        onStart({ amount, min, max, ...operators }, timeout);
+        onStart({ name, timeout, amount, min, max, ...operators });
     }
 
     useEffect(() => {
@@ -66,8 +60,8 @@ export function ExerciseSetup({ onStart, onCancel }: Props) {
                 <NumericInputControl
                     label="Время (мин.)"
                     defaultValue={timeout}
-                    min={MIN_TIMEOUT}
-                    max={MAX_TIMEOUT}
+                    min={ExerciseLimits.MIN_TIMEOUT}
+                    max={ExerciseLimits.MAX_TIMEOUT}
                     onChange={setTimeout}
                     onError={handleInputsError} />
             </Grid>
@@ -76,8 +70,8 @@ export function ExerciseSetup({ onStart, onCancel }: Props) {
                 <NumericInputControl
                     label="Количество примеров"
                     defaultValue={amount}
-                    min={MIN_EPXRESSIONS_AMOUNT}
-                    max={MAX_EPXRESSIONS_AMOUNT}
+                    min={ExerciseLimits.MIN_EPXRESSIONS_AMOUNT}
+                    max={ExerciseLimits.MAX_EPXRESSIONS_AMOUNT}
                     onChange={setAmount}
                     onError={handleInputsError} />
             </Grid>
@@ -86,8 +80,8 @@ export function ExerciseSetup({ onStart, onCancel }: Props) {
                 <NumericInputControl
                     label="Мин. число"
                     defaultValue={min}
-                    min={MIN_VALUE}
-                    max={MAX_VALUE}
+                    min={ExerciseLimits.MIN_VALUE}
+                    max={ExerciseLimits.MAX_VALUE}
                     onChange={setMin}
                     onError={handleInputsError} />
             </Grid>
@@ -96,8 +90,8 @@ export function ExerciseSetup({ onStart, onCancel }: Props) {
                 <NumericInputControl
                     label="Макс. число"
                     defaultValue={max}
-                    min={MIN_VALUE}
-                    max={MAX_VALUE}
+                    min={ExerciseLimits.MIN_VALUE}
+                    max={ExerciseLimits.MAX_VALUE}
                     onChange={setMax}
                     onError={handleInputsError} />
             </Grid>

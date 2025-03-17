@@ -3,7 +3,7 @@ import { Button, Container, OutlinedInput, Typography } from "@mui/material";
 import { Util } from "../util";
 
 interface Props {
-    expressions: string[];
+    problems: string[];
     answers: string[];
     correctAnswers: string[];
     duration: number;
@@ -15,8 +15,8 @@ function toPercents(a: number, b: number): string {
     return (a / b * 100).toFixed() + "%";
 }
 
-export function Results({ expressions, answers, correctAnswers, duration, onReplay, onFinished }: Props) {
-    const expressionsAmount = answers.length;
+export function Results({ problems, answers, correctAnswers, duration, onReplay, onFinished }: Props) {
+    const problemsAmount = answers.length;
     let correctAnswersAmount = 0;
     let incorrectAnswersAmount = 0;
     answers.forEach((value, idx) => {
@@ -44,10 +44,10 @@ export function Results({ expressions, answers, correctAnswers, duration, onRepl
                     Время: {Util.formatTime(duration)}
                 </Typography>
                 <Typography variant="h4" component="h2" color="success">
-                    Правильные ответы: {correctAnswersAmount} ({toPercents(correctAnswersAmount, expressionsAmount)})
+                    Правильные ответы: {correctAnswersAmount} ({toPercents(correctAnswersAmount, problemsAmount)})
                 </Typography>
                 <Typography variant="h4" component="h2" color="error">
-                    Неправильные ответы: {incorrectAnswersAmount} ({toPercents(incorrectAnswersAmount, expressionsAmount)})
+                    Неправильные ответы: {incorrectAnswersAmount} ({toPercents(incorrectAnswersAmount, problemsAmount)})
                 </Typography>
             </Container>
 
@@ -57,7 +57,7 @@ export function Results({ expressions, answers, correctAnswers, duration, onRepl
                     padding: "10px 0"
                 }}
             >
-                {expressions.map((expression, idx) => (
+                {problems.map((problem, idx) => (
                     <Container key={idx} style={{
                         display: "flex",
                         alignItems: "center",
@@ -66,7 +66,7 @@ export function Results({ expressions, answers, correctAnswers, duration, onRepl
                         padding: "5px 0"
                     }}>
                         <span style={{ width: "25px" }}>{idx + 1})</span>
-                        {expression}
+                        {problem}
                         <span style={{ width: "7px" }}>=</span>
                         <OutlinedInput
                             style={{ height: "25px", width: "90px", textAlignLast: "center" }}

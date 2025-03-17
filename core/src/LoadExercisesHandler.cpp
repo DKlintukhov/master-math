@@ -22,26 +22,36 @@
 * SOFTWARE.
 */
 
+#include "pch.h"
 
-#ifndef PCH_H
-#define PCH_H
+#include "EventHandlers.h"
+#include "Exercise.h"
 
-#include <locale>
-#include <codecvt>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <chrono>
-#include <random>
-#include <string>
-#include <string_view>
-#include <unordered_map>
-#include <filesystem>
-#include <fstream>
+namespace Core
+{
+    void LoadExercisesHandler(webui::window::event* event) noexcept
+    {
+        try
+        {
+            boost::json::object response;
+            boost::json::array exercisesArr;
 
-#include <webui.hpp>
-#include <boost/json.hpp>
-#include <muParser.h>
+            const std::filesystem::directory_iterator dir(std::filesystem::current_path() / "exercises");
+            for (const auto& file : dir)
+            {
+                Exercise exercise(file.path());
+                exercisesArr.push_back(exercise.ToJson());
+            }
 
-#endif
+            response["exercises"] = std::move(exercisesArr);
+            event->return_string(boost::json::serialize(response));
+        }
+        catch (const std::exception& e)
+        {
+            boost::json::object errJson;
+            errJson["error"] = e.what();
+
+            event->return_string(boost::json::serialize(errJson));
+        }
+    }
+}

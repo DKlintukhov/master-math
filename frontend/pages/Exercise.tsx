@@ -1,11 +1,11 @@
 import { Button, Container, OutlinedInput } from "@mui/material";
-import { CountdownTimer, ExpressionInputControl } from "../components";
+import { CountdownTimer, ProblemInputControl } from "../components";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
 
 interface Props {
     timeout: number;
-    expressions: string[];
+    problems: string[];
     onFinish: (duration: number, answers: string[]) => void;
 }
 
@@ -15,8 +15,8 @@ function getDurationInSeconds(startDate: Date): number {
     return differenceInMilliseconds / 1000;
 }
 
-export function Exercise({ timeout, expressions, onFinish }: Props) {
-    const [answers, setAnswers] = useState<string[]>(() => Array(expressions.length).fill(null));
+export function Exercise({ timeout, problems, onFinish }: Props) {
+    const [answers, setAnswers] = useState<string[]>(() => Array(problems.length).fill(null));
 
     const startDateRef = useRef(new Date());
     const startDate = startDateRef.current;
@@ -59,7 +59,7 @@ export function Exercise({ timeout, expressions, onFinish }: Props) {
                     overflow: "hidden auto",
                 }}
             >
-                {expressions.map((expression, id) => (
+                {problems.map((problem, id) => (
                     <Container key={id}
                         style={{
                             display: "flex",
@@ -70,13 +70,13 @@ export function Exercise({ timeout, expressions, onFinish }: Props) {
                             padding: "5px 0"
                         }}>
                         <span style={{ width: "20px", fontSize: "large" }}>{id + 1})</span>
-                        <ExpressionInputControl
-                            expression={expression}
+                        <ProblemInputControl
+                            problem={problem}
                             answer={""}
                             readOnly={true}
                             onChange={(expr: string) => { }}
                             onAnswer={(answer) => answerChanged(id, answer)}
-                        ></ExpressionInputControl>
+                        ></ProblemInputControl>
                     </Container>
                 ))}
             </Container>

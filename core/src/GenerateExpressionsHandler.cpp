@@ -46,16 +46,6 @@ namespace Core
             config.useDiv = value.at("useDiv").as_bool();
             config.useFloats = false;
 
-            // std::cout << "json: " << json << std::endl;
-            // std::cout << "amount: " << amount << std::endl;
-            // std::cout << "min: " << config.min << std::endl;
-            // std::cout << "max: " << config.max << std::endl;
-            // std::cout << "useAdd: " << config.useAdd << std::endl;
-            // std::cout << "useSub: " << config.useSub << std::endl;
-            // std::cout << "useMul: " << config.useMul << std::endl;
-            // std::cout << "useDiv: " << config.useDiv << std::endl;
-            // std::cout << "useFloats: " << config.useFloats << std::endl;
-
             mu::Parser parser;
             ExpressionGenerator generator(config);
 

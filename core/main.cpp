@@ -37,6 +37,9 @@ int main(int, char const**)
 
     win.bind("GenerateExpressions", Core::GenerateExpressionsHandler);
     win.bind("SolveExpressions", Core::SolveExpressionsHandler);
+    win.bind("SaveExercise", Core::SaveExerciseHandler);
+    win.bind("LoadExercises", Core::LoadExercisesHandler);
+
     win.show_browser("index.html", static_cast<unsigned int>(win.get_best_browser()));
 
     webui::wait();
