@@ -1,1 +1,1 @@
-export * from './expressions.model';
+export * from './exercise.model';

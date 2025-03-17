@@ -1,29 +1,29 @@
 import React from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { Button, Container } from "@mui/material";
-import { Exercise, ExerciseBuilder, ExerciseSetup, Results } from "./pages";
+import { Container } from "@mui/material";
+import { Exercise as ExercisePage, ExerciseBuilder, ExerciseSetup, Results } from "./pages";
 import { useEffect, useState } from "react";
 import { Main } from "./pages/Main";
-import { CoreService, GenerateExpressionsConfig } from "./services";
+import { GenerateExpressionsConfig } from "./services";
 import { CoreController } from "./controllers";
+import { Exercise } from "./models";
 
 export function App() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [expressions, setExpressions] = useState<string[]>([]);
+    const [problems, setProblems] = useState<string[]>([]);
     const [answers, setAnswers] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
     const [timeout, setTimeout] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
 
-    const generatedExerciseStarted = async (config: GenerateExpressionsConfig, timeout: number) => {
+    const generatedExerciseStarted = async (config: GenerateExpressionsConfig) => {
         navigate("/");
         try {
-            const response = await CoreService.GenerateExpressions(config);
-            const { expressions, answers } = CoreController.GeneratedExpressionsToView(response);
+            const { problems, answers } = await CoreController.GenerateExpressions(config);
 
-            setTimeout(timeout);
-            setExpressions(expressions);
+            setTimeout(config.timeout);
+            setProblems(problems);
             setCorrectAnswers(answers);
             navigate("/exercise");
         } catch (e) {
@@ -31,11 +31,11 @@ export function App() {
         }
     }
 
-    const generatedExcersizeNavigated = () => {
+    const exerciseSetupNavigate = () => {
         navigate("/exercise-setup");
     }
 
-    const excersizeBuilderNavigated = () => {
+    const exerciseBuilderNavigated = () => {
         navigate("/builder");
     }
 
@@ -49,11 +49,19 @@ export function App() {
         navigate("/");
     }
 
-    const excersiseBuilt = (expressions: string[], answers: string[]) => {
-        setExpressions(expressions);
+    const excersiseBuilt = ({ timeout, problems, answers }: Exercise) => {
+        setProblems(problems);
         setCorrectAnswers(answers);
-        setTimeout(5);
+        setTimeout(timeout);
         navigate("/exercise");
+    }
+
+    const excersiseSaved = async (exercise: Exercise) => {
+        try {
+            await CoreController.SaveExercise(exercise);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     useEffect(() => {
@@ -74,19 +82,24 @@ export function App() {
             }}>
             <Routes>
                 <Route path="/" element={
-                    <Main onGeneratedExcersizeNavigated={generatedExcersizeNavigated}
-                        onExcersizeBuilderNavigated={excersizeBuilderNavigated} />
+                    <Main
+                        onExerciseSetupNavigate={exerciseSetupNavigate}
+                        onExerciseBuilderNavigate={exerciseBuilderNavigated}
+                        onExerciseSelected={excersiseBuilt}
+                    />
                 } />
                 <Route path="/exercise-setup" element={<ExerciseSetup onStart={generatedExerciseStarted} onCancel={finished} />} />
-                <Route path="/builder" element={<ExerciseBuilder onBuilt={excersiseBuilt} onCancel={finished} />} />
-                <Route path="/exercise" element={<Exercise timeout={timeout} expressions={expressions} onFinish={exerciseFinished} />} />
-                <Route path="/results" element={<Results
-                    expressions={expressions}
-                    duration={duration}
-                    answers={answers}
-                    correctAnswers={correctAnswers}
-                    onReplay={() => navigate("/exercise")}
-                    onFinished={finished} />}
+                <Route path="/builder" element={<ExerciseBuilder onBuilt={excersiseBuilt} onSave={excersiseSaved} onCancel={finished} />} />
+                <Route path="/exercise" element={<ExercisePage timeout={timeout} problems={problems} onFinish={exerciseFinished} />} />
+                <Route path="/results" element={
+                    <Results
+                        problems={problems}
+                        duration={duration}
+                        answers={answers}
+                        correctAnswers={correctAnswers}
+                        onReplay={() => navigate("/exercise")}
+                        onFinished={finished}
+                    />}
                 />
             </Routes>
         </Container>

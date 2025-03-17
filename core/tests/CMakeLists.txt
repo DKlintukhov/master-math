@@ -4,6 +4,7 @@ set(TARGET_TESTS CoreTests)
 
 add_executable(${TARGET_TESTS} 
     main.cpp
+    ExerciseTest.cpp
     ExpressionGeneratorTest.cpp
     ${SRC}
 )

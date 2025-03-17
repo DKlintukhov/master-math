@@ -23,25 +23,19 @@
 */
 
 
-#ifndef PCH_H
-#define PCH_H
+#ifndef UTF8_H
+#define UTF8_H
 
 #include <locale>
 #include <codecvt>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <chrono>
-#include <random>
 #include <string>
-#include <string_view>
-#include <unordered_map>
-#include <filesystem>
-#include <fstream>
 
-#include <webui.hpp>
-#include <boost/json.hpp>
-#include <muParser.h>
+namespace Core::Encoding
+{
+    inline static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> CONVERTER;
+
+    std::wstring ToWide(const std::string& str) noexcept(false);
+    std::string ToUtf8(const std::wstring& str) noexcept(false);
+}
 
 #endif

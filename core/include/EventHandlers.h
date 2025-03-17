@@ -32,6 +32,8 @@ namespace Core
 {
     void GenerateExpressionsHandler(webui::window::event* event) noexcept;
     void SolveExpressionsHandler(webui::window::event* event) noexcept;
+    void SaveExerciseHandler(webui::window::event* event) noexcept;
+    void LoadExercisesHandler(webui::window::event* event) noexcept;
 }
 
 #endif

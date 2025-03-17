@@ -3,9 +3,13 @@ find_package(Boost COMPONENTS json REQUIRED)
 find_program(NPM_CMD npm REQUIRED)
 
 set(SRC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Exercise.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Utf8.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ExpressionGenerator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/GenerateExpressionsHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/SolveExpressionsHandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/SaveExerciseHandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/LoadExercisesHandler.cpp
 )
 
 set(INCLUDES 
@@ -17,9 +21,7 @@ set(INCLUDES
 )
 
 include(FetchContent)
-set(FETCHCONTENT_QUIET FALSE)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-set(ENABLE_SAMPLES OFF CACHE BOOL "" FORCE)
+set(FETCHCONTENT_QUIET OFF)
 
 FetchContent_Declare(
     webui
@@ -31,6 +33,9 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(webui)
 
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(ENABLE_SAMPLES OFF CACHE BOOL "" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 FetchContent_Declare(
     muparser
     GIT_REPOSITORY https://github.com/beltoforion/muparser.git

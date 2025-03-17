@@ -25,11 +25,14 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include "pch.h"
+
 #include "ExpressionGenerator.h"
 
 using namespace Core;
 
-BOOST_AUTO_TEST_CASE(GenerateConstantTest) {
+BOOST_AUTO_TEST_CASE(GenerateConstantTest)
+{
     ExpressionGenerator::Config config;
     config.min = 1;
     config.max = 10;
@@ -55,7 +58,8 @@ BOOST_AUTO_TEST_CASE(GenerateConstantTest) {
     BOOST_CHECK(static_cast<int64_t>(intValue) == intValue);
 }
 
-BOOST_AUTO_TEST_CASE(GenerateOperationTest) {
+BOOST_AUTO_TEST_CASE(GenerateOperationTest)
+{
     ExpressionGenerator::Config config;
     config.min = 1;
     config.max = 10;
@@ -71,7 +75,8 @@ BOOST_AUTO_TEST_CASE(GenerateOperationTest) {
     BOOST_CHECK(op == Operation::Add || op == Operation::Mul);
 }
 
-BOOST_AUTO_TEST_CASE(GenerateBinaryOperationTest_NormalizeSubBinaryOperation) {
+BOOST_AUTO_TEST_CASE(GenerateBinaryOperationTest_NormalizeSubBinaryOperation)
+{
     ExpressionGenerator::Config config;
     config.min = 1.0;
     config.max = 20.0;
@@ -96,7 +101,8 @@ BOOST_AUTO_TEST_CASE(GenerateBinaryOperationTest_NormalizeSubBinaryOperation) {
     }
 }
 
-BOOST_AUTO_TEST_CASE(GenerateBinaryOperationTest_NormalizeDivBinaryOperation) {
+BOOST_AUTO_TEST_CASE(GenerateBinaryOperationTest_NormalizeDivBinaryOperation)
+{
     ExpressionGenerator::Config config;
     config.min = 0.0;
     config.max = 10.0;

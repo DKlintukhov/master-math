@@ -2,32 +2,32 @@ import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 
 interface Props {
-    expression: string;
+    problem: string;
     answer: string;
     readOnly: boolean;
     onChange: (expr: string) => void;
     onAnswer: (answer: string) => void;
 }
 
-export function ExpressionInputControl({ expression, onChange, answer, readOnly, onAnswer }: Props) {
-    const [exprVal, setExpression] = useState<string>(expression);
+export function ProblemInputControl({ problem, onChange, answer, readOnly, onAnswer }: Props) {
+    const [problemVal, setProblem] = useState<string>(problem);
     const [answerVal, setAnswer] = useState<string>(answer);
 
     const answwerChanged = (event) => {
-        const answer = event.target.value.trim();
+        const answer = event.target.value;
         setAnswer(answer);
         onAnswer(answer);
     }
 
     const expressionChanged = (event) => {
-        const expr = event.target.value.trim();
-        setExpression(expr);
-        onChange(expr);
+        const problem = event.target.value;
+        setProblem(problem);
+        onChange(problem);
     }
 
     useEffect(() => {
-        setExpression(expression);
-    }, [expression]);
+        setProblem(problem);
+    }, [problem]);
 
     useEffect(() => {
         setAnswer(answer);
@@ -36,12 +36,13 @@ export function ExpressionInputControl({ expression, onChange, answer, readOnly,
     return (
         <>
             {readOnly ?
-                expression :
+                problem :
                 <TextField
                     size="small"
                     variant="outlined"
+                    multiline
                     onChange={expressionChanged}
-                    value={exprVal}
+                    value={problemVal}
                 />}
             <span> = </span>
             <TextField
@@ -51,6 +52,7 @@ export function ExpressionInputControl({ expression, onChange, answer, readOnly,
                 size="small"
                 variant="outlined"
                 value={answerVal}
+                multiline
                 onChange={answwerChanged}
             />
         </>

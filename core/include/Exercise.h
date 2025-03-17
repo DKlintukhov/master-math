@@ -23,25 +23,43 @@
 */
 
 
-#ifndef PCH_H
-#define PCH_H
+#ifndef EXERCISE_H
+#define EXERCISE_H
 
-#include <locale>
-#include <codecvt>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <chrono>
-#include <random>
+#include <vector>
 #include <string>
-#include <string_view>
-#include <unordered_map>
 #include <filesystem>
-#include <fstream>
-
-#include <webui.hpp>
+#include <chrono>
 #include <boost/json.hpp>
-#include <muParser.h>
+
+namespace Core
+{
+    class Exercise final
+    {
+    public:
+        Exercise(
+            std::string name,
+            std::chrono::seconds timeout,
+            std::vector<std::string> problems,
+            std::vector<std::string> answers);
+
+        Exercise(const std::filesystem::path& path) noexcept(false);
+
+        boost::json::object ToJson() const;
+        const std::string& GetName() const noexcept;
+        std::chrono::seconds GetTimeout() const noexcept;
+        const std::vector<std::string>& GetProblems() const noexcept;
+        const std::vector<std::string>& GetAnswers() const noexcept;
+
+        void SaveAsCSV(const std::filesystem::path& destDir) const noexcept(false);
+        void LoadFromCSV(const std::filesystem::path& filePath) noexcept(false);
+
+    private:
+        std::string m_name;
+        std::chrono::seconds m_timeout;
+        std::vector<std::string> m_problems;
+        std::vector<std::string> m_answers;
+    };
+}
 
 #endif
