@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 
 interface Props {
     problem: string;
@@ -36,20 +36,27 @@ export function ProblemInputControl({ problem, onChange, answer, readOnly, onAns
     return (
         <>
             {readOnly ?
-                problem :
+                <Typography fontSize="24px">
+                    {problem}
+                </Typography> :
                 <TextField
-                    size="small"
+                    style={{
+                        width: "300px"
+                    }}
+                    size="medium"
                     variant="outlined"
                     multiline
                     onChange={expressionChanged}
                     value={problemVal}
                 />}
-            <span> = </span>
+            <Typography style={{ fontSize: "24px", width: "7px" }}>
+                =
+            </Typography>
             <TextField
                 style={{
-                    width: "100px",
+                    width: "150px",
                 }}
-                size="small"
+                size="medium"
                 variant="outlined"
                 value={answerVal}
                 multiline

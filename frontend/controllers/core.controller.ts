@@ -32,6 +32,15 @@ export class CoreController {
         }
     }
 
+    public static async DeleteExercise(name: string): Promise<void | never> {
+        try {
+            await CoreService.DeleteExercise({ name });
+        } catch (error) {
+            console.error(error);
+            throw new Error(error);
+        }
+    }
+
     public static async LoadExercises(): Promise<Exercise[] | never> {
         try {
             const exercises = await CoreService.LoadExercises();

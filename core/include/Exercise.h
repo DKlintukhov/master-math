@@ -34,6 +34,8 @@
 
 namespace Core
 {
+    inline const std::filesystem::path EXERCISES_DIR = std::filesystem::current_path() / "exercises";
+
     class Exercise final
     {
     public:

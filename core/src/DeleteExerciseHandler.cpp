@@ -26,44 +26,28 @@
 
 #include "EventHandlers.h"
 #include "Exercise.h"
+#include "Utf8.h"
 
 namespace Core
 {
-    void SaveExerciseHandler(webui::window::event* event) noexcept
+    void DeleteExerciseHandler(webui::window::event* event) noexcept
     {
         try
         {
             const boost::json::value json = boost::json::parse(event->get_string(0));
+            const std::string name = json.at("name").as_string().c_str();
+            const std::wstring wname = Encoding::ToWide(name);
 
-            const boost::json::object& exerciseJson = json.at("exercise").as_object();
-            const boost::json::array& problemsJson = exerciseJson.at("problems").as_array();
-            const boost::json::array& answersJson = exerciseJson.at("answers").as_array();
-            const int64_t timeout = exerciseJson.at("timeout").as_int64();
-            std::string name = exerciseJson.at("name").as_string().c_str();
-
-            std::vector<std::string> problems;
-            problems.reserve(problemsJson.size());
-            std::vector<std::string> answers;
-            answers.reserve(answersJson.size());
-
-            for (const auto& problemJson : problemsJson)
+            const std::filesystem::directory_iterator dir(EXERCISES_DIR);
+            for (const auto& file : dir)
             {
-                problems.push_back(problemJson.as_string().c_str());
+                const auto& path = file.path();
+                if (path.stem().filename() == wname)
+                {
+                    std::filesystem::remove(path);
+                    break;
+                }
             }
-
-            for (const auto& answerJson : answersJson)
-            {
-                answers.push_back(answerJson.as_string().c_str());
-            }
-
-            const Exercise exercise(
-                std::move(name),
-                std::chrono::seconds{ timeout },
-                std::move(problems),
-                std::move(answers)
-            );
-
-            exercise.SaveAsCSV(EXERCISES_DIR);
 
             event->return_string("");
         }

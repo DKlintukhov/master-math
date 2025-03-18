@@ -27,6 +27,10 @@ export interface SaveExercisePayload {
     exercise: Exercise;
 }
 
+export interface DeleteExercisePayload {
+    name: string;
+}
+
 export interface LoadExercisesResponse {
     exercises: Exercise[];
     error: string;
