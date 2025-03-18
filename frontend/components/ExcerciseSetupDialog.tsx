@@ -21,7 +21,7 @@ export function ExcerciseSetupDialog({ name, onConfirm, onCancel }: Props) {
     const [currName, setName] = useState<string>(name);
     const [timeout, setTimeout] = useState<number>(5);
     const [isTimeoutInvalid, setIsTimeoutInvalid] = useState<boolean>(false);
-    const [isNameInvalid, setIsNameinvalid] = useState<boolean>(true);
+    const [isNameInvalid, setIsNameinvalid] = useState<boolean>(name !== "");
 
     const handleSubmit = () => {
         onConfirm(currName, timeout);
@@ -74,7 +74,7 @@ export function ExcerciseSetupDialog({ name, onConfirm, onCancel }: Props) {
                     <OutlinedInput
                         error={isNameInvalid}
                         required
-                        defaultValue=""
+                        defaultValue={currName}
                         onChange={(e) => nameChangeHandler(e.target.value)}
                     />
                     {isNameInvalid && <FormHelperText>Название некорректное</FormHelperText>}

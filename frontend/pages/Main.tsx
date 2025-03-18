@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import { Container } from "@mui/material";
+import { CircularProgress, Container } from "@mui/material";
 import { ExercisesList } from "../components";
 import { Exercise } from "../models";
 import { CoreController } from "../controllers";
@@ -10,23 +10,42 @@ interface Props {
     onExerciseSetupNavigate: () => void;
     onExerciseBuilderNavigate: () => void;
     onExerciseSelected: (exercise: Exercise) => void;
+    onExerciseEdit: (exercise: Exercise) => void;
 }
 
-export function Main({ onExerciseSetupNavigate, onExerciseBuilderNavigate, onExerciseSelected }: Props) {
+export function Main({ onExerciseSetupNavigate, onExerciseBuilderNavigate, onExerciseSelected, onExerciseEdit }: Props) {
     const [exercises, setExercises] = useState<Exercise[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const loadExercises = async () => {
+        setLoading(true);
         try {
             const exercises = await CoreController.LoadExercises();
             setExercises(exercises);
         } catch (e) {
             console.error(e);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const handleExerciseDelete = async (exercise: Exercise) => {
+        try {
+            await CoreController.DeleteExercise(exercise.name);
+            await loadExercises();
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoading(false);
         }
     }
 
     // it's needed to wait for WebSocket connection
     // TODO: find better solution
-    setTimeout(() => loadExercises(), 1000);
+    useEffect(() => {
+        const timeoutId = setTimeout(() => loadExercises(), 1000);
+        return () => clearTimeout(timeoutId);
+    }, []);
 
     return (
         <Container style={{
@@ -43,7 +62,16 @@ export function Main({ onExerciseSetupNavigate, onExerciseBuilderNavigate, onExe
                 <Button variant="outlined" onClick={onExerciseSetupNavigate}>Сгенерировать упражнение</Button>
                 <Button variant="outlined" onClick={onExerciseBuilderNavigate}>Создать упражнение</Button>
             </Container>
-            <ExercisesList exercises={exercises} onExerciseSelected={onExerciseSelected}></ExercisesList>
+            {loading
+                ? <CircularProgress size="70px" />
+                : exercises.length > 0
+                && <ExercisesList
+                    exercises={exercises}
+                    onEdit={onExerciseEdit}
+                    onDelete={handleExerciseDelete}
+                    onExerciseSelected={onExerciseSelected}
+                />
+            }
         </Container>
     );
 }

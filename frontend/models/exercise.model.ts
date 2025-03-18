@@ -26,6 +26,13 @@ export interface Exercise {
     answers: string[];
 }
 
+export const EMPTY_EXERCISE: Exercise = {
+    name: "Упражнение",
+    timeout: 5,
+    problems: [],
+    answers: [],
+}
+
 export const ExerciseLimits = {
     MIN_VALUE: -10000,
     MAX_VALUE: 10000,

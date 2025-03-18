@@ -1,22 +1,22 @@
 import Button from "@mui/material/Button";
 import React, { useState } from "react";
-import { Container } from "@mui/material";
-import { ExcerciseSetupDialog, ProblemInputControl } from "../components";
+import { Container, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { ProblemInputControl } from "../components";
 import { Exercise, ExerciseLimits } from "../models";
 
 interface Props {
-    onBuilt: (exercise: Exercise) => void;
+    exercise: Exercise;
     onSave: (exercise: Exercise) => void;
     onCancel: () => void;
 }
 
-export function ExerciseBuilder({ onBuilt, onSave, onCancel }: Props) {
+export function ExerciseBuilder({ exercise, onSave, onCancel }: Props) {
     const [problem, setProblem] = useState<string>("");
     const [answer, setAnswer] = useState<string>("");
-    const [problems, setProblems] = useState<string[]>([]);
-    const [answers, setAnswers] = useState<string[]>([]);
-    const [dialogOpened, setDialogOpened] = useState<boolean>(false);
-    const [isSaving, setIsSaving] = useState<boolean>(false);
+    const [problems, setProblems] = useState<string[]>([...exercise.problems]);
+    const [answers, setAnswers] = useState<string[]>([...exercise.answers]);
+    const [name, setName] = useState<string>(exercise.name);
+    const [timeout, setTimeout] = useState<number>(exercise.timeout);
 
     const problemAdded = () => {
         setProblems([...problems, problem]);
@@ -52,40 +52,17 @@ export function ExerciseBuilder({ onBuilt, onSave, onCancel }: Props) {
             setAnswer(answer);
     }
 
-    const saveHandler = () => {
-        setIsSaving(true);
-        dialogOpenedHandler();
+    const handleOnSave = () => {
+        onSave({ name, timeout, problems, answers });
     }
 
-    const startHandler = () => {
-        setIsSaving(false);
-        dialogOpenedHandler();
-    }
-
-    const confirmed = (name: string, timeout: number) => {
-        dialogClosedHandler();
-
-        if (isSaving) {
-            setIsSaving(false);
-            onSave({ name, timeout, problems, answers });
-            return;
-        }
-
-        onBuilt({ name, timeout, problems, answers });
-    }
-
-    const dialogOpenedHandler = () => {
-        setDialogOpened(true);
-    }
-
-    const dialogClosedHandler = () => {
-        setDialogOpened(false);
-    }
+    const handleTimeoutChange = (rawtimeout: string) => {
+        const timeout = Number(rawtimeout.trim());
+        setTimeout(timeout);
+    };
 
     return (
         <>
-            {dialogOpened && <ExcerciseSetupDialog name="" onCancel={dialogClosedHandler} onConfirm={confirmed}></ExcerciseSetupDialog>}
-
             <Container style={{
                 display: "flex",
                 flexDirection: "column",
@@ -108,6 +85,41 @@ export function ExerciseBuilder({ onBuilt, onSave, onCancel }: Props) {
                         gap: "10px",
                         padding: "5px 0",
                     }}>
+                        <div style={{
+                            display: "flex",
+                            gap: "30px",
+                        }}>
+                            <div style={{
+                                paddingLeft: "25px",
+                            }}>
+                                <InputLabel>Название упражнения</InputLabel>
+                                <TextField
+                                    style={{
+                                        width: "300px",
+                                    }}
+                                    size="medium"
+                                    variant="outlined"
+                                    value={name}
+                                    multiline
+                                    onChange={(event) => setName(event.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <InputLabel>Время (мин.)</InputLabel>
+                                <OutlinedInput
+                                    style={{
+                                        width: "150px",
+                                    }}
+                                    error={timeout < 1 || timeout > ExerciseLimits.MAX_TIMEOUT}
+                                    required
+                                    defaultValue={timeout}
+                                    type="number"
+                                    onChange={(e) => handleTimeoutChange(e.target.value)}
+                                />
+                            </div>
+                        </div>
+
                         {problems.map((expr, id) => (
                             <Container
                                 key={id}
@@ -173,8 +185,7 @@ export function ExerciseBuilder({ onBuilt, onSave, onCancel }: Props) {
                     padding: '10px 0',
                     height: "10%",
                 }}>
-                    <Button variant="outlined" onClick={saveHandler} disabled={problems.length < 1}>Сохранить</Button>
-                    <Button variant="outlined" onClick={startHandler} disabled={problems.length < 1}>Начать</Button>
+                    <Button variant="outlined" onClick={() => handleOnSave()} disabled={problems.length < 1}>Сохранить</Button>
                     <Button variant="outlined" onClick={onCancel}>Назад</Button>
                 </Container>
             </Container>

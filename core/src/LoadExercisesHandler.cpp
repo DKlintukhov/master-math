@@ -36,7 +36,7 @@ namespace Core
             boost::json::object response;
             boost::json::array exercisesArr;
 
-            const std::filesystem::directory_iterator dir(std::filesystem::current_path() / "exercises");
+            const std::filesystem::directory_iterator dir(EXERCISES_DIR);
             for (const auto& file : dir)
             {
                 Exercise exercise(file.path());
