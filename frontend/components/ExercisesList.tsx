@@ -22,12 +22,11 @@ export function ExercisesList({ exercises, onExerciseSelected, onEdit, onDelete 
 
     return (
         <List style={{
-            height: "30vh",
-            width: "400px",
-            overflow: "hidden auto"
+            width: "100%",
+            height: "100%",
         }}
             subheader={
-                <ListSubheader component="div">
+                <ListSubheader component="div" style={{ fontSize: "1.25rem" }}>
                     Доступные упражнения
                 </ListSubheader>
             }

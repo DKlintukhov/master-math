@@ -53,7 +53,7 @@ export function ExerciseBuilder({ exercise, onSave, onCancel }: Props) {
     }
 
     const handleOnSave = () => {
-        onSave({ name, timeout, problems, answers });
+        onSave({ id: 0, name, timeout, problems, answers });
     }
 
     const handleTimeoutChange = (rawtimeout: string) => {

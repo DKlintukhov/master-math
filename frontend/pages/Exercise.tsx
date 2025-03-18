@@ -64,12 +64,10 @@ export function Exercise({ timeout, problems, onFinish }: Props) {
                         style={{
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "space-between",
-                            width: "fit-content",
                             gap: "10px",
                             padding: "5px 0"
                         }}>
-                        <span style={{ width: "20px", fontSize: "24px" }}>{id + 1})</span>
+                        <span style={{ width: "30px", fontSize: "24px" }}>{id + 1})</span>
                         <ProblemInputControl
                             problem={problem}
                             answer={""}

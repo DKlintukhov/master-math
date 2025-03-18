@@ -26,10 +26,13 @@
 #ifndef EVENT_HANDLERS_H
 #define EVENT_HANDLERS_H
 
+#include <filesystem>
 #include <webui.hpp>
 
 namespace Core
 {
+    inline const std::filesystem::path EXERCISES_DIR = std::filesystem::current_path() / "exercises";
+
     void GenerateExpressionsHandler(webui::window::event* event) noexcept;
     void SolveExpressionsHandler(webui::window::event* event) noexcept;
     void SaveExerciseHandler(webui::window::event* event) noexcept;

@@ -52,7 +52,10 @@ export function Main({ onExerciseSetupNavigate, onExerciseBuilderNavigate, onExe
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "15px"
+            justifyContent: "center",
+            height: "100%",
+            gap: "15px",
+            padding: "15px",
         }}>
             <Container style={{
                 display: "flex",
@@ -62,16 +65,26 @@ export function Main({ onExerciseSetupNavigate, onExerciseBuilderNavigate, onExe
                 <Button variant="outlined" onClick={onExerciseSetupNavigate}>Сгенерировать упражнение</Button>
                 <Button variant="outlined" onClick={onExerciseBuilderNavigate}>Создать упражнение</Button>
             </Container>
-            {loading
-                ? <CircularProgress size="70px" />
-                : exercises.length > 0
-                && <ExercisesList
-                    exercises={exercises}
-                    onEdit={onExerciseEdit}
-                    onDelete={handleExerciseDelete}
-                    onExerciseSelected={onExerciseSelected}
-                />
-            }
+            <div style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "40vh",
+                height: "40vh",
+                overflow: "hidden auto"
+            }}>
+                {loading
+                    ? <CircularProgress size="70px" />
+                    : exercises.length > 0
+                    && <ExercisesList
+                        exercises={exercises}
+                        onEdit={onExerciseEdit}
+                        onDelete={handleExerciseDelete}
+                        onExerciseSelected={onExerciseSelected}
+                    />
+                }
+            </div>
+
         </Container>
     );
 }

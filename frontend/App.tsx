@@ -22,8 +22,8 @@ export function App() {
             const { problems, answers } = await CoreController.GenerateExpressions(config);
 
             setTimeout(config.timeout);
-            setExercise({ ...exercise, problems, answers });
-            setCorrectAnswers(exercise.answers);
+            setExercise({ ...exercise, problems, answers: [] });
+            setCorrectAnswers(answers);
             navigate("/exercise");
         } catch (e) {
             console.error(e);

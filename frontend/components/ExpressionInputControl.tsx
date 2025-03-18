@@ -49,9 +49,7 @@ export function ProblemInputControl({ problem, onChange, answer, readOnly, onAns
                     onChange={expressionChanged}
                     value={problemVal}
                 />}
-            <Typography style={{ fontSize: "24px", width: "7px" }}>
-                =
-            </Typography>
+
             <TextField
                 style={{
                     width: "150px",

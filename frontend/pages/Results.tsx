@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, OutlinedInput, Typography } from "@mui/material";
+import { Button, Container, InputLabel, OutlinedInput, Typography } from "@mui/material";
 import { Util } from "../util";
 
 interface Props {
@@ -19,8 +19,6 @@ export function Results({ problems, answers, correctAnswers, duration, onReplay,
     const problemsAmount = answers.length;
     let correctAnswersAmount = 0;
     let incorrectAnswersAmount = 0;
-    console.log(correctAnswers)
-    console.log(answers)
     answers.forEach((value, idx) => {
         if (value === correctAnswers[idx])
             ++correctAnswersAmount;
@@ -59,36 +57,39 @@ export function Results({ problems, answers, correctAnswers, duration, onReplay,
                     padding: "10px 0"
                 }}
             >
-                {problems.map((problem, idx) => (
-                    <Container key={idx} style={{
+                {problems.map((problem, id) => (
+                    <Container key={id} style={{
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
                         gap: "10px",
                         padding: "5px 0"
                     }}>
                         <Typography fontSize="24px">
-                            <span style={{ width: "25px" }}>{idx + 1}) </span>
+                            <span style={{ width: "30px", fontSize: "24px" }}>{id + 1}) </span>
                             {problem}
                         </Typography>
 
-                        <Typography style={{ fontSize: "24px", width: "7px" }}>
-                            =
-                        </Typography>
+                        <div>
+                            <InputLabel>Ответ</InputLabel>
+                            <OutlinedInput
+                                style={{ width: "150px", textAlignLast: "center" }}
+                                size="medium"
+                                value={answers[id] === null ? "" : answers[id]}
+                                error={answers[id] !== correctAnswers[id]}
+                                readOnly={true}
+                            />
+                        </div>
 
-                        <OutlinedInput
-                            style={{ width: "150px", textAlignLast: "center" }}
-                            size="medium"
-                            value={answers[idx] === null ? "" : answers[idx]}
-                            error={answers[idx] !== correctAnswers[idx]}
-                            readOnly={true}
-                        />
-                        <OutlinedInput
-                            style={{ width: "150px", textAlignLast: "center" }}
-                            size="medium"
-                            value={correctAnswers[idx] === null ? "" : correctAnswers[idx]}
-                            readOnly={true}
-                        />
+                        <div>
+                            <InputLabel>Правильный ответ</InputLabel>
+                            <OutlinedInput
+                                style={{ width: "150px", textAlignLast: "center" }}
+                                size="medium"
+                                value={correctAnswers[id] === null ? "" : correctAnswers[id]}
+                                color="success"
+                                readOnly={true}
+                            />
+                        </div>
                     </Container>
                 ))}
             </Container>
