@@ -20,6 +20,7 @@ export interface OperationToUse {
 }
 
 export interface Exercise {
+    id: number;
     name: string;
     timeout: number;
     problems: string[];
@@ -27,6 +28,7 @@ export interface Exercise {
 }
 
 export const EMPTY_EXERCISE: Exercise = {
+    id: 0,
     name: "Упражнение",
     timeout: 5,
     problems: [],

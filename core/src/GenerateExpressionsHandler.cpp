@@ -53,13 +53,17 @@ namespace Core
             boost::json::array expressionsArrObj;
             boost::json::array answersArrObj;
 
+            std::stringstream ss;
+
             for (int i = 0; i < amount; ++i)
             {
                 std::string expr = generator.GenerateExpression();
                 parser.SetExpr(expr);
-                int answer = parser.Eval();
+                ss << std::setprecision(3) << std::noshowpoint << parser.Eval();
                 expressionsArrObj.emplace_back(expr);
-                answersArrObj.push_back(answer);
+                answersArrObj.push_back(boost::json::value(ss.str()));
+
+                ss.str("");
             }
 
             jsonObj["expressions"] = std::move(expressionsArrObj);

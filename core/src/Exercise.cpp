@@ -35,11 +35,17 @@ namespace Core
         std::vector<std::string> problems,
         std::vector<std::string> answers
     )
-        : m_name(std::move(name))
+        : m_id(std::hash<std::string>{}(name))
+        , m_name(std::move(name))
         , m_timeout(timeout)
         , m_problems(std::move(problems))
         , m_answers(std::move(answers))
     {
+    }
+
+    size_t Exercise::GetId() const noexcept
+    {
+        return m_id;
     }
 
     const std::string& Exercise::GetName() const noexcept
@@ -83,6 +89,7 @@ namespace Core
             answers.push_back(boost::json::value(answer));
         }
 
+        json["id"] = m_id;
         json["name"] = m_name;
         json["timeout"] = m_timeout.count();
         json["problems"] = std::move(problems);
@@ -106,6 +113,8 @@ namespace Core
         {
             throw std::runtime_error("Failed to open file for writing: " + path.string());
         }
+
+        file << m_id << std::endl;
 
         long long timeout = m_timeout.count();
         file << timeout << std::endl;
@@ -138,6 +147,8 @@ namespace Core
         {
             throw std::runtime_error("Failed to open file for reading: " + filePath.string());
         }
+
+        file >> m_id;
 
         long long timeout;
         file >> timeout;

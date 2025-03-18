@@ -34,8 +34,6 @@
 
 namespace Core
 {
-    inline const std::filesystem::path EXERCISES_DIR = std::filesystem::current_path() / "exercises";
-
     class Exercise final
     {
     public:
@@ -48,6 +46,8 @@ namespace Core
         Exercise(const std::filesystem::path& path) noexcept(false);
 
         boost::json::object ToJson() const;
+
+        size_t GetId() const noexcept;
         const std::string& GetName() const noexcept;
         std::chrono::seconds GetTimeout() const noexcept;
         const std::vector<std::string>& GetProblems() const noexcept;
@@ -57,6 +57,7 @@ namespace Core
         void LoadFromCSV(const std::filesystem::path& filePath) noexcept(false);
 
     private:
+        size_t m_id;
         std::string m_name;
         std::chrono::seconds m_timeout;
         std::vector<std::string> m_problems;

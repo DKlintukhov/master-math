@@ -13,10 +13,11 @@ export class CoreController {
                     .replaceAll("*", ` ${OperationSymbols[Operation.Mul]} `)
                     .replaceAll("/", ` ${OperationSymbols[Operation.Div]} `);
 
+                res += " = ";
                 return res;
             });
 
-            return { name: config.name, timeout: config.timeout, problems, answers }
+            return { id: 0, name: config.name, timeout: config.timeout, problems, answers }
         } catch (error) {
             console.error(error);
             throw new Error(error);
