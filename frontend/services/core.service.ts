@@ -11,30 +11,32 @@ import {
 export class CoreService {
 
     public static async GenerateExpressions(conf: GenerateExpressionsConfig): Promise<GeneratedExpressions | never> {
-        const json = await globalThis.webui.call("GenerateExpressions", JSON.stringify(conf));
-        const { error, expressions, answers } = JSON.parse(json) as GenerateExpressionsResponse;
-        if (error) {
-            throw error;
-        }
+        if (import.meta.env.MODE === 'production') {
+            const json = await globalThis.webui.call("GenerateExpressions", JSON.stringify(conf));
+            const { error, expressions, answers } = JSON.parse(json) as GenerateExpressionsResponse;
+            if (error) {
+                throw error;
+            }
 
-        return { expressions, answers };
+            return { expressions, answers };
+        }
 
         return {
             expressions: [
-                "2+2", "2+3-2+3+(2+3)", "10-3-6+(5/10)", 
-                "2+2", "2+3-2+3+(2+3)", "10-3-6+(5/10)", 
                 "2+2", "2+3-2+3+(2+3)", "10-3-6+(5/10)",
-                "2+2", "2+3-2+3+(2+3)", "10-3-6+(5/10)", 
-                "2+2", "2+3-2+3+(2+3)", "10-3-6+(5/10)", 
+                "2+2", "2+3-2+3+(2+3)", "10-3-6+(5/10)",
+                "2+2", "2+3-2+3+(2+3)", "10-3-6+(5/10)",
+                "2+2", "2+3-2+3+(2+3)", "10-3-6+(5/10)",
+                "2+2", "2+3-2+3+(2+3)", "10-3-6+(5/10)",
                 "2+2", "2+3-2+3+(2+3)", "10-3-6+(5/10)",
                 "Лыжник прошёл дистанцию 24 км за три часа. С какой скоростью он шёл?, Лыжник прошёл дистанцию 24 км за три часа. С какой скоростью он шёл?"
             ],
             answers: [
-                "4", "5", "7", 
-                "4", "5", "7", 
                 "4", "5", "7",
-                "4", "5", "7", 
-                "4", "5", "7", 
+                "4", "5", "7",
+                "4", "5", "7",
+                "4", "5", "7",
+                "4", "5", "7",
                 "4", "5", "7",
                 "24 км/ч"
             ]
@@ -56,13 +58,16 @@ export class CoreService {
     }
 
     public static async LoadExercises(): Promise<Exercise[] | never> {
-        const json = await globalThis.webui.call("LoadExercises", "");
-        const { error, exercises } = JSON.parse(json) as LoadExercisesResponse;
-        if (error) {
-            throw error;
+        if (import.meta.env.MODE === 'production') {
+            const json = await globalThis.webui.call("LoadExercises", "");
+            const { error, exercises } = JSON.parse(json) as LoadExercisesResponse;
+            if (error) {
+                throw error;
+            }
+
+            return exercises;
         }
 
-        return exercises;
         return [
             { id: 0, answers: ["2", "3"], problems: ["1+1", "1+2"], timeout: 3, name: "name 1" },
             { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2" },

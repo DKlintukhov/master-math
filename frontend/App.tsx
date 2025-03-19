@@ -74,6 +74,32 @@ export function App() {
         setExercise(EMPTY_EXERCISE);
     }, []);
 
+    useEffect(() => {
+        if (import.meta.env.MODE === 'production') {
+            const handleKeyDown = (event) => {
+                // Disable F12 (Inspect Element)
+                if (event.key === 'F12') {
+                    event.preventDefault();
+                    return false;
+                }
+
+                // Disable F5 (Refresh)
+                if (event.key === 'F5' || (event.ctrlKey && (event.key === 'r' || event.key === 'R'))) {
+                    event.preventDefault();
+                    return false;
+                }
+            };
+
+            document.addEventListener('keydown', handleKeyDown);
+
+            return () => {
+                document.removeEventListener('keydown', handleKeyDown);
+            };
+        }
+
+        return () => { }; // Empty cleanup function for non-production environments
+    }, []);
+
     return (
         <>
             <SubmitIssueBtn></SubmitIssueBtn>

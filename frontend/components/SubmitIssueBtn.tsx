@@ -5,7 +5,7 @@ export function SubmitIssueBtn() {
     return (
         <Button
             style={{
-                position: "static"
+                position: "absolute"
             }}
             component="a"
             href="https://github.com/DKlintukhov/master-math/issues/new"
