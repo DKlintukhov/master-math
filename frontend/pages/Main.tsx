@@ -55,7 +55,7 @@ export function Main({ onExerciseSetupNavigate, onExerciseBuilderNavigate, onExe
             justifyContent: "center",
             height: "100%",
             gap: "15px",
-            padding: "15px",
+            paddingTop: "150px",
         }}>
             <Container style={{
                 display: "flex",
@@ -65,6 +65,7 @@ export function Main({ onExerciseSetupNavigate, onExerciseBuilderNavigate, onExe
                 <Button variant="outlined" onClick={onExerciseSetupNavigate}>Сгенерировать упражнение</Button>
                 <Button variant="outlined" onClick={onExerciseBuilderNavigate}>Создать упражнение</Button>
             </Container>
+
             <div style={{
                 display: "flex",
                 justifyContent: "center",
