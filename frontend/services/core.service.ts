@@ -69,22 +69,22 @@ export class CoreService {
         }
 
         return [
-            { id: 0, answers: ["2", "3"], problems: ["1+1", "1+2"], timeout: 3, name: "name 1" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 23" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 24" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 25" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 26" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 27" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв1" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв2" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв3" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв4" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв5" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв6" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв7" },
-            { id: 0, answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв8" },
+            { id: 0, solution: [], answers: ["2", "3"], problems: ["1+1", "1+2"], timeout: 3, name: "name 1" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 23" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 24" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 25" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 26" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 27" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв1" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв2" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв3" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв4" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв5" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв6" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв7" },
+            { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв8" },
         ]
     }
 }

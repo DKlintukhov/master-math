@@ -38,6 +38,7 @@ namespace Core
             const boost::json::object& exerciseJson = json.at("exercise").as_object();
             const boost::json::array& problemsJson = exerciseJson.at("problems").as_array();
             const boost::json::array& answersJson = exerciseJson.at("answers").as_array();
+            const boost::json::array& solutionJson = exerciseJson.at("solution").as_array();
             const int64_t timeout = exerciseJson.at("timeout").as_int64();
             std::string name = exerciseJson.at("name").as_string().c_str();
 
@@ -45,6 +46,8 @@ namespace Core
             problems.reserve(problemsJson.size());
             std::vector<std::string> answers;
             answers.reserve(answersJson.size());
+            std::vector<std::string> solution;
+            answers.reserve(solutionJson.size());
 
             for (const auto& problemJson : problemsJson)
             {
@@ -56,11 +59,17 @@ namespace Core
                 answers.push_back(answerJson.as_string().c_str());
             }
 
+            for (const auto& solutionJson : solutionJson)
+            {
+                solution.push_back(solutionJson.as_string().c_str());
+            }
+
             const Exercise exercise(
                 std::move(name),
                 std::chrono::seconds{ timeout },
                 std::move(problems),
-                std::move(answers)
+                std::move(answers),
+                std::move(solution)
             );
 
             exercise.SaveAsCSV(EXERCISES_DIR);

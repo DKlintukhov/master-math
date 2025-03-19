@@ -41,7 +41,8 @@ namespace Core
             std::string name,
             std::chrono::seconds timeout,
             std::vector<std::string> problems,
-            std::vector<std::string> answers);
+            std::vector<std::string> answers,
+            std::vector<std::string> solution);
 
         Exercise(const std::filesystem::path& path) noexcept(false);
 
@@ -52,6 +53,7 @@ namespace Core
         std::chrono::seconds GetTimeout() const noexcept;
         const std::vector<std::string>& GetProblems() const noexcept;
         const std::vector<std::string>& GetAnswers() const noexcept;
+        const std::vector<std::string>& GetSolution() const noexcept;
 
         void SaveAsCSV(const std::filesystem::path& destDir) const noexcept(false);
         void LoadFromCSV(const std::filesystem::path& filePath) noexcept(false);
@@ -60,6 +62,7 @@ namespace Core
         size_t m_id;
         std::string m_name;
         std::chrono::seconds m_timeout;
+        std::vector<std::string> m_solution;
         std::vector<std::string> m_problems;
         std::vector<std::string> m_answers;
     };

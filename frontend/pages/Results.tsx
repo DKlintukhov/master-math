@@ -62,7 +62,7 @@ export function Results({ problems, answers, correctAnswers, duration, onReplay,
                         display: "flex",
                         alignItems: "center",
                         gap: "10px",
-                        padding: "0 5px 0 100px"
+                        padding: "5px 5px 5px 120px"
                     }}>
                         <Typography style={{
                             fontSize: "24px",

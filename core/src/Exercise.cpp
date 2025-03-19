@@ -33,13 +33,15 @@ namespace Core
         std::string name,
         std::chrono::seconds timeout,
         std::vector<std::string> problems,
-        std::vector<std::string> answers
+        std::vector<std::string> answers,
+        std::vector<std::string> solution
     )
         : m_id(std::hash<std::string>{}(name))
         , m_name(std::move(name))
         , m_timeout(timeout)
         , m_problems(std::move(problems))
         , m_answers(std::move(answers))
+        , m_solution(std::move(solution))
     {
     }
 
@@ -73,11 +75,17 @@ namespace Core
         return m_answers;
     }
 
+    const std::vector<std::string>& Exercise::GetSolution() const noexcept
+    {
+        return m_solution;
+    }
+
     boost::json::object Exercise::ToJson() const
     {
         boost::json::object json;
         boost::json::array problems;
         boost::json::array answers;
+        boost::json::array solution;
 
         for (const auto& problem : m_problems)
         {
@@ -89,11 +97,17 @@ namespace Core
             answers.push_back(boost::json::value(answer));
         }
 
+        for (const auto& sol : m_solution)
+        {
+            solution.push_back(boost::json::value(sol));
+        }
+
         json["id"] = m_id;
         json["name"] = m_name;
         json["timeout"] = m_timeout.count();
         json["problems"] = std::move(problems);
         json["answers"] = std::move(answers);
+        json["solution"] = std::move(solution);
 
         return json;
     }
@@ -135,6 +149,14 @@ namespace Core
             file << answer.c_str() << std::endl;
         }
 
+        file << m_solution.size() << std::endl;
+
+        for (const std::string step : m_solution)
+        {
+            file << step.size() << ",";
+            file << step.c_str() << std::endl;
+        }
+
         if (!file.good()) {
             throw std::runtime_error("Error writing to file: " + path.string());
         }
@@ -156,12 +178,12 @@ namespace Core
 
         file.ignore();
 
-        size_t problemsSz = 0;
-        file >> problemsSz;
-        m_problems.resize(problemsSz);
+        size_t size = 0;
+        file >> size;
+        m_problems.resize(size);
         file.ignore();
 
-        for (size_t i = 0; i < problemsSz; ++i)
+        for (size_t i = 0; i < size; ++i)
         {
             size_t strLen = 0;
             file >> strLen;
@@ -173,7 +195,6 @@ namespace Core
             file.ignore();
         }
 
-        size_t size = 0;
         file >> size;
         file.ignore();
         m_answers.resize(size);
@@ -193,6 +214,27 @@ namespace Core
             file.ignore();
 
             m_answers[i] = answer;
+        }
+
+        file >> size;
+        file.ignore();
+        m_solution.resize(size);
+
+        for (size_t i = 0; i < size; ++i)
+        {
+            size_t solutionSize;
+
+            std::string solution;
+
+            file >> solutionSize;
+            file.ignore();
+
+            solution.resize(solutionSize);
+
+            file.read(solution.data(), solutionSize);
+            file.ignore();
+
+            m_solution[i] = solution;
         }
 
         const std::wstring name = filePath.filename().replace_extension("").wstring();
