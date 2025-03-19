@@ -62,9 +62,12 @@ export function Results({ problems, answers, correctAnswers, duration, onReplay,
                         display: "flex",
                         alignItems: "center",
                         gap: "10px",
-                        padding: "5px 0"
+                        padding: "0 5px 0 100px"
                     }}>
-                        <Typography fontSize="24px">
+                        <Typography style={{
+                            fontSize: "24px",
+                            paddingTop: "20px",
+                        }}>
                             <span style={{ width: "30px", fontSize: "24px" }}>{id + 1}) </span>
                             {problem}
                         </Typography>

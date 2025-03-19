@@ -65,7 +65,7 @@ export function Exercise({ timeout, problems, onFinish }: Props) {
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
-                            padding: "5px 0"
+                            padding: "0 5px 0 100px"
                         }}>
                         <span style={{ width: "30px", fontSize: "24px" }}>{id + 1})</span>
                         <ProblemInputControl

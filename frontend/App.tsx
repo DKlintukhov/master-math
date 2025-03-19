@@ -63,14 +63,6 @@ export function App() {
         navigate("/builder");
     }
 
-    const excersiseSaved = async (exercise: Exercise) => {
-        try {
-            await CoreController.SaveExercise(exercise);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
     useEffect(() => {
         if (location.pathname !== "/") {
             navigate("/");
@@ -101,7 +93,7 @@ export function App() {
                     />
                 } />
                 <Route path="/exercise-setup" element={<ExerciseSetup onStart={generatedExerciseStarted} onCancel={finished} />} />
-                <Route path="/builder" element={<ExerciseBuilder exercise={exercise} onSave={excersiseSaved} onCancel={finished} />} />
+                <Route path="/builder" element={<ExerciseBuilder exercise={exercise} onCancel={finished} />} />
                 <Route path="/exercise" element={<ExercisePage timeout={timeout} problems={exercise.problems} onFinish={exerciseFinished} />} />
                 <Route path="/results" element={
                     <Results

@@ -1,22 +1,25 @@
 import Button from "@mui/material/Button";
 import React, { useState } from "react";
-import { Container, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { Alert, Container, InputLabel, OutlinedInput, Snackbar, TextField } from "@mui/material";
 import { ProblemInputControl } from "../components";
 import { Exercise, ExerciseLimits } from "../models";
+import { CoreController } from "../controllers";
 
 interface Props {
     exercise: Exercise;
-    onSave: (exercise: Exercise) => void;
     onCancel: () => void;
 }
 
-export function ExerciseBuilder({ exercise, onSave, onCancel }: Props) {
+export function ExerciseBuilder({ exercise, onCancel }: Props) {
     const [problem, setProblem] = useState<string>("");
     const [answer, setAnswer] = useState<string>("");
     const [problems, setProblems] = useState<string[]>([...exercise.problems]);
     const [answers, setAnswers] = useState<string[]>([...exercise.answers]);
     const [name, setName] = useState<string>(exercise.name);
     const [timeout, setTimeout] = useState<number>(exercise.timeout);
+    const [openSucessSnackbar, setSuccessSnackbarOpen] = useState<boolean>(false);
+    const [openErrorSnackbar, setErrorSnackbarOpen] = useState<boolean>(false);
+    const [exerciseSavingErrorMsg, setExerciseSavingErrorMsg] = useState<string>("");
 
     const problemAdded = () => {
         setProblems([...problems, problem]);
@@ -52,8 +55,25 @@ export function ExerciseBuilder({ exercise, onSave, onCancel }: Props) {
             setAnswer(answer);
     }
 
-    const handleOnSave = () => {
-        onSave({ id: 0, name, timeout, problems, answers });
+    const handleOnSave = async () => {
+        try {
+            await CoreController.SaveExercise({
+                id: 0,
+                name, timeout,
+                problems,
+                answers
+            });
+            setSuccessSnackbarOpen(true);
+        } catch (error) {
+            console.error(error.message);
+            setErrorSnackbarOpen(true);
+            setExerciseSavingErrorMsg(error.message);
+        }
+    }
+
+    const handleSnackbarClose = () => {
+        setSuccessSnackbarOpen(false);
+        setErrorSnackbarOpen(false);
     }
 
     const handleTimeoutChange = (rawtimeout: string) => {
@@ -87,10 +107,10 @@ export function ExerciseBuilder({ exercise, onSave, onCancel }: Props) {
                     }}>
                         <div style={{
                             display: "flex",
-                            gap: "30px",
+                            gap: "10px",
                         }}>
                             <div style={{
-                                paddingLeft: "25px",
+                                paddingLeft: "15px",
                             }}>
                                 <InputLabel>Название упражнения</InputLabel>
                                 <TextField
@@ -188,6 +208,43 @@ export function ExerciseBuilder({ exercise, onSave, onCancel }: Props) {
                     <Button variant="outlined" onClick={() => handleOnSave()} disabled={problems.length < 1}>Сохранить</Button>
                     <Button variant="outlined" onClick={onCancel}>Назад</Button>
                 </Container>
+
+                <Snackbar
+                    open={openSucessSnackbar}
+                    onClose={handleSnackbarClose}
+                    autoHideDuration={1500}
+                    anchorOrigin={{
+                        horizontal: "center",
+                        vertical: "bottom",
+                    }}
+                >
+                    <Alert
+                        onClose={handleSnackbarClose}
+                        severity="success"
+                        variant="filled"
+                    >
+                        Упраженение сохранено
+                    </Alert>
+                </Snackbar>
+
+                <Snackbar
+                    open={openErrorSnackbar}
+                    onClose={handleSnackbarClose}
+                    autoHideDuration={3000}
+                    anchorOrigin={{
+                        horizontal: "center",
+                        vertical: "bottom",
+                    }}
+                >
+                    <Alert
+                        onClose={handleSnackbarClose}
+                        severity="error"
+                        variant="filled"
+                    >
+                        Ошибка сохранения: {exerciseSavingErrorMsg}
+                    </Alert>
+                </Snackbar>
+
             </Container>
         </>
     );
