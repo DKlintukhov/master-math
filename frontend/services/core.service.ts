@@ -44,14 +44,16 @@ export class CoreService {
     }
 
     public static async SaveExercise(payload: SaveExercisePayload): Promise<void | never> {
-        const { error } = await globalThis.webui.call("SaveExercise", JSON.stringify(payload));
+        const json = await globalThis.webui.call("SaveExercise", JSON.stringify(payload));
+        const { error } = JSON.parse(json);
         if (error) {
             throw error;
         }
     }
 
     public static async DeleteExercise(payload: DeleteExercisePayload): Promise<void | never> {
-        const { error } = await globalThis.webui.call("DeleteExercise", JSON.stringify(payload));
+        const json = await globalThis.webui.call("DeleteExercise", JSON.stringify(payload));
+        const { error } = JSON.parse(json);
         if (error) {
             throw error;
         }

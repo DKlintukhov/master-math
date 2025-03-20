@@ -44,11 +44,12 @@ namespace Core
             std::vector<std::string> answers,
             std::vector<std::string> solution);
 
-        Exercise(const std::filesystem::path& path) noexcept(false);
+        Exercise(const boost::json::object& json) noexcept(false);
 
         boost::json::object ToJson() const;
+        void FromJson(const boost::json::object& json) noexcept(false);
 
-        size_t GetId() const noexcept;
+        uint64_t GetId() const noexcept;
         const std::string& GetName() const noexcept;
         std::chrono::seconds GetTimeout() const noexcept;
         const std::vector<std::string>& GetProblems() const noexcept;
@@ -59,7 +60,7 @@ namespace Core
         void LoadFromCSV(const std::filesystem::path& filePath) noexcept(false);
 
     private:
-        size_t m_id;
+        uint64_t m_id;
         std::string m_name;
         std::chrono::seconds m_timeout;
         std::vector<std::string> m_solution;

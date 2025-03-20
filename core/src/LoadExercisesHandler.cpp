@@ -37,9 +37,29 @@ namespace Core
             boost::json::array exercisesArr;
 
             const std::filesystem::directory_iterator dir(EXERCISES_DIR);
-            for (const auto& file : dir)
+            for (const auto& entry : dir)
             {
-                Exercise exercise(file.path());
+                if (!entry.is_regular_file()) continue;
+
+                const std::filesystem::path filePath = entry.path();
+
+                if (filePath.extension() != ".json") continue;
+
+                boost::nowide::ifstream file(filePath);
+                if (!file.is_open()) 
+                {
+                    // TODO: handle such errors errors
+                    continue;
+                }
+
+                std::string content(
+                    (std::istreambuf_iterator<char>(file)),
+                    std::istreambuf_iterator<char>()
+                );
+
+                auto json = boost::json::parse(content);
+                const Exercise exercise(json.as_object());
+
                 exercisesArr.push_back(exercise.ToJson());
             }
 

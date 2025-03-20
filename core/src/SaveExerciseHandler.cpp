@@ -26,6 +26,7 @@
 
 #include "EventHandlers.h"
 #include "Exercise.h"
+#include "Utf8.h"
 
 namespace Core
 {
@@ -34,54 +35,39 @@ namespace Core
         try
         {
             const boost::json::value json = boost::json::parse(event->get_string(0));
-
             const boost::json::object& exerciseJson = json.at("exercise").as_object();
-            const boost::json::array& problemsJson = exerciseJson.at("problems").as_array();
-            const boost::json::array& answersJson = exerciseJson.at("answers").as_array();
-            const boost::json::array& solutionJson = exerciseJson.at("solution").as_array();
-            const int64_t timeout = exerciseJson.at("timeout").as_int64();
-            std::string name = exerciseJson.at("name").as_string().c_str();
 
-            std::vector<std::string> problems;
-            problems.reserve(problemsJson.size());
-            std::vector<std::string> answers;
-            answers.reserve(answersJson.size());
-            std::vector<std::string> solution;
-            answers.reserve(solutionJson.size());
+            const Exercise exercise(exerciseJson);
 
-            for (const auto& problemJson : problemsJson)
+            if (!std::filesystem::exists(EXERCISES_DIR))
             {
-                problems.push_back(problemJson.as_string().c_str());
+                std::filesystem::create_directories(EXERCISES_DIR);
             }
 
-            for (const auto& answerJson : answersJson)
+            const std::string filename = exercise.GetName() + ".json";
+            const std::filesystem::path path = EXERCISES_DIR / Encoding::ToWide(filename);
+
+            boost::nowide::ofstream file(path);
+            if (!file.is_open())
             {
-                answers.push_back(answerJson.as_string().c_str());
+                throw std::runtime_error("Failed to open file for reading: " + path.string());
             }
 
-            for (const auto& solutionJson : solutionJson)
+            file << boost::json::serialize(exercise.ToJson());
+
+            if (!file.good())
             {
-                solution.push_back(solutionJson.as_string().c_str());
+                throw std::runtime_error("Error writing to file: " + path.string());
             }
 
-            const Exercise exercise(
-                std::move(name),
-                std::chrono::seconds{ timeout },
-                std::move(problems),
-                std::move(answers),
-                std::move(solution)
-            );
-
-            exercise.SaveAsCSV(EXERCISES_DIR);
-
-            event->return_string("");
+            event->return_string("{}");
         }
         catch (const std::exception& e)
         {
             boost::json::object errJson;
             errJson["error"] = e.what();
-
-            event->return_string(boost::json::serialize(errJson));
+            std::string res = boost::json::serialize(errJson);
+            event->return_string(res);
         }
     }
 }

@@ -45,7 +45,12 @@ namespace Core
     {
     }
 
-    size_t Exercise::GetId() const noexcept
+    Exercise::Exercise(const boost::json::object& json) noexcept(false)
+    {
+        FromJson(json);
+    }
+
+    uint64_t Exercise::GetId() const noexcept
     {
         return m_id;
     }
@@ -58,11 +63,6 @@ namespace Core
     std::chrono::seconds Exercise::GetTimeout() const noexcept
     {
         return m_timeout;
-    }
-
-    Exercise::Exercise(const std::filesystem::path& path) noexcept(false)
-    {
-        LoadFromCSV(path);
     }
 
     const std::vector<std::string>& Exercise::GetProblems() const noexcept
@@ -104,7 +104,7 @@ namespace Core
 
         json["id"] = m_id;
         json["name"] = m_name;
-        json["timeout"] = m_timeout.count();
+        json["timeout"] = static_cast<int64_t>(m_timeout.count());
         json["problems"] = std::move(problems);
         json["answers"] = std::move(answers);
         json["solution"] = std::move(solution);
@@ -112,133 +112,37 @@ namespace Core
         return json;
     }
 
-    void Exercise::SaveAsCSV(const std::filesystem::path& destDir) const noexcept(false)
+    void Exercise::FromJson(const boost::json::object& json) noexcept(false)
     {
-        if (!std::filesystem::exists(destDir))
+        const boost::json::array& problemsJson = json.at("problems").as_array();
+        const boost::json::array& answersJson = json.at("answers").as_array();
+        const boost::json::array& solutionJson = json.at("solution").as_array();
+
+        m_name = json.at("name").as_string().c_str();
+
+        // cannot use .as_uin64 right now becasue of js JSON.stringify serializes id as int64
+        // TODO: find beeter solution
+        m_id = std::hash<std::string>{}(m_name);
+
+        m_timeout = std::chrono::seconds{ json.at("timeout").as_int64() };
+
+        m_problems.reserve(problemsJson.size());
+        m_answers.reserve(answersJson.size());
+        m_solution.reserve(solutionJson.size());
+
+        for (const auto& problemJson : problemsJson)
         {
-            std::filesystem::create_directory(destDir);
+            m_problems.push_back(problemJson.as_string().c_str());
         }
 
-        const std::wstring filename = Encoding::ToWide(m_name) + L".csv";
-        const std::filesystem::path path = destDir / filename;
-
-        std::wofstream file(path);
-        if (!file.is_open())
+        for (const auto& answerJson : answersJson)
         {
-            throw std::runtime_error("Failed to open file for writing: " + path.string());
+            m_answers.push_back(answerJson.as_string().c_str());
         }
 
-        file << m_id << std::endl;
-
-        long long timeout = m_timeout.count();
-        file << timeout << std::endl;
-
-        file << m_problems.size() << std::endl;
-
-        for (const std::string problem : m_problems)
+        for (const auto& solutionJson : solutionJson)
         {
-            file << problem.size() << ",";
-            file << problem.c_str() << std::endl;
+            m_solution.push_back(solutionJson.as_string().c_str());
         }
-
-        file << m_answers.size() << std::endl;
-
-        for (const std::string answer : m_answers)
-        {
-            file << answer.size() << ",";
-            file << answer.c_str() << std::endl;
-        }
-
-        file << m_solution.size() << std::endl;
-
-        for (const std::string step : m_solution)
-        {
-            file << step.size() << ",";
-            file << step.c_str() << std::endl;
-        }
-
-        if (!file.good()) {
-            throw std::runtime_error("Error writing to file: " + path.string());
-        }
-    }
-
-    void Exercise::LoadFromCSV(const std::filesystem::path& filePath) noexcept(false)
-    {
-        std::ifstream file(filePath);
-        if (!file.is_open())
-        {
-            throw std::runtime_error("Failed to open file for reading: " + filePath.string());
-        }
-
-        file >> m_id;
-
-        long long timeout;
-        file >> timeout;
-        m_timeout = std::chrono::seconds(timeout);
-
-        file.ignore();
-
-        size_t size = 0;
-        file >> size;
-        m_problems.resize(size);
-        file.ignore();
-
-        for (size_t i = 0; i < size; ++i)
-        {
-            size_t strLen = 0;
-            file >> strLen;
-            file.ignore();
-
-            m_problems[i].resize(strLen);
-            file.read(m_problems[i].data(), strLen);
-
-            file.ignore();
-        }
-
-        file >> size;
-        file.ignore();
-        m_answers.resize(size);
-
-        for (size_t i = 0; i < size; ++i)
-        {
-            size_t answerSize;
-
-            std::string answer;
-
-            file >> answerSize;
-            file.ignore();
-
-            answer.resize(answerSize);
-
-            file.read(answer.data(), answerSize);
-            file.ignore();
-
-            m_answers[i] = answer;
-        }
-
-        file >> size;
-        file.ignore();
-        m_solution.resize(size);
-
-        for (size_t i = 0; i < size; ++i)
-        {
-            size_t solutionSize;
-
-            std::string solution;
-
-            file >> solutionSize;
-            file.ignore();
-
-            solution.resize(solutionSize);
-
-            file.read(solution.data(), solutionSize);
-            file.ignore();
-
-            m_solution[i] = solution;
-        }
-
-        const std::wstring name = filePath.filename().replace_extension("").wstring();
-
-        m_name = Encoding::ToUtf8(name);
     }
 }
