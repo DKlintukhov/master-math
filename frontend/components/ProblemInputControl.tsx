@@ -51,9 +51,7 @@ export function ProblemInputControl({ problem, onChange, answer, readOnly, onAns
                 />}
 
             <TextField
-                style={{
-                    width: "150px",
-                }}
+                style={{ width: "150px", }}
                 size="medium"
                 variant="outlined"
                 value={answerVal}

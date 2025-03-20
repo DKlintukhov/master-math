@@ -1,5 +1,5 @@
-import { Button, Container, OutlinedInput } from "@mui/material";
-import { CountdownTimer, ProblemInputControl } from "../components";
+import { Button, Container, Divider, TextField, Typography } from "@mui/material";
+import { CountdownTimer } from "../components";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
 
@@ -60,22 +60,37 @@ export function Exercise({ timeout, problems, onFinish }: Props) {
                 }}
             >
                 {problems.map((problem, id) => (
-                    <Container key={id}
-                        style={{
+                    <>
+                        <Container key={id} style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
-                            padding: "5px 5px 5px 120px"
+                            paddingLeft: "120px"
                         }}>
-                        <span style={{ width: "30px", fontSize: "24px" }}>{id + 1})</span>
-                        <ProblemInputControl
-                            problem={problem}
-                            answer={""}
-                            readOnly={true}
-                            onChange={(expr: string) => { }}
-                            onAnswer={(answer) => answerChanged(id, answer)}
-                        ></ProblemInputControl>
-                    </Container>
+                            <Typography variant="h6" component="div">
+                                {id + 1})
+                            </Typography>
+                            <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap' }}>
+                                {problem}
+                            </pre>
+                            <Typography variant="subtitle1">
+                                Ответ:
+                            </Typography>
+
+                            <TextField
+                                style={{
+                                    width: "150px",
+                                }}
+                                size="small"
+                                variant="outlined"
+                                value={answers[id]}
+                                multiline
+                                onChange={(ev) => answerChanged(id, ev.target.value)}
+                            />
+                        </Container>
+
+                        <Divider />
+                    </>
                 ))}
             </Container>
 
