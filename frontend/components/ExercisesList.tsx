@@ -19,6 +19,7 @@ interface Props {
 }
 
 export function ExercisesList({ exercises, onExerciseSelected, onEdit, onDelete }: Props) {
+    const sorted = exercises.sort((a, b) => a.name.localeCompare(b.name));
 
     return (
         <List style={{
@@ -26,12 +27,12 @@ export function ExercisesList({ exercises, onExerciseSelected, onEdit, onDelete 
             height: "100%",
         }}
             subheader={
-                <ListSubheader component="div" style={{ fontSize: "1.25rem" }}>
+                <ListSubheader style={{ fontSize: "1.25rem" }}>
                     Доступные упражнения
                 </ListSubheader>
             }
         >
-            {exercises.map((exercise, id) => (
+            {sorted.map((exercise, id) => (
                 <ListItem key={id}
                     secondaryAction={
                         <div>

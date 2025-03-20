@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Container, InputLabel, OutlinedInput, Typography } from "@mui/material";
+import { Button, Container, InputLabel, Typography } from "@mui/material";
+import Divider from '@mui/material/Divider';
 import { Util } from "../util";
 
 interface Props {
@@ -40,13 +41,13 @@ export function Results({ problems, answers, correctAnswers, duration, onReplay,
                 alignItems: "center",
                 padding: "15px 0"
             }}>
-                <Typography variant="h4" component="h2" color="info">
+                <Typography variant="h5" component="h5" color="info">
                     Время: {Util.formatTime(duration)}
                 </Typography>
-                <Typography variant="h4" component="h2" color="success">
+                <Typography variant="h5" component="h5" color="success">
                     Правильные ответы: {correctAnswersAmount} ({toPercents(correctAnswersAmount, problemsAmount)})
                 </Typography>
-                <Typography variant="h4" component="h2" color="error">
+                <Typography variant="h5" component="h5" color="error">
                     Неправильные ответы: {incorrectAnswersAmount} ({toPercents(incorrectAnswersAmount, problemsAmount)})
                 </Typography>
             </Container>
@@ -58,42 +59,33 @@ export function Results({ problems, answers, correctAnswers, duration, onReplay,
                 }}
             >
                 {problems.map((problem, id) => (
-                    <Container key={id} style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        padding: "5px 5px 5px 120px"
-                    }}>
-                        <Typography style={{
-                            fontSize: "24px",
-                            paddingTop: "20px",
+                    <>
+                        <Container key={id} style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "10px",
+                            paddingLeft: "120px"
                         }}>
-                            <span style={{ width: "30px", fontSize: "24px" }}>{id + 1}) </span>
-                            {problem}
-                        </Typography>
+                            <Typography variant="h6" component="div">
+                                {id + 1})
+                            </Typography>
+                            <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap' }}>
+                                {problem}
+                            </pre>
+                            <Typography variant="subtitle1">
+                                Ответ: {answers[id]}
+                            </Typography>
+                            <Typography
+                                variant="subtitle1"
+                                color={answers[id] === correctAnswers[id] ? 'success' : 'error'}
+                            >
+                                Правильный ответ: {correctAnswers[id]}
+                            </Typography>
 
-                        <div>
-                            <InputLabel>Ответ</InputLabel>
-                            <OutlinedInput
-                                style={{ width: "150px", textAlignLast: "center" }}
-                                size="medium"
-                                value={answers[id] === null ? "" : answers[id]}
-                                error={answers[id] !== correctAnswers[id]}
-                                readOnly={true}
-                            />
-                        </div>
+                        </Container>
 
-                        <div>
-                            <InputLabel>Правильный ответ</InputLabel>
-                            <OutlinedInput
-                                style={{ width: "150px", textAlignLast: "center" }}
-                                size="medium"
-                                value={correctAnswers[id] === null ? "" : correctAnswers[id]}
-                                color="success"
-                                readOnly={true}
-                            />
-                        </div>
-                    </Container>
+                        <Divider />
+                    </>
                 ))}
             </Container>
 
