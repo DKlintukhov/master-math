@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select } from "@mui/material";
-import { Operation, OperationSymbols } from "../models";
+import { Operation, OPERATION_SYMBOLS } from "../models";
 import React, { useEffect, useState } from "react";
 
 interface Props {
@@ -24,10 +24,10 @@ export function OperationSelector({ onSelect }: Props) {
                 value={operation}
                 onChange={selectHandler}
             >
-                <MenuItem value={Operation.Add}>{OperationSymbols[Operation.Add]}</MenuItem>
-                <MenuItem value={Operation.Sub}>{OperationSymbols[Operation.Sub]}</MenuItem>
-                <MenuItem value={Operation.Mul}>{OperationSymbols[Operation.Mul]}</MenuItem>
-                <MenuItem value={Operation.Div}>{OperationSymbols[Operation.Div]}</MenuItem>
+                <MenuItem value={Operation.Add}>{OPERATION_SYMBOLS[Operation.Add]}</MenuItem>
+                <MenuItem value={Operation.Sub}>{OPERATION_SYMBOLS[Operation.Sub]}</MenuItem>
+                <MenuItem value={Operation.Mul}>{OPERATION_SYMBOLS[Operation.Mul]}</MenuItem>
+                <MenuItem value={Operation.Div}>{OPERATION_SYMBOLS[Operation.Div]}</MenuItem>
             </Select>
         </FormControl>
     );

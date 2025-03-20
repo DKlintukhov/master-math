@@ -5,7 +5,7 @@ export enum Operation {
     Div,
 }
 
-export const OperationSymbols: { [key in Operation]: string } = {
+export const OPERATION_SYMBOLS: { [key in Operation]: string } = {
     [Operation.Add]: "+",
     [Operation.Sub]: "-",
     [Operation.Mul]: "\u00D7",
@@ -25,6 +25,7 @@ export interface Exercise {
     timeout: number;
     problems: string[];
     answers: string[];
+    solution: string[];
 }
 
 export const EMPTY_EXERCISE: Exercise = {
@@ -33,6 +34,7 @@ export const EMPTY_EXERCISE: Exercise = {
     timeout: 5,
     problems: [],
     answers: [],
+    solution: [],
 }
 
 export const ExerciseLimits = {

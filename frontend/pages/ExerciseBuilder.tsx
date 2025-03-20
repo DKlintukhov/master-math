@@ -61,7 +61,8 @@ export function ExerciseBuilder({ exercise, onCancel }: Props) {
                 id: 0,
                 name, timeout,
                 problems,
-                answers
+                answers,
+                solution: []
             });
             setSuccessSnackbarOpen(true);
         } catch (error) {

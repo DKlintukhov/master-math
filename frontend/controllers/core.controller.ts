@@ -1,4 +1,4 @@
-import { Exercise, Operation, OperationSymbols } from "../models";
+import { Exercise, Operation, OPERATION_SYMBOLS } from "../models";
 import { CoreService, GenerateExpressionsConfig } from "../services";
 
 export class CoreController {
@@ -8,16 +8,16 @@ export class CoreController {
             const { expressions, answers } = await CoreService.GenerateExpressions(config);
             const problems = expressions.map((expression) => {
                 let res = expression
-                    .replaceAll("+", ` ${OperationSymbols[Operation.Add]} `)
-                    .replaceAll("-", ` ${OperationSymbols[Operation.Sub]} `)
-                    .replaceAll("*", ` ${OperationSymbols[Operation.Mul]} `)
-                    .replaceAll("/", ` ${OperationSymbols[Operation.Div]} `);
+                    .replaceAll("+", ` ${OPERATION_SYMBOLS[Operation.Add]} `)
+                    .replaceAll("-", ` ${OPERATION_SYMBOLS[Operation.Sub]} `)
+                    .replaceAll("*", ` ${OPERATION_SYMBOLS[Operation.Mul]} `)
+                    .replaceAll("/", ` ${OPERATION_SYMBOLS[Operation.Div]} `);
 
                 res += " = ";
                 return res;
             });
 
-            return { id: 0, name: config.name, timeout: config.timeout, problems, answers }
+            return { id: 0, name: config.name, timeout: config.timeout, problems, answers, solution: [] }
         } catch (error) {
             console.error(error);
             throw new Error(error);

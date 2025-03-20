@@ -37,6 +37,7 @@ const size_t ID = std::hash<std::string>{}(NAME);
 const std::chrono::seconds TIMEOUT{ 5 };
 const std::vector<std::string> PROBLEMS{ "2+2", "3+3", "задача" };
 const std::vector<std::string> ANSWERS{ "4", "6", "ответ" };
+const std::vector<std::string> SOLUTION{ "", "", "Решение" };
 
 BOOST_AUTO_TEST_CASE(ExerciseTest)
 {
@@ -46,7 +47,7 @@ BOOST_AUTO_TEST_CASE(ExerciseTest)
     const std::filesystem::path fullFilename = dirPath / Encoding::ToWide("Some mame with юникод.csv");
 
     {
-        Exercise exercise(NAME, TIMEOUT, PROBLEMS, ANSWERS);
+        Exercise exercise(NAME, TIMEOUT, PROBLEMS, ANSWERS, SOLUTION);
         exercise.SaveAsCSV(dirPath);
 
         BOOST_REQUIRE(std::filesystem::exists(fullFilename));
@@ -58,12 +59,14 @@ BOOST_AUTO_TEST_CASE(ExerciseTest)
         size_t id = exercise.GetId();
         const auto& problems = exercise.GetProblems();
         const auto& answers = exercise.GetAnswers();
+        const auto& solution = exercise.GetSolution();
         const auto timeout = exercise.GetTimeout();
 
         BOOST_CHECK_EQUAL(id, ID);
         BOOST_CHECK_EQUAL(timeout, TIMEOUT);
         BOOST_CHECK_EQUAL(problems.size(), PROBLEMS.size());
         BOOST_CHECK_EQUAL(answers.size(), ANSWERS.size());
+        BOOST_CHECK_EQUAL(solution.size(), SOLUTION.size());
 
         for (size_t i = 0; i < problems.size(); ++i)
         {
@@ -74,6 +77,11 @@ BOOST_AUTO_TEST_CASE(ExerciseTest)
         {
             BOOST_CHECK_EQUAL(answers[i], ANSWERS[i]);
         }
+
+        for (size_t i = 0; i < solution.size(); ++i)
+        {
+            BOOST_CHECK_EQUAL(solution[i], SOLUTION[i]);
+        }
     }
 
     BOOST_REQUIRE(std::filesystem::remove(fullFilename));
@@ -81,7 +89,7 @@ BOOST_AUTO_TEST_CASE(ExerciseTest)
 
 BOOST_AUTO_TEST_CASE(ExerciseToHsonTest)
 {
-    Exercise exercise(NAME, TIMEOUT, PROBLEMS, ANSWERS);
+    Exercise exercise(NAME, TIMEOUT, PROBLEMS, ANSWERS, SOLUTION);
 
     boost::json::object json_obj = exercise.ToJson();
 
@@ -103,4 +111,10 @@ BOOST_AUTO_TEST_CASE(ExerciseToHsonTest)
     BOOST_CHECK_EQUAL(answers[0].as_string(), ANSWERS[0]);
     BOOST_CHECK_EQUAL(answers[1].as_string(), ANSWERS[1]);
     BOOST_CHECK_EQUAL(answers[2].as_string(), ANSWERS[2]);
+
+    boost::json::array solution = json_obj["solution"].as_array();
+    BOOST_REQUIRE_EQUAL(solution.size(), 3);
+    BOOST_CHECK_EQUAL(solution[0].as_string(), SOLUTION[0]);
+    BOOST_CHECK_EQUAL(solution[1].as_string(), SOLUTION[1]);
+    BOOST_CHECK_EQUAL(solution[2].as_string(), SOLUTION[2]);
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import { Routes, Route, useNavigate, useLocation, Link } from "react-router-dom";
-import { Button, Container } from "@mui/material";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Container } from "@mui/material";
 import { Exercise as ExercisePage, ExerciseBuilder, ExerciseSetup, Results } from "./pages";
 import { useEffect, useState } from "react";
 import { Main } from "./pages/Main";
@@ -104,7 +104,7 @@ export function App() {
         <>
             <SubmitIssueBtn></SubmitIssueBtn>
 
-            <Container maxWidth="md"
+            <Container
                 style={{
                     height: "100vh",
                     width: "100vw",

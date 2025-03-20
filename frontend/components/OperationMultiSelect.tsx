@@ -1,6 +1,6 @@
 import React from "react";
 import { Checkbox, Container, FormControlLabel, FormHelperText } from "@mui/material";
-import { Operation, OperationToUse, OperationSymbols, } from "../models";
+import { Operation, OperationToUse, OPERATION_SYMBOLS, } from "../models";
 import { useEffect, useState } from "react";
 
 
@@ -40,16 +40,16 @@ export function OperationMultiSelect({ onCheck, onError }: Props) {
             <div>
                 <FormControlLabel control={
                     <Checkbox checked={useAdd} onChange={(e) => setUseAdd(Boolean(e.target.checked))} />
-                } label={"Сложение " + OperationSymbols[Operation.Add]} />
+                } label={"Сложение " + OPERATION_SYMBOLS[Operation.Add]} />
                 <FormControlLabel control={
                     <Checkbox checked={useSub} onChange={(e) => setUseSub(Boolean(e.target.checked))} />
-                } label={"Вычитание " + OperationSymbols[Operation.Sub]} />
+                } label={"Вычитание " + OPERATION_SYMBOLS[Operation.Sub]} />
                 <FormControlLabel control={
                     <Checkbox checked={useMul} onChange={(e) => setUseMul(Boolean(e.target.checked))} />
-                } label={"Умножение " + OperationSymbols[Operation.Mul]} />
+                } label={"Умножение " + OPERATION_SYMBOLS[Operation.Mul]} />
                 <FormControlLabel control={
                     <Checkbox checked={useDiv} onChange={(e) => setUseDiv(Boolean(e.target.checked))} />
-                } label={"Деление " + OperationSymbols[Operation.Div]} />
+                } label={"Деление " + OPERATION_SYMBOLS[Operation.Div]} />
             </div>
             {isError && <FormHelperText error={true}>{errorMessage}</FormHelperText>}
         </Container>
