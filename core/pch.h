@@ -43,6 +43,7 @@
 
 #include <webui.hpp>
 #include <boost/json.hpp>
+#include <boost/nowide/fstream.hpp>
 #include <muParser.h>
 
 #endif

@@ -49,7 +49,7 @@ namespace Core
                 }
             }
 
-            event->return_string("");
+            event->return_string("{}");
         }
         catch (const std::exception& e)
         {

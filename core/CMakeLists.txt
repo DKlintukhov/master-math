@@ -1,5 +1,5 @@
 find_package(Threads REQUIRED)
-find_package(Boost COMPONENTS json REQUIRED)
+find_package(Boost COMPONENTS json nowide REQUIRED)
 find_program(NPM_CMD npm REQUIRED)
 
 set(SRC 
@@ -50,6 +50,7 @@ FetchContent_MakeAvailable(muparser)
 set(LIBS
     Threads::Threads
     Boost::json
+    Boost::nowide
     webui
     muparser
 )
