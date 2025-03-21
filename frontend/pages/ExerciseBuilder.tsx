@@ -115,7 +115,7 @@ export function ExerciseBuilder({ exercise, onCancel }: Props) {
                         justifyContent: "center",
                         alignItems: "center",
                         gap: "10px",
-                        padding: "5px 0",
+                        padding: "25px 0 10px 0",
                     }}>
                         <div style={{
                             display: "flex",
