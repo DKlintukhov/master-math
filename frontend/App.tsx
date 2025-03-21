@@ -1,13 +1,13 @@
 import React from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { Box, Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 import { Exercise as ExercisePage, ExerciseBuilder, ExerciseSetup, Results } from "./pages";
 import { useEffect, useState } from "react";
 import { Main } from "./pages/Main";
 import { GenerateExpressionsConfig } from "./services";
 import { CoreController } from "./controllers";
 import { EMPTY_EXERCISE, Exercise } from "./models";
-import { ServiceBtn } from "./components";
+import { ServiceBtn, Watermark } from "./components";
 
 export function App() {
     const navigate = useNavigate();
@@ -140,6 +140,8 @@ export function App() {
                         />}
                     />
                 </Routes>
+
+                <Watermark version="v1.0.0" />
             </Container>
         </>
     );
