@@ -4,7 +4,7 @@ if (PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message(FATAL_ERROR "In-source builds are not allowed. You should create separate directory for build files.")
 endif()
 
-set(VERSION 0.1.0)
+set(VERSION 1.0.0)
 set(TARGET MasterMath)
 
 set(PACKAGE_BUGREPORT "https://github.com/DKlintukhov/MasterMath/issues")

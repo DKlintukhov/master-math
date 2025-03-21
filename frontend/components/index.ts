@@ -5,3 +5,4 @@ export * from "./CountdownTimer";
 export * from "./ExercisesList";
 export * from "./ServiceBtn";
 export * from "./ExerciseContainer";
+export * from "./Watermark";
