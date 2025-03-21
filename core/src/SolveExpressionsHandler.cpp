@@ -22,28 +22,38 @@
 * SOFTWARE.
 */
 
+#include "pch.h"
 
-#ifndef PCH_H
-#define PCH_H
 
-#include <locale>
-#include <codecvt>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <chrono>
-#include <random>
-#include <string>
-#include <string_view>
-#include <unordered_map>
-#include <filesystem>
-#include <fstream>
-#include <utility>
+#include "ExpressionGenerator.h"
+#include "EventHandlers.h"
 
-#include <webui.hpp>
-#include <boost/json.hpp>
-#include <boost/nowide/fstream.hpp>
-#include <muParser.h>
+namespace Core
+{
+    void SolveExpressionsHandler(webui::window::event* event) noexcept
+    {
+        try
+        {
+            std::string jsonStr = event->get_string(0);
+            boost::json::array arrayJson = boost::json::parse(jsonStr).as_array();
+            boost::json::array arrayJsonResp;
 
-#endif
+            for (const auto& expr : arrayJson)
+            {
+                // Json json = expr.as_object();
+                // Expression expr = ExpressionFromJson(json);
+                // arrayJsonResp.push_back(Evaluate(expr));
+            }
+
+           std::string serializedJson = boost::json::serialize(arrayJsonResp);
+
+            event->return_string(serializedJson);
+        }
+        catch (const std::exception& e)
+        {
+            boost::json::object errJson;
+            errJson["error"] = e.what();
+            event->return_string(boost::json::serialize(errJson));
+        }
+    }
+}

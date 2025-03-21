@@ -37,7 +37,7 @@ vcpkg is used for managing the project's dependencies.
 Use vcpkg to install the required Boost libraries:
 
 ```bash
-vcpkg install boost-json:x64-windows-static boost-test:x64-windows-static
+vcpkg install boost-json:x64-windows-static boost-nowide:x64-windows-static boost-test:x64-windows-static
 ```
 
 3. CMake Configuration and Building

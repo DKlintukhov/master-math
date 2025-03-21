@@ -23,27 +23,19 @@
 */
 
 
-#ifndef PCH_H
-#define PCH_H
+#include "pch.h"
 
-#include <locale>
-#include <codecvt>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <chrono>
-#include <random>
-#include <string>
-#include <string_view>
-#include <unordered_map>
-#include <filesystem>
-#include <fstream>
-#include <utility>
+#include "Utf8.h"
 
-#include <webui.hpp>
-#include <boost/json.hpp>
-#include <boost/nowide/fstream.hpp>
-#include <muParser.h>
+namespace Core::Encoding
+{
+    std::wstring ToWide(const std::string& str) noexcept(false)
+    {
+        return CONVERTER.from_bytes(str);
+    }
 
-#endif
+    std::string ToUtf8(const std::wstring& str) noexcept(false)
+    {
+        return CONVERTER.to_bytes(str);
+    }
+}

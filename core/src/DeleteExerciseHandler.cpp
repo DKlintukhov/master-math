@@ -22,28 +22,41 @@
 * SOFTWARE.
 */
 
+#include "pch.h"
 
-#ifndef PCH_H
-#define PCH_H
+#include "EventHandlers.h"
+#include "Exercise.h"
+#include "Utf8.h"
 
-#include <locale>
-#include <codecvt>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <chrono>
-#include <random>
-#include <string>
-#include <string_view>
-#include <unordered_map>
-#include <filesystem>
-#include <fstream>
-#include <utility>
+namespace Core
+{
+    void DeleteExerciseHandler(webui::window::event* event) noexcept
+    {
+        try
+        {
+            const boost::json::value json = boost::json::parse(event->get_string(0));
+            const std::string name = json.at("name").as_string().c_str();
+            const std::wstring wname = Encoding::ToWide(name);
 
-#include <webui.hpp>
-#include <boost/json.hpp>
-#include <boost/nowide/fstream.hpp>
-#include <muParser.h>
+            const std::filesystem::directory_iterator dir(EXERCISES_DIR);
+            for (const auto& file : dir)
+            {
+                const auto& path = file.path();
+                if (path.stem().filename() == wname)
+                {
+                    std::filesystem::remove(path);
+                    break;
+                }
+            }
 
-#endif
+            event->return_string("{}");
+        }
+        catch (const std::exception& e)
+        {
+            boost::json::object errJson;
+            errJson["error"] = e.what();
+
+            event->return_string(boost::json::serialize(errJson));
+        }
+    }
+}

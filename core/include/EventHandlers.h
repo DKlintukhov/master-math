@@ -23,27 +23,21 @@
 */
 
 
-#ifndef PCH_H
-#define PCH_H
+#ifndef EVENT_HANDLERS_H
+#define EVENT_HANDLERS_H
 
-#include <locale>
-#include <codecvt>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <chrono>
-#include <random>
-#include <string>
-#include <string_view>
-#include <unordered_map>
 #include <filesystem>
-#include <fstream>
-#include <utility>
-
 #include <webui.hpp>
-#include <boost/json.hpp>
-#include <boost/nowide/fstream.hpp>
-#include <muParser.h>
+
+namespace Core
+{
+    inline const std::filesystem::path EXERCISES_DIR = std::filesystem::current_path() / "exercises";
+
+    void GenerateExpressionsHandler(webui::window::event* event) noexcept;
+    void SolveExpressionsHandler(webui::window::event* event) noexcept;
+    void SaveExerciseHandler(webui::window::event* event) noexcept;
+    void LoadExercisesHandler(webui::window::event* event) noexcept;
+    void DeleteExerciseHandler(webui::window::event* event) noexcept;
+}
 
 #endif
