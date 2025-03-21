@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import React, { useState } from "react";
 import { Alert, Container, InputLabel, OutlinedInput, Snackbar, TextField } from "@mui/material";
-import { ProblemInputControl } from "../components";
+import { ProblemInputControl, ExerciseImporter } from "../components";
 import { Exercise, ExerciseLimits } from "../models";
 import { CoreController } from "../controllers";
 
@@ -11,10 +11,12 @@ interface Props {
 }
 
 export function ExerciseBuilder({ exercise, onCancel }: Props) {
+    const [id, setId] = useState<number>(0);
     const [problem, setProblem] = useState<string>("");
     const [answer, setAnswer] = useState<string>("");
     const [problems, setProblems] = useState<string[]>([...exercise.problems]);
     const [answers, setAnswers] = useState<string[]>([...exercise.answers]);
+    const [solution, setSolution] = useState<string[]>([...exercise.solution]);
     const [name, setName] = useState<string>(exercise.name);
     const [timeout, setTimeout] = useState<number>(exercise.timeout);
     const [openSucessSnackbar, setSuccessSnackbarOpen] = useState<boolean>(false);
@@ -58,11 +60,11 @@ export function ExerciseBuilder({ exercise, onCancel }: Props) {
     const handleOnSave = async () => {
         try {
             await CoreController.SaveExercise({
-                id: 0,
+                id,
                 name, timeout,
                 problems,
                 answers,
-                solution: []
+                solution,
             });
             setSuccessSnackbarOpen(true);
         } catch (error) {
@@ -81,6 +83,15 @@ export function ExerciseBuilder({ exercise, onCancel }: Props) {
         const timeout = Number(rawtimeout.trim());
         setTimeout(timeout);
     };
+
+    const handleExercsieImport = (exercise: Exercise) => {
+        setId(exercise.id);
+        setName(exercise.name);
+        setTimeout(exercise.timeout);
+        setProblems(exercise.problems);
+        setAnswers(exercise.answers);
+        setSolution(exercise.solution);
+    }
 
     return (
         <>
@@ -206,6 +217,7 @@ export function ExerciseBuilder({ exercise, onCancel }: Props) {
                     padding: '10px 0',
                     height: "10%",
                 }}>
+                    <ExerciseImporter onImported={handleExercsieImport}></ExerciseImporter>
                     <Button variant="outlined" onClick={() => handleOnSave()} disabled={problems.length < 1}>Сохранить</Button>
                     <Button variant="outlined" onClick={onCancel}>Назад</Button>
                 </Container>

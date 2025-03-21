@@ -35,9 +35,8 @@ export function ExercisesList({ exercises, onExerciseSelected, onEdit, onDelete 
             }
         >
             {sorted.map((exercise, id) => (
-                <>
+                <div key={id}>
                     <ListItem
-                        key={id}
                         style={{ minWidth: "400px" }}
                         secondaryAction={
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -68,7 +67,7 @@ export function ExercisesList({ exercises, onExerciseSelected, onEdit, onDelete 
                         </ListItemButton>
                     </ListItem>
                     <Divider/>
-                </>
+                </div>
             ))}
         </List>
     );

@@ -46,9 +46,9 @@ namespace Core
                 if (filePath.extension() != ".json") continue;
 
                 boost::nowide::ifstream file(filePath);
-                if (!file.is_open()) 
+                if (!file.is_open())
                 {
-                    // TODO: handle such errors errors
+                    std::cerr << "Failed to open " + filePath.string() << std::endl;
                     continue;
                 }
 
@@ -57,10 +57,17 @@ namespace Core
                     std::istreambuf_iterator<char>()
                 );
 
-                auto json = boost::json::parse(content);
-                const Exercise exercise(json.as_object());
+                try
+                {
+                    auto json = boost::json::parse(content);
+                    const Exercise exercise(json.as_object());
 
-                exercisesArr.push_back(exercise.ToJson());
+                    exercisesArr.push_back(exercise.ToJson());
+                }
+                catch (const std::exception& e)
+                {
+                    std::cerr << "Failed to parse " + filePath.string() << std::endl;
+                }
             }
 
             response["exercises"] = std::move(exercisesArr);
