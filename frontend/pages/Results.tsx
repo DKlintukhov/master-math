@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, Container, InputLabel, Typography } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 import Divider from '@mui/material/Divider';
 import { Util } from "../util";
+import { ExerciseContainer } from "../components";
 
 interface Props {
     problems: string[];
@@ -28,13 +29,7 @@ export function Results({ problems, answers, correctAnswers, duration, onReplay,
     });
 
     return (
-        <Container style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "space-evenly",
-            height: "100%"
-        }}>
+        <ExerciseContainer>
             <Container style={{
                 display: "flex",
                 flexDirection: "column",
@@ -64,7 +59,6 @@ export function Results({ problems, answers, correctAnswers, duration, onReplay,
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
-                            paddingLeft: "120px"
                         }}>
                             <Typography variant="h6" component="div">
                                 {id + 1})
@@ -99,6 +93,6 @@ export function Results({ problems, answers, correctAnswers, duration, onReplay,
                 <Button variant="outlined" onClick={onReplay}>Повтор</Button>
                 <Button variant="outlined" onClick={() => onFinished()}>Закончить</Button>
             </Container>
-        </Container >
+        </ExerciseContainer>
     );
 }

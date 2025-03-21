@@ -43,7 +43,7 @@ export function Main({ onExerciseSetupNavigate, onExerciseBuilderNavigate, onExe
     // it's needed to wait for WebSocket connection
     // TODO: find better solution
     useEffect(() => {
-        const timeoutId = setTimeout(() => loadExercises(), 1000);
+        const timeoutId = setTimeout(() => loadExercises(), 750);
         return () => clearTimeout(timeoutId);
     }, []);
 
@@ -55,7 +55,7 @@ export function Main({ onExerciseSetupNavigate, onExerciseBuilderNavigate, onExe
             justifyContent: "center",
             height: "100%",
             gap: "15px",
-            paddingTop: "150px",
+            paddingTop: "250px",
         }}>
             <Container style={{
                 display: "flex",
@@ -70,7 +70,6 @@ export function Main({ onExerciseSetupNavigate, onExerciseBuilderNavigate, onExe
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                minHeight: "40vh",
                 height: "40vh",
                 overflow: "hidden auto"
             }}>

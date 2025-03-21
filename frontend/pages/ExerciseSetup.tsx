@@ -1,10 +1,9 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid2";
 import { ExerciseLimits, OperationToUse } from "../models";
 import { NumericInputControl, OperationMultiSelect } from "../components";
-import { Container, FormHelperText } from "@mui/material";
+import { Box, FormHelperText } from "@mui/material";
 import { GenerateExpressionsConfig } from "../services";
 
 interface Props {
@@ -55,66 +54,85 @@ export function ExerciseSetup({ onStart, onCancel }: Props) {
     }
 
     return (
-        <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 4 }}>
-            <Grid size={6}>
-                <NumericInputControl
-                    label="Время (мин.)"
-                    defaultValue={timeout}
-                    min={ExerciseLimits.MIN_TIMEOUT}
-                    max={ExerciseLimits.MAX_TIMEOUT}
-                    onChange={setTimeout}
-                    onError={handleInputsError} />
-            </Grid>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+            gap: "15px",
+            maxWidth: "960px",
+            padding: "50px",
+        }}>
+            <Box sx={{
+                display: 'flex',
+                gap: 2,
+                flexWrap: 'wrap',
+                justifyContent: 'space-between'
+            }}>
+                <Box sx={{ flex: '1 1 300px' }}>
+                    <NumericInputControl
+                        label="Время (мин.)"
+                        defaultValue={timeout}
+                        min={ExerciseLimits.MIN_TIMEOUT}
+                        max={ExerciseLimits.MAX_TIMEOUT}
+                        onChange={setTimeout}
+                        onError={handleInputsError} />
+                </Box>
 
-            <Grid size={6}>
-                <NumericInputControl
-                    label="Количество примеров"
-                    defaultValue={amount}
-                    min={ExerciseLimits.MIN_EPXRESSIONS_AMOUNT}
-                    max={ExerciseLimits.MAX_EPXRESSIONS_AMOUNT}
-                    onChange={setAmount}
-                    onError={handleInputsError} />
-            </Grid>
+                <Box sx={{ flex: '1 1 300px' }}>
+                    <NumericInputControl
+                        label="Количество примеров"
+                        defaultValue={amount}
+                        min={ExerciseLimits.MIN_EPXRESSIONS_AMOUNT}
+                        max={ExerciseLimits.MAX_EPXRESSIONS_AMOUNT}
+                        onChange={setAmount}
+                        onError={handleInputsError} />
+                </Box>
+            </Box>
 
-            <Grid size={6}>
-                <NumericInputControl
-                    label="Мин. число"
-                    defaultValue={min}
-                    min={ExerciseLimits.MIN_VALUE}
-                    max={ExerciseLimits.MAX_VALUE}
-                    onChange={setMin}
-                    onError={handleInputsError} />
-            </Grid>
+            <Box sx={{
+                display: 'flex',
+                gap: 2,
+                flexWrap: 'wrap',
+                justifyContent: 'space-between'
+            }}>
+                <Box sx={{ flex: '1 1 300px' }}>
+                    <NumericInputControl
+                        label="Мин. число"
+                        defaultValue={min}
+                        min={ExerciseLimits.MIN_VALUE}
+                        max={ExerciseLimits.MAX_VALUE}
+                        onChange={setMin}
+                        onError={handleInputsError} />
+                </Box>
 
-            <Grid size={6}>
-                <NumericInputControl
-                    label="Макс. число"
-                    defaultValue={max}
-                    min={ExerciseLimits.MIN_VALUE}
-                    max={ExerciseLimits.MAX_VALUE}
-                    onChange={setMax}
-                    onError={handleInputsError} />
-            </Grid>
+                <Box sx={{ flex: '1 1 300px' }}>
+                    <NumericInputControl
+                        label="Макс. число"
+                        defaultValue={max}
+                        min={ExerciseLimits.MIN_VALUE}
+                        max={ExerciseLimits.MAX_VALUE}
+                        onChange={setMax}
+                        onError={handleInputsError} />
+                </Box>
+            </Box>
 
-            <Grid size={12} style={{
-                display: "flex",
-                justifyContent: "center",
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
             }}>
                 <OperationMultiSelect onCheck={setOperators} onError={setCheckOperatorsError} />
-            </Grid>
+            </Box>
 
-            <Grid size={12}>
-                <Container style={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "column",
-                    gap: "15px"
-                }}>
-                    <Button disabled={inputsInvalid || minmaxInvalid} variant="outlined" onClick={handleStart}>Начать</Button>
-                    {minmaxInvalid && <FormHelperText error={true}>{"Мин. не может быть >= чем Макс."}</FormHelperText>}
-                    <Button variant="outlined" onClick={onCancel}>Отмена</Button>
-                </Container>
-            </Grid>
-        </Grid>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 2,
+            }}>
+                <Button disabled={inputsInvalid || minmaxInvalid} variant="outlined" onClick={handleStart}>Начать</Button>
+                {minmaxInvalid && <FormHelperText error={true}>{"Мин. не может быть >= чем Макс."}</FormHelperText>}
+                <Button variant="outlined" onClick={onCancel}>Отмена</Button>
+            </Box>
+        </Box>
     );
 }

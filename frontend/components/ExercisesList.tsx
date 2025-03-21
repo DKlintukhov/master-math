@@ -6,6 +6,8 @@ import {
     ListItemButton,
     ListSubheader,
     IconButton,
+    Box,
+    Divider,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -27,38 +29,46 @@ export function ExercisesList({ exercises, onExerciseSelected, onEdit, onDelete 
             height: "100%",
         }}
             subheader={
-                <ListSubheader style={{ fontSize: "1.25rem" }}>
+                <ListSubheader sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
                     Доступные упражнения
                 </ListSubheader>
             }
         >
             {sorted.map((exercise, id) => (
-                <ListItem key={id}
-                    secondaryAction={
-                        <div>
-                            <IconButton
-                                edge="end"
-                                aria-label="edit"
-                                title="Изменить упражнение"
-                                onClick={() => onEdit(exercise)}
-                            >
-                                <EditIcon />
-                            </IconButton>
-                            <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                title="Удалить упражнение"
-                                onClick={() => onDelete(exercise)}
-                            >
-                                <DeleteIcon />
-                            </IconButton>
-                        </div>
-                    }
-                >
-                    <ListItemButton onClick={() => onExerciseSelected(exercise)}>
-                        <ListItemText primary={exercise.name} />
-                    </ListItemButton>
-                </ListItem>
+                <>
+                    <ListItem
+                        key={id}
+                        style={{ minWidth: "400px" }}
+                        secondaryAction={
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <IconButton
+                                    edge="end"
+                                    aria-label="edit"
+                                    title="Изменить упражнение"
+                                    onClick={() => onEdit(exercise)}
+                                    size="small"
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    edge="end"
+                                    aria-label="delete"
+                                    title="Удалить упражнение"
+                                    onClick={() => onDelete(exercise)}
+                                    size="small"
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Box>
+                        }
+                        disablePadding
+                    >
+                        <ListItemButton onClick={() => onExerciseSelected(exercise)}>
+                            <ListItemText primary={exercise.name} />
+                        </ListItemButton>
+                    </ListItem>
+                    <Divider/>
+                </>
             ))}
         </List>
     );

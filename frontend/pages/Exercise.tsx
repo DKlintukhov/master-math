@@ -1,18 +1,13 @@
 import { Button, Container, Divider, TextField, Typography } from "@mui/material";
-import { CountdownTimer } from "../components";
+import { CountdownTimer, ExerciseContainer } from "../components";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
+import { Util } from "../util";
 
 interface Props {
     timeout: number;
     problems: string[];
     onFinish: (duration: number, answers: string[]) => void;
-}
-
-function getDurationInSeconds(startDate: Date): number {
-    const now = new Date();
-    const differenceInMilliseconds = now.getTime() - startDate.getTime();
-    return differenceInMilliseconds / 1000;
 }
 
 export function Exercise({ timeout, problems, onFinish }: Props) {
@@ -23,7 +18,7 @@ export function Exercise({ timeout, problems, onFinish }: Props) {
 
     useEffect(() => {
         const timerId = setTimeout(() => {
-            const duration = getDurationInSeconds(startDate);
+            const duration = Util.getDurationInSeconds(startDate);
             onFinish(duration, answers);
         }, timeout * 60 * 1000);
 
@@ -39,19 +34,11 @@ export function Exercise({ timeout, problems, onFinish }: Props) {
     };
 
     const finished = () => {
-        onFinish(getDurationInSeconds(startDate), answers);
+        onFinish(Util.getDurationInSeconds(startDate), answers);
     };
 
     return (
-        <Container style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "space-evenly",
-            gap: "15px",
-            height: "100%",
-            padding: "10px 0"
-        }}>
+        <ExerciseContainer >
             <CountdownTimer timeout={timeout} onExpire={finished} />
 
             <Container
@@ -65,12 +52,11 @@ export function Exercise({ timeout, problems, onFinish }: Props) {
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
-                            paddingLeft: "120px"
                         }}>
                             <Typography variant="h6" component="div">
                                 {id + 1})
                             </Typography>
-                            <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap' }}>
+                            <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap', maxWidth: "75%" }}>
                                 {problem}
                             </pre>
                             <Typography variant="subtitle1">
@@ -95,6 +81,6 @@ export function Exercise({ timeout, problems, onFinish }: Props) {
             </Container>
 
             <Button variant="outlined" onClick={finished}>Готово</Button>
-        </Container >
+        </ExerciseContainer >
     );
 }
