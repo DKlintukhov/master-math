@@ -13,7 +13,6 @@ export class CoreController {
                     .replaceAll("*", ` ${OPERATION_SYMBOLS[Operation.Mul]} `)
                     .replaceAll("/", ` ${OPERATION_SYMBOLS[Operation.Div]} `);
 
-                res += " = ";
                 return res;
             });
 
