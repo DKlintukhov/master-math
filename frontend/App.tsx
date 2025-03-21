@@ -1,13 +1,13 @@
 import React from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { Exercise as ExercisePage, ExerciseBuilder, ExerciseSetup, Results } from "./pages";
 import { useEffect, useState } from "react";
 import { Main } from "./pages/Main";
 import { GenerateExpressionsConfig } from "./services";
 import { CoreController } from "./controllers";
 import { EMPTY_EXERCISE, Exercise } from "./models";
-import { SubmitIssueBtn } from "./components";
+import { ServiceBtn } from "./components";
 
 export function App() {
     const navigate = useNavigate();
@@ -102,7 +102,10 @@ export function App() {
 
     return (
         <>
-            <SubmitIssueBtn></SubmitIssueBtn>
+            <div style={{ position: "absolute" }}>
+                <ServiceBtn href="https://github.com/DKlintukhov/master-math/releases" label="Проверить обновления" />
+                <ServiceBtn href="https://github.com/DKlintukhov/master-math/issues/new" label="Сообщить о проблеме" />
+            </div>
 
             <Container
                 style={{

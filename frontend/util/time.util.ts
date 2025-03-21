@@ -6,4 +6,10 @@ export namespace Util {
         const formattedSeconds = String(remainingSeconds).padStart(2, '0');
         return `${formattedMinutes}:${formattedSeconds}`;
     };
+
+    export const getDurationInSeconds = (startDate: Date): number => {
+        const now = new Date();
+        const differenceInMilliseconds = now.getTime() - startDate.getTime();
+        return differenceInMilliseconds / 1000;
+    }
 }
