@@ -1,5 +1,6 @@
 find_package(Threads REQUIRED)
 find_package(Boost COMPONENTS json nowide REQUIRED)
+find_package(muparser REQUIRED)
 find_program(NPM_CMD npm REQUIRED)
 
 set(SRC 
@@ -34,25 +35,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(webui)
 
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-set(ENABLE_SAMPLES OFF CACHE BOOL "" FORCE)
-set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
-FetchContent_Declare(
-    muparser
-    GIT_REPOSITORY https://github.com/beltoforion/muparser.git
-    GIT_TAG        v2.3.5
-    TLS_VERIFY 	   TRUE
-    GIT_SHALLOW    TRUE
-    GIT_PROGRESS   TRUE
-)
-FetchContent_MakeAvailable(muparser)
-
 set(LIBS
     Threads::Threads
     Boost::json
     Boost::nowide
+    muparser::muparser
     webui
-    muparser
 )
 
 add_executable(${TARGET} main.cpp ${SRC})

@@ -16,7 +16,7 @@ vcpkg is used for managing the project's dependencies.
 1.  Clone the vcpkg repository:
 
     ```bash
-    git clone https://github.com/microsoft/vcpkg
+    git clone --depth 1 https://github.com/microsoft/vcpkg
     cd vcpkg
     ```
 
@@ -32,12 +32,17 @@ vcpkg is used for managing the project's dependencies.
     .\vcpkg integrate install
     ```
 
-## 2. Install Dependencies (Boost.JSON and Boost.Test)
+## 2. Install Dependencies
 
 Use vcpkg to install the required Boost libraries:
 
 ```bash
-vcpkg install boost-json:x64-windows-static boost-nowide:x64-windows-static boost-test:x64-windows-static
+vcpkg install boost-json:x64-windows-static boost-nowide:x64-windows-static 
+vcpkg install muparser:x64-windows-static
+```
+## For tests (optional)
+```bash
+vcpkg install boost-test:x64-windows-static
 ```
 
 3. CMake Configuration and Building
@@ -51,7 +56,7 @@ cd build
 Configure the project with CMake, specifying the vcpkg toolchain file:
 
 ```bash
-cmake -DCMAKE_TOOLCHAIN_FILE=<path_to_vcpkg>\scripts\buildsystems\vcpkg.cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_TOOLCHAIN_FILE=<path_to_vcpkg>\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCMAKE_BUILD_TYPE=Release ..
 ```
 
 bash

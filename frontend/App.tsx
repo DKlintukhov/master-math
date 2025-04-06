@@ -141,7 +141,7 @@ export function App() {
                     />
                 </Routes>
 
-                <Watermark version="v1.0.0" />
+                <Watermark version="v1.1.0" />
             </Container>
         </>
     );
