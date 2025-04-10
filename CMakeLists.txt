@@ -7,6 +7,7 @@ endif()
 set(VERSION 1.1.0)
 set(TARGET MasterMath)
 
+set(PACKAGE ${TARGET})
 set(PACKAGE_BUGREPORT "https://github.com/DKlintukhov/MasterMath/issues")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 17)

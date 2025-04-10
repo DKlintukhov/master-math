@@ -59,6 +59,8 @@ if (WIN32)
     target_sources(${TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/windows/resource.rc)
 endif()
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
+
 if (ENABLE_TESTS)
     add_subdirectory(tests)
 endif()
