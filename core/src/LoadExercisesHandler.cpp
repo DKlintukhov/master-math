@@ -35,6 +35,13 @@ namespace Core
         {
             boost::json::object response;
             boost::json::array exercisesArr;
+            
+            if (!std::filesystem::exists(EXERCISES_DIR))
+            {
+                response["exercises"] = std::move(exercisesArr);
+                event->return_string(boost::json::serialize(response));
+                return;
+            }
 
             const std::filesystem::directory_iterator dir(EXERCISES_DIR);
             for (const auto& entry : dir)
