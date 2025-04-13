@@ -22,23 +22,35 @@
 * SOFTWARE.
 */
 
+#include "pch.h"
 
-#ifndef EVENT_HANDLERS_H
-#define EVENT_HANDLERS_H
-
-#include <filesystem>
-#include <webui.hpp>
+#include "EventHandlers.h"
+#include "Exercise.h"
+#include "Utf8.h"
 
 namespace Core
 {
-    inline const std::filesystem::path EXERCISES_DIR = std::filesystem::current_path() / "exercises";
+    void GetAppInfoHandler(webui::window::event* event) noexcept
+    {
+        try
+        {
+            boost::json::object resp;
+            boost::json::object appInfoJson;
 
-    void GenerateExpressionsHandler(webui::window::event* event) noexcept;
-    void SolveExpressionsHandler(webui::window::event* event) noexcept;
-    void SaveExerciseHandler(webui::window::event* event) noexcept;
-    void LoadExercisesHandler(webui::window::event* event) noexcept;
-    void DeleteExerciseHandler(webui::window::event* event) noexcept;
-    void GetAppInfoHandler(webui::window::event* event) noexcept;
+            appInfoJson["name"] = PACKAGE_NAME;
+            appInfoJson["version"] = PACKAGE_VERSION;
+            appInfoJson["homepage"] = PACKAGE_HOMEPAGE_URL;
+            appInfoJson["bugreport"] = PACKAGE_BUGREPORT_URL;
+            appInfoJson["releases"] = PACKAGE_RELEASES_URL;
+
+            resp["appInfo"] = appInfoJson;
+
+            event->return_string(boost::json::serialize(resp));
+        }
+        catch (const std::exception& e)
+        {
+            boost::json::object errJson;
+            errJson["error"] = e.what();
+        }
+    }
 }
-
-#endif

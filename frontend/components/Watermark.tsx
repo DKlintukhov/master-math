@@ -1,11 +1,12 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { AppInfo } from "../models";
 
 interface Props {
-    version: string;
+    appInfo: AppInfo;
 }
 
-export function Watermark({ version }: Props) {
+export function Watermark({ appInfo }: Props) {
     return (
         <Box sx={{
             position: "absolute",
@@ -20,7 +21,7 @@ export function Watermark({ version }: Props) {
         }}>
             <p>
                 <Typography variant="caption">
-                    MasterMath {version}
+                    {appInfo.name} v{appInfo.version}
                 </Typography>
             </p>
             <p>

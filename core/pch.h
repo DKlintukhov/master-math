@@ -26,6 +26,8 @@
 #ifndef PCH_H
 #define PCH_H
 
+#include <config.h>
+
 #include <locale>
 #include <codecvt>
 #include <algorithm>

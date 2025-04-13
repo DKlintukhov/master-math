@@ -1,4 +1,4 @@
-import { Exercise, Operation, OPERATION_SYMBOLS } from "../models";
+import { AppInfo, Exercise, Operation, OPERATION_SYMBOLS } from "../models";
 import { CoreService, GenerateExpressionsConfig } from "../services";
 
 export class CoreController {
@@ -45,6 +45,16 @@ export class CoreController {
         try {
             const exercises = await CoreService.LoadExercises();
             return exercises
+        } catch (error) {
+            console.error(error);
+            throw new Error(error);
+        }
+    }
+
+    public static async GetAppInfo(): Promise<AppInfo | never> {
+        try {
+            const appInfo = await CoreService.GetAppInfo();
+            return appInfo
         } catch (error) {
             console.error(error);
             throw new Error(error);

@@ -40,6 +40,7 @@ int main(int, char const**)
     win.bind("SaveExercise", Core::SaveExerciseHandler);
     win.bind("DeleteExercise", Core::DeleteExerciseHandler);
     win.bind("LoadExercises", Core::LoadExercisesHandler);
+    win.bind("GetAppInfo", Core::GetAppInfoHandler);
 
     win.show_browser("index.html", static_cast<unsigned int>(win.get_best_browser()));
 

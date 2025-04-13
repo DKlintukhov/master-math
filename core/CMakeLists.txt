@@ -12,6 +12,7 @@ set(SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/SaveExerciseHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/LoadExercisesHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DeleteExerciseHandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GetAppInfoHandler.cpp
 )
 
 set(INCLUDES 
@@ -45,7 +46,7 @@ set(LIBS
 
 add_executable(${TARGET} main.cpp ${SRC})
 target_link_libraries(${TARGET} PRIVATE ${LIBS})
-target_include_directories(${TARGET} PRIVATE ${INCLUDES})
+target_include_directories(${TARGET} PRIVATE ${CMAKE_BINARY_DIR} ${INCLUDES})
 target_precompile_headers(${TARGET} PRIVATE pch.h)
 
 if (WIN32)
