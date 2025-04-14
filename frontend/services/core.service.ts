@@ -1,9 +1,10 @@
-import { Exercise } from "../models";
+import { AppInfo, Exercise } from "../models";
 import {
     DeleteExercisePayload,
     GenerateExpressionsConfig,
     GenerateExpressionsResponse,
     GeneratedExpressions,
+    GetAppInfoResponse,
     LoadExercisesResponse,
     SaveExercisePayload
 } from "./core.types";
@@ -88,5 +89,15 @@ export class CoreService {
             { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв7" },
             { id: 0, solution: [], answers: ["3", "5"], problems: ["1+2", "1+4"], timeout: 3, name: "name 2 имя вфлиорвофрывшв8" },
         ]
+    }
+
+    public static async GetAppInfo(): Promise<AppInfo | never> {
+        const json = await globalThis.webui.call("GetAppInfo");
+        const { appInfo, error } = JSON.parse(json) as GetAppInfoResponse;
+        if (error) {
+            throw error;
+        }
+
+        return appInfo;
     }
 }
