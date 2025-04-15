@@ -28,7 +28,7 @@
 #include "Exercise.h"
 #include "Utf8.h"
 
-namespace Core
+namespace Core::EventHandlers
 {
     void SaveExerciseHandler(webui::window::event* event) noexcept
     {

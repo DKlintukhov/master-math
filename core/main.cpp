@@ -27,6 +27,8 @@
 
 #include "EventHandlers.h"
 
+using namespace Core;
+
 int main(int, char const**)
 {
     std::locale::global(std::locale(""));
@@ -35,12 +37,12 @@ int main(int, char const**)
 
     win.set_size(1024, 768);
 
-    win.bind("GenerateExpressions", Core::GenerateExpressionsHandler);
-    win.bind("SolveExpressions", Core::SolveExpressionsHandler);
-    win.bind("SaveExercise", Core::SaveExerciseHandler);
-    win.bind("DeleteExercise", Core::DeleteExerciseHandler);
-    win.bind("LoadExercises", Core::LoadExercisesHandler);
-    win.bind("GetAppInfo", Core::GetAppInfoHandler);
+    win.bind("GenerateExpressions", EventHandlers::GenerateExpressionsHandler);
+    win.bind("SolveExpressions", EventHandlers::SolveExpressionsHandler);
+    win.bind("SaveExercise", EventHandlers::SaveExerciseHandler);
+    win.bind("DeleteExercise", EventHandlers::DeleteExerciseHandler);
+    win.bind("LoadExercises", EventHandlers::LoadExercisesHandler);
+    win.bind("GetAppInfo", EventHandlers::GetAppInfoHandler);
 
     win.show_browser("index.html", static_cast<unsigned int>(win.get_best_browser()));
 

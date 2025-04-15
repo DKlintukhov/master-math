@@ -28,7 +28,7 @@
 #include "ExpressionGenerator.h"
 #include "EventHandlers.h"
 
-namespace Core
+namespace Core::EventHandlers
 {
     void SolveExpressionsHandler(webui::window::event* event) noexcept
     {
