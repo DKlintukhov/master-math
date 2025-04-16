@@ -27,7 +27,7 @@
 #include "ExpressionGenerator.h"
 #include "EventHandlers.h"
 
-namespace Core
+namespace Core::EventHandlers
 {
     void GenerateExpressionsHandler(webui::window::event* event) noexcept
     {

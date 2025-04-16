@@ -29,7 +29,7 @@
 #include <filesystem>
 #include <webui.hpp>
 
-namespace Core
+namespace Core::EventHandlers
 {
     inline const std::filesystem::path EXERCISES_DIR = std::filesystem::current_path() / "exercises";
 

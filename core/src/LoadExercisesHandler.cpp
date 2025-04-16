@@ -27,7 +27,7 @@
 #include "EventHandlers.h"
 #include "Exercise.h"
 
-namespace Core
+namespace Core::EventHandlers
 {
     void LoadExercisesHandler(webui::window::event* event) noexcept
     {
