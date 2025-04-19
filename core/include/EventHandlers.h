@@ -27,18 +27,24 @@
 #define EVENT_HANDLERS_H
 
 #include <filesystem>
+#include <vector>
+#include <string>
 #include <webui.hpp>
+
+#include "ExpressionGenerator.h"
 
 namespace Core::EventHandlers
 {
     inline const std::filesystem::path EXERCISES_DIR = std::filesystem::current_path() / "exercises";
 
-    void GenerateExpressionsHandler(webui::window::event* event) noexcept;
-    void SolveExpressionsHandler(webui::window::event* event) noexcept;
-    void SaveExerciseHandler(webui::window::event* event) noexcept;
-    void LoadExercisesHandler(webui::window::event* event) noexcept;
-    void DeleteExerciseHandler(webui::window::event* event) noexcept;
-    void GetAppInfoHandler(webui::window::event* event) noexcept;
+    boost::json::object GenerateExpressions(ExpressionGenerator::Config conf, size_t amount);
+
+    void GenerateExpressionsHandler(webui::window::event* event);
+    void SolveExpressionsHandler(webui::window::event* event);
+    void SaveExerciseHandler(webui::window::event* event);
+    void LoadExercisesHandler(webui::window::event* event);
+    void DeleteExerciseHandler(webui::window::event* event);
+    void GetAppInfoHandler(webui::window::event* event);
 }
 
 #endif

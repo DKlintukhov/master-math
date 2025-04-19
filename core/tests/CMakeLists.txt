@@ -6,6 +6,7 @@ add_executable(${TARGET_TESTS}
     main.cpp
     ExerciseTest.cpp
     ExpressionGeneratorTest.cpp
+    EventHandlersTest.cpp
     ${SRC}
 )
 target_include_directories(${TARGET_TESTS} PRIVATE ${INCLUDES})

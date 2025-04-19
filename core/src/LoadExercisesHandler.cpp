@@ -29,7 +29,7 @@
 
 namespace Core::EventHandlers
 {
-    void LoadExercisesHandler(webui::window::event* event) noexcept
+    void LoadExercisesHandler(webui::window::event* event)
     {
         try
         {
