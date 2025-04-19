@@ -30,7 +30,7 @@
 
 namespace Core::EventHandlers
 {
-    void DeleteExerciseHandler(webui::window::event* event) noexcept
+    void DeleteExerciseHandler(webui::window::event* event)
     {
         try
         {

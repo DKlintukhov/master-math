@@ -30,7 +30,7 @@
 
 namespace Core::EventHandlers
 {
-    void GetAppInfoHandler(webui::window::event* event) noexcept
+    void GetAppInfoHandler(webui::window::event* event)
     {
         try
         {

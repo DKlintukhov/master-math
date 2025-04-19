@@ -30,7 +30,7 @@
 
 namespace Core::EventHandlers
 {
-    void SaveExerciseHandler(webui::window::event* event) noexcept
+    void SaveExerciseHandler(webui::window::event* event)
     {
         try
         {

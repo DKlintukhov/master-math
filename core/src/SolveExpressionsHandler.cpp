@@ -30,7 +30,7 @@
 
 namespace Core::EventHandlers
 {
-    void SolveExpressionsHandler(webui::window::event* event) noexcept
+    void SolveExpressionsHandler(webui::window::event* event)
     {
         try
         {
