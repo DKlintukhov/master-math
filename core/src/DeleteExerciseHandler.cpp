@@ -36,18 +36,8 @@ namespace Core::EventHandlers
         {
             const boost::json::value json = boost::json::parse(event->get_string(0));
             const std::string name = json.at("name").as_string().c_str();
-            const std::wstring wname = Encoding::ToWide(name);
-
-            const std::filesystem::directory_iterator dir(EXERCISES_DIR);
-            for (const auto& file : dir)
-            {
-                const auto& path = file.path();
-                if (path.stem().filename() == wname)
-                {
-                    std::filesystem::remove(path);
-                    break;
-                }
-            }
+            
+            DeleteExercise(name);
 
             event->return_string("{}");
         }
@@ -58,5 +48,24 @@ namespace Core::EventHandlers
 
             event->return_string(boost::json::serialize(errJson));
         }
+    }
+
+    bool DeleteExercise(const std::string filename)
+    {
+        if (filename.empty()) 
+            throw std::invalid_argument("Invalid filename");
+
+        const std::wstring wfilename = Encoding::ToWide(filename);
+        const std::filesystem::directory_iterator dir(EXERCISES_DIR);
+        for (const auto& file : dir)
+        {
+            const auto& path = file.path();
+            if (path.stem().filename() == wfilename)
+            {
+                return std::filesystem::remove(path);
+            }
+        }
+
+        return false;
     }
 }
