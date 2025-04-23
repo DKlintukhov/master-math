@@ -93,3 +93,8 @@ BOOST_AUTO_TEST_CASE(GetAppInfoHandler)
     BOOST_CHECK_EQUAL(appInfoJson["bugreport"], PACKAGE_BUGREPORT_URL);
     BOOST_CHECK_EQUAL(appInfoJson["releases"], PACKAGE_RELEASES_URL);
 }
+
+BOOST_AUTO_TEST_CASE(DeleteExerciseHandler)
+{
+    BOOST_CHECK_THROW(EventHandlers::DeleteExercise(""), std::invalid_argument);
+}

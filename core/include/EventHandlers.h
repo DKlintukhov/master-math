@@ -39,6 +39,7 @@ namespace Core::EventHandlers
 
     boost::json::object GenerateExpressions(ExpressionGenerator::Config conf, size_t amount);
     boost::json::object GetAppInfo();
+    bool DeleteExercise(const std::string filename);
 
     void GenerateExpressionsHandler(webui::window::event* event);
     void SolveExpressionsHandler(webui::window::event* event);
