@@ -38,27 +38,7 @@ namespace Core::EventHandlers
             const boost::json::object& exerciseJson = json.at("exercise").as_object();
 
             const Exercise exercise(exerciseJson);
-
-            if (!std::filesystem::exists(EXERCISES_DIR))
-            {
-                std::filesystem::create_directories(EXERCISES_DIR);
-            }
-
-            const std::string filename = exercise.GetName() + ".json";
-            const std::filesystem::path path = EXERCISES_DIR / Encoding::ToWide(filename);
-
-            boost::nowide::ofstream file(path);
-            if (!file.is_open())
-            {
-                throw std::runtime_error("Failed to open file for reading: " + path.string());
-            }
-
-            file << boost::json::serialize(exercise.ToJson());
-
-            if (!file.good())
-            {
-                throw std::runtime_error("Error writing to file: " + path.string());
-            }
+            SaveExercise(exercise);
 
             event->return_string("{}");
         }
@@ -69,5 +49,31 @@ namespace Core::EventHandlers
             std::string res = boost::json::serialize(errJson);
             event->return_string(res);
         }
+    }
+
+    bool SaveExercise(const Exercise& exercise)
+    {
+        if (!std::filesystem::exists(EXERCISES_DIR))
+        {
+            std::filesystem::create_directories(EXERCISES_DIR);
+        }
+
+        const std::string filename = exercise.GetName() + ".json";
+        const std::filesystem::path path = EXERCISES_DIR / Encoding::ToWide(filename);
+
+        boost::nowide::ofstream file(path);
+        if (!file.is_open())
+        {
+            throw std::runtime_error("Failed to open file for reading: " + path.string());
+        }
+
+        file << boost::json::serialize(exercise.ToJson());
+
+        if (!file.good())
+        {
+            throw std::runtime_error("Error writing to file: " + path.string());
+        }
+
+        return true;
     }
 }

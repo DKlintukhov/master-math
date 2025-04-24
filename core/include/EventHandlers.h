@@ -31,6 +31,7 @@
 #include <string>
 #include <webui.hpp>
 
+#include "Exercise.h"
 #include "ExpressionGenerator.h"
 
 namespace Core::EventHandlers
@@ -39,6 +40,7 @@ namespace Core::EventHandlers
 
     boost::json::object GenerateExpressions(ExpressionGenerator::Config conf, size_t amount);
     boost::json::object GetAppInfo();
+    bool SaveExercise(const Exercise& exercise);
     bool DeleteExercise(const std::string filename);
 
     void GenerateExpressionsHandler(webui::window::event* event);

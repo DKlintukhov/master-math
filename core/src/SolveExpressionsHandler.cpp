@@ -40,9 +40,7 @@ namespace Core::EventHandlers
 
             for (const auto& expr : arrayJson)
             {
-                // Json json = expr.as_object();
-                // Expression expr = ExpressionFromJson(json);
-                // arrayJsonResp.push_back(Evaluate(expr));
+               // TODO: solve expression
             }
 
            std::string serializedJson = boost::json::serialize(arrayJsonResp);
