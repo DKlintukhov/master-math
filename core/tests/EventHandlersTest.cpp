@@ -22,7 +22,6 @@
 * SOFTWARE.
 */
 
-
 #include <boost/test/unit_test.hpp>
 
 #include "pch.h"
@@ -54,7 +53,6 @@ BOOST_AUTO_TEST_CASE(GenerateExpressionsHandler)
 
     const array expressions = json["expressions"].as_array();
     const array answers = json["answers"].as_array();
-
 
     BOOST_REQUIRE(expressions.size() == amount);
     BOOST_REQUIRE(answers.size() == amount);
@@ -94,7 +92,80 @@ BOOST_AUTO_TEST_CASE(GetAppInfoHandler)
     BOOST_CHECK_EQUAL(appInfoJson["releases"], PACKAGE_RELEASES_URL);
 }
 
+BOOST_AUTO_TEST_CASE(SaveExerciseHandler)
+{
+    const std::string exerciseName = "TestExercise";
+    const std::filesystem::path fullFilename = EventHandlers::EXERCISES_DIR / (exerciseName + EventHandlers::EXERCISE_FILE_EXT);
+    const std::vector<std::string> problems{ "problem1", "problem2" };
+    const std::vector<std::string> answers{ "answer1", "answer2" };
+    const std::vector<std::string> solutions{ "solution1", "solution2" };
+    const std::chrono::seconds seconds{ 60 };
+
+    const Exercise exercise(exerciseName, seconds, problems, answers, solutions);
+
+    BOOST_CHECK(EventHandlers::SaveExercise(exercise));
+    BOOST_CHECK(std::filesystem::exists(fullFilename));
+
+    const std::vector<Exercise> exercises = EventHandlers::LoadExercises();
+
+    BOOST_REQUIRE(exercises.size() > 0);
+
+    const auto found = std::find_if(
+        std::cbegin(exercises),
+        std::cend(exercises),
+        [&](const Exercise& exercise)
+        { return exercise.GetName() == exerciseName; }
+    );
+
+    BOOST_REQUIRE_EQUAL(found->GetProblems().size(), problems.size());
+    BOOST_REQUIRE_EQUAL(found->GetAnswers().size(), answers.size());
+    BOOST_REQUIRE_EQUAL(found->GetSolution().size(), solutions.size());
+
+    for (size_t i = 0; i < problems.size(); ++i)
+    {
+        BOOST_CHECK(found->GetProblems()[i] == problems[i]);
+    }
+
+    for (size_t i = 0; i < problems.size(); ++i)
+    {
+        BOOST_CHECK(found->GetAnswers()[i] == answers[i]);
+    }
+
+    for (size_t i = 0; i < problems.size(); ++i)
+    {
+        BOOST_CHECK(found->GetSolution()[i] == solutions[i]);
+    }
+
+    BOOST_REQUIRE(found != std::cend(exercises));
+
+    std::filesystem::remove_all(EventHandlers::EXERCISES_DIR);
+}
+
 BOOST_AUTO_TEST_CASE(DeleteExerciseHandler)
 {
     BOOST_CHECK_THROW(EventHandlers::DeleteExercise(""), std::invalid_argument);
+
+    const std::string exerciseName = "some file name";
+    const std::string exerciseNameToDelete = "some file name, ютф-8";
+    const std::string exerciseNameNotExists = "doesn't exist";
+
+    const std::filesystem::path fullFilename = EventHandlers::EXERCISES_DIR / (exerciseName + EventHandlers::EXERCISE_FILE_EXT);
+    const std::filesystem::path fullFilenameToDelete = EventHandlers::EXERCISES_DIR / (exerciseNameToDelete + EventHandlers::EXERCISE_FILE_EXT);
+    const std::filesystem::path fullFilenameNotExists = EventHandlers::EXERCISES_DIR / (exerciseNameNotExists + EventHandlers::EXERCISE_FILE_EXT);
+
+    const Exercise exercise(exerciseName, std::chrono::seconds{ 0 }, {}, {}, {});
+    const Exercise exerciseToDelete(exerciseNameToDelete, std::chrono::seconds{ 0 }, {}, {}, {});
+    const Exercise exerciseNotExists(exerciseNameNotExists, std::chrono::seconds{ 0 }, {}, {}, {});
+
+    BOOST_CHECK(EventHandlers::SaveExercise(exercise));
+    BOOST_CHECK(EventHandlers::SaveExercise(exerciseToDelete));
+
+    BOOST_CHECK(EventHandlers::DeleteExercise(exerciseNameToDelete));
+    BOOST_CHECK(!EventHandlers::DeleteExercise(exerciseNameNotExists));
+
+    BOOST_CHECK(std::filesystem::exists(fullFilename));
+    BOOST_CHECK(!std::filesystem::exists(fullFilenameToDelete));
+    BOOST_CHECK(!std::filesystem::exists(fullFilenameNotExists));
+
+    BOOST_REQUIRE(std::filesystem::remove_all(EventHandlers::EXERCISES_DIR));
 }

@@ -50,7 +50,7 @@ namespace Core::EventHandlers
         }
     }
 
-    bool DeleteExercise(const std::string filename)
+    bool DeleteExercise(const std::string& filename)
     {
         if (filename.empty()) 
             throw std::invalid_argument("Invalid filename");
@@ -60,7 +60,7 @@ namespace Core::EventHandlers
         for (const auto& file : dir)
         {
             const auto& path = file.path();
-            if (path.stem().filename() == wfilename)
+            if (path.filename() == wfilename || path.stem().filename() == wfilename)
             {
                 return std::filesystem::remove(path);
             }
