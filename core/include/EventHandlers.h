@@ -36,12 +36,14 @@
 
 namespace Core::EventHandlers
 {
+    inline const char* EXERCISE_FILE_EXT = ".json";
     inline const std::filesystem::path EXERCISES_DIR = std::filesystem::current_path() / "exercises";
 
     boost::json::object GenerateExpressions(ExpressionGenerator::Config conf, size_t amount);
     boost::json::object GetAppInfo();
+    std::vector<Exercise> LoadExercises();
     bool SaveExercise(const Exercise& exercise);
-    bool DeleteExercise(const std::string filename);
+    bool DeleteExercise(const std::string& filename);
 
     void GenerateExpressionsHandler(webui::window::event* event);
     void SolveExpressionsHandler(webui::window::event* event);

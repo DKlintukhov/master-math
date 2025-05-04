@@ -58,7 +58,7 @@ namespace Core::EventHandlers
             std::filesystem::create_directories(EXERCISES_DIR);
         }
 
-        const std::string filename = exercise.GetName() + ".json";
+        const std::string filename = exercise.GetName() + EXERCISE_FILE_EXT;
         const std::filesystem::path path = EXERCISES_DIR / Encoding::ToWide(filename);
 
         boost::nowide::ofstream file(path);

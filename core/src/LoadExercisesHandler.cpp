@@ -35,46 +35,19 @@ namespace Core::EventHandlers
         {
             boost::json::object response;
             boost::json::array exercisesArr;
-            
-            if (!std::filesystem::exists(EXERCISES_DIR))
+
+            const std::vector<Exercise> exercises = LoadExercises();
+
+            if (exercises.empty())
             {
                 response["exercises"] = std::move(exercisesArr);
                 event->return_string(boost::json::serialize(response));
                 return;
             }
 
-            const std::filesystem::directory_iterator dir(EXERCISES_DIR);
-            for (const auto& entry : dir)
+            for (const auto& ex : exercises)
             {
-                if (!entry.is_regular_file()) continue;
-
-                const std::filesystem::path filePath = entry.path();
-
-                if (filePath.extension() != ".json") continue;
-
-                boost::nowide::ifstream file(filePath);
-                if (!file.is_open())
-                {
-                    std::cerr << "Failed to open " + filePath.string() << std::endl;
-                    continue;
-                }
-
-                std::string content(
-                    (std::istreambuf_iterator<char>(file)),
-                    std::istreambuf_iterator<char>()
-                );
-
-                try
-                {
-                    auto json = boost::json::parse(content);
-                    const Exercise exercise(json.as_object());
-
-                    exercisesArr.push_back(exercise.ToJson());
-                }
-                catch (const std::exception& e)
-                {
-                    std::cerr << "Failed to parse " + filePath.string() << std::endl;
-                }
+                exercisesArr.push_back(ex.ToJson());
             }
 
             response["exercises"] = std::move(exercisesArr);
@@ -87,5 +60,47 @@ namespace Core::EventHandlers
 
             event->return_string(boost::json::serialize(errJson));
         }
+    }
+
+    std::vector<Exercise> LoadExercises()
+    {
+        if (!std::filesystem::exists(EXERCISES_DIR))
+        {
+            return {};
+        }
+
+        std::vector<Exercise> exercises;
+
+        const std::filesystem::directory_iterator dir(EXERCISES_DIR);
+        for (const auto& entry : dir)
+        {
+            if (!entry.is_regular_file()) continue;
+
+            const std::filesystem::path filePath = entry.path();
+
+            if (filePath.extension() != ".json") continue;
+
+            boost::nowide::ifstream file(filePath);
+            if (!file.is_open())
+            {
+                std::cerr << "Failed to open " + filePath.string() << std::endl;
+                continue;
+            }
+
+            const std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+            try
+            {
+                auto json = boost::json::parse(content);
+                const Exercise exercise(json.as_object());
+                exercises.push_back(exercise.ToJson());
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << "Failed to parse " + filePath.string() << std::endl;
+            }
+        }
+
+        return exercises;
     }
 }
