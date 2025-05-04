@@ -49,9 +49,10 @@ namespace Core::EventHandlers
             config.useDiv = value.at("useDiv").as_bool();
             config.useFloats = false;
 
-            const auto exprs = GenerateExpressions(config, amount);
+            const auto expressions = GenerateExpressions(config, amount);
+            const auto expressionsJson = ExpressionsToJson(expressions);
 
-            event->return_string(boost::json::serialize(exprs));
+            event->return_string(boost::json::serialize(expressionsJson));
         }
         catch (const std::exception& e)
         {
@@ -61,32 +62,41 @@ namespace Core::EventHandlers
         }
     }
 
-    boost::json::object GenerateExpressions(ExpressionGenerator::Config conf, size_t amount)
+    boost::json::object ExpressionsToJson(const Expressions& expressions)
     {
-        mu::Parser parser;
-        ExpressionGenerator generator(conf);
-        std::stringstream ss;
-
         boost::json::object jsonObj;
         boost::json::array expressionsArrObj;
         boost::json::array answersArrObj;
-        expressionsArrObj.reserve(amount);
-        answersArrObj.reserve(amount);
 
-        while (amount--)
+        for (const auto& [key, value] : expressions)
         {
-            const std::string expr = generator.GenerateExpression();
-            parser.SetExpr(expr);
-            ss << std::setprecision(3) << std::noshowpoint << parser.Eval();
-            expressionsArrObj.emplace_back(expr);
-            answersArrObj.emplace_back(ss.str());
-
-            ss.str("");
+            expressionsArrObj.emplace_back(key);
+            answersArrObj.emplace_back(value);
         }
 
         jsonObj["expressions"] = std::move(expressionsArrObj);
         jsonObj["answers"] = std::move(answersArrObj);
 
         return jsonObj;
+    }
+
+    Expressions GenerateExpressions(ExpressionGenerator::Config conf, size_t amount)
+    {
+        mu::Parser parser;
+        ExpressionGenerator generator(conf);
+        std::stringstream ss;
+        Expressions expressions;
+
+        while (amount--)
+        {
+            const std::string expr = generator.GenerateExpression();
+            parser.SetExpr(expr);
+            ss << std::setprecision(3) << std::noshowpoint << parser.Eval();
+            expressions.emplace(expr, ss.str());
+
+            ss.str("");
+        }
+
+        return expressions;
     }
 }
