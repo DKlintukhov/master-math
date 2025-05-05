@@ -34,8 +34,10 @@ namespace Core::EventHandlers
     {
         try
         {
-            boost::json::object resp = GetAppInfo();
-            event->return_string(boost::json::serialize(resp));
+            const AppInfo appInfo = GetAppInfo();
+            const boost::json::object json = AppInfoToJson(appInfo);
+
+            event->return_string(boost::json::serialize(json));
         }
         catch (const std::exception& e)
         {
@@ -44,16 +46,27 @@ namespace Core::EventHandlers
         }
     }
 
-    boost::json::object GetAppInfo()
+    AppInfo GetAppInfo()
+    {
+        return {
+            PACKAGE_NAME,
+            PACKAGE_VERSION,
+            PACKAGE_HOMEPAGE_URL,
+            PACKAGE_BUGREPORT_URL,
+            PACKAGE_RELEASES_URL
+        };
+    }
+
+    boost::json::object AppInfoToJson(const AppInfo& appInfo)
     {
         boost::json::object json;
         boost::json::object appInfoJson;
 
-        appInfoJson["name"] = PACKAGE_NAME;
-        appInfoJson["version"] = PACKAGE_VERSION;
-        appInfoJson["homepage"] = PACKAGE_HOMEPAGE_URL;
-        appInfoJson["bugreport"] = PACKAGE_BUGREPORT_URL;
-        appInfoJson["releases"] = PACKAGE_RELEASES_URL;
+        appInfoJson["name"] = appInfo.name;
+        appInfoJson["version"] = appInfo.version;
+        appInfoJson["homepage"] = appInfo.homepage;
+        appInfoJson["bugreport"] = appInfo.bugreport;
+        appInfoJson["releases"] = appInfo.releases;
 
         json["appInfo"] = appInfoJson;
 
