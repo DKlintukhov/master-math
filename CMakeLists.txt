@@ -1,20 +1,18 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.25.1)
 
 if (PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message(FATAL_ERROR "In-source builds are not allowed. You should create separate directory for build files.")
 endif()
 
-set(VERSION 1.0.0)
 set(TARGET MasterMath)
 
-set(PACKAGE_BUGREPORT "https://github.com/DKlintukhov/MasterMath/issues")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_C_EXTENSIONS OFF)
-#set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
+set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
@@ -28,12 +26,19 @@ endif()
 
 project(
     ${TARGET}
-    VERSION ${VERSION}
+    VERSION 1.1.0
+    HOMEPAGE_URL "https://github.com/DKlintukhov/master-math"
     DESCRIPTION "MasterMath is an intuitive platform designed for math educators to effortlessly create, customize, and assign timed exercises, quizzes, and problem sets."
     LANGUAGES C CXX
 )
 
-option(ENABLE_TESTS "Enable tests" ON)
+set(PACKAGE_VERSION "${PROJECT_VERSION}")
+set(PACKAGE_NAME "${PROJECT_NAME}")
+set(PACKAGE_HOMEPAGE_URL "${PROJECT_HOMEPAGE_URL}")
+set(PACKAGE_BUGREPORT_URL "${PROJECT_HOMEPAGE_URL}/issues")
+set(PACKAGE_RELEASES_URL "${PROJECT_HOMEPAGE_URL}/releases")
+
+option(ENABLE_TESTS "Enable tests" OFF)
 option(USE_MBEDTLS ON)
 if(ENABLE_TESTS)
     enable_testing()

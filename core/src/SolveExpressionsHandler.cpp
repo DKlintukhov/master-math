@@ -28,9 +28,9 @@
 #include "ExpressionGenerator.h"
 #include "EventHandlers.h"
 
-namespace Core
+namespace Core::EventHandlers
 {
-    void SolveExpressionsHandler(webui::window::event* event) noexcept
+    void SolveExpressionsHandler(webui::window::event* event)
     {
         try
         {
@@ -40,9 +40,7 @@ namespace Core
 
             for (const auto& expr : arrayJson)
             {
-                // Json json = expr.as_object();
-                // Expression expr = ExpressionFromJson(json);
-                // arrayJsonResp.push_back(Evaluate(expr));
+               // TODO: solve expression
             }
 
            std::string serializedJson = boost::json::serialize(arrayJsonResp);

@@ -24,12 +24,11 @@
 
 #include "pch.h"
 
-#include "ExpressionGenerator.h"
 #include "EventHandlers.h"
 
-namespace Core
+namespace Core::EventHandlers
 {
-    void GenerateExpressionsHandler(webui::window::event* event) noexcept
+    void GenerateExpressionsHandler(webui::window::event* event)
     {
         try
         {
@@ -38,6 +37,10 @@ namespace Core
 
             ExpressionGenerator::Config config;
             int64_t amount = value.at("amount").as_int64();
+
+            if (amount <= 0)
+                throw std::invalid_argument("The number of expressions must be positive.");
+
             config.min = value.at("min").as_int64();
             config.max = value.at("max").as_int64();
             config.useAdd = value.at("useAdd").as_bool();
@@ -46,32 +49,10 @@ namespace Core
             config.useDiv = value.at("useDiv").as_bool();
             config.useFloats = false;
 
-            mu::Parser parser;
-            ExpressionGenerator generator(config);
+            const auto expressions = GenerateExpressions(config, amount);
+            const auto expressionsJson = ExpressionsToJson(expressions);
 
-            boost::json::object jsonObj;
-            boost::json::array expressionsArrObj;
-            boost::json::array answersArrObj;
-
-            std::stringstream ss;
-
-            for (int i = 0; i < amount; ++i)
-            {
-                std::string expr = generator.GenerateExpression();
-                parser.SetExpr(expr);
-                ss << std::setprecision(3) << std::noshowpoint << parser.Eval();
-                expressionsArrObj.emplace_back(expr);
-                answersArrObj.push_back(boost::json::value(ss.str()));
-
-                ss.str("");
-            }
-
-            jsonObj["expressions"] = std::move(expressionsArrObj);
-            jsonObj["answers"] = std::move(answersArrObj);
-
-            std::string serializedJson = boost::json::serialize(jsonObj);
-
-            event->return_string(serializedJson);
+            event->return_string(boost::json::serialize(expressionsJson));
         }
         catch (const std::exception& e)
         {
@@ -79,5 +60,43 @@ namespace Core
             errJson["error"] = e.what();
             event->return_string(boost::json::serialize(errJson));
         }
+    }
+
+    boost::json::object ExpressionsToJson(const Expressions& expressions)
+    {
+        boost::json::object jsonObj;
+        boost::json::array expressionsArrObj;
+        boost::json::array answersArrObj;
+
+        for (const auto& [key, value] : expressions)
+        {
+            expressionsArrObj.emplace_back(key);
+            answersArrObj.emplace_back(value);
+        }
+
+        jsonObj["expressions"] = std::move(expressionsArrObj);
+        jsonObj["answers"] = std::move(answersArrObj);
+
+        return jsonObj;
+    }
+
+    Expressions GenerateExpressions(ExpressionGenerator::Config conf, size_t amount)
+    {
+        mu::Parser parser;
+        ExpressionGenerator generator(conf);
+        std::stringstream ss;
+        Expressions expressions;
+
+        while (amount--)
+        {
+            const std::string expr = generator.GenerateExpression();
+            parser.SetExpr(expr);
+            ss << std::setprecision(3) << std::noshowpoint << parser.Eval();
+            expressions.emplace(expr, ss.str());
+
+            ss.str("");
+        }
+
+        return expressions;
     }
 }

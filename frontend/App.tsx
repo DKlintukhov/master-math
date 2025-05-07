@@ -6,15 +6,16 @@ import { useEffect, useState } from "react";
 import { Main } from "./pages/Main";
 import { GenerateExpressionsConfig } from "./services";
 import { CoreController } from "./controllers";
-import { EMPTY_EXERCISE, Exercise } from "./models";
+import { AppInfo, EMPTY_EXERCISE, Exercise } from "./models";
 import { ServiceBtn, Watermark } from "./components";
 
 export function App() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [appInfo, setAppInfo] = useState<AppInfo>();
     const [exercise, setExercise] = useState<Exercise>(EMPTY_EXERCISE);
     const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
-    const [timeout, setTimeout] = useState<number>(0);
+    const [timeout, setExerciseTimeout] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
 
     const generatedExerciseStarted = async (config: GenerateExpressionsConfig) => {
@@ -22,10 +23,19 @@ export function App() {
         try {
             const { problems, answers } = await CoreController.GenerateExpressions(config);
 
-            setTimeout(config.timeout);
+            setExerciseTimeout(config.timeout);
             setExercise({ ...exercise, problems, answers: [] });
             setCorrectAnswers(answers);
             navigate("/exercise");
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    const loadAppInfo = async () => {
+        try {
+            const appInfo = await CoreController.GetAppInfo();
+            setAppInfo(appInfo);
         } catch (e) {
             console.error(e);
         }
@@ -53,14 +63,14 @@ export function App() {
     const exerciseSelected = (exercise: Exercise) => {
         setExercise(exercise);
         setCorrectAnswers(exercise.answers);
-        setTimeout(exercise.timeout);
+        setExerciseTimeout(exercise.timeout);
         navigate("/exercise");
     }
 
     const handleExerciseEdit = (exercise: Exercise) => {
         setExercise(exercise);
         setCorrectAnswers(exercise.answers);
-        setTimeout(exercise.timeout);
+        setExerciseTimeout(exercise.timeout);
         navigate("/builder");
     }
 
@@ -72,6 +82,13 @@ export function App() {
 
     useEffect(() => {
         setExercise(EMPTY_EXERCISE);
+    }, []);
+
+    // it's needed to wait for WebSocket connection
+    // TODO: find better solution
+    useEffect(() => {
+        const timeoutId = setTimeout(() => loadAppInfo(), 750);
+        return () => clearTimeout(timeoutId);
     }, []);
 
     useEffect(() => {
@@ -102,10 +119,12 @@ export function App() {
 
     return (
         <>
-            <div style={{ position: "absolute" }}>
-                <ServiceBtn href="https://github.com/DKlintukhov/master-math/releases" label="Проверить обновления" />
-                <ServiceBtn href="https://github.com/DKlintukhov/master-math/issues/new" label="Сообщить о проблеме" />
-            </div>
+            { appInfo && 
+                <div style={{ position: "fixed", width: "100%" }}>
+                    <ServiceBtn href={appInfo.releases} label="Проверить наличие обновлений" />
+                    <ServiceBtn href={appInfo.bugreport} label="Сообщить о проблеме" />
+                </div>
+            }
 
             <Container
                 style={{
@@ -141,7 +160,7 @@ export function App() {
                     />
                 </Routes>
 
-                <Watermark version="v1.0.0" />
+                {appInfo && <Watermark appInfo={appInfo} /> }
             </Container>
         </>
     );

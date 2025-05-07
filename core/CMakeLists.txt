@@ -1,5 +1,6 @@
 find_package(Threads REQUIRED)
 find_package(Boost COMPONENTS json nowide REQUIRED)
+find_package(muparser REQUIRED)
 find_program(NPM_CMD npm REQUIRED)
 
 set(SRC 
@@ -11,6 +12,7 @@ set(SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/SaveExerciseHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/LoadExercisesHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DeleteExerciseHandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GetAppInfoHandler.cpp
 )
 
 set(INCLUDES 
@@ -34,30 +36,17 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(webui)
 
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-set(ENABLE_SAMPLES OFF CACHE BOOL "" FORCE)
-set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
-FetchContent_Declare(
-    muparser
-    GIT_REPOSITORY https://github.com/beltoforion/muparser.git
-    GIT_TAG        v2.3.5
-    TLS_VERIFY 	   TRUE
-    GIT_SHALLOW    TRUE
-    GIT_PROGRESS   TRUE
-)
-FetchContent_MakeAvailable(muparser)
-
 set(LIBS
     Threads::Threads
     Boost::json
     Boost::nowide
+    muparser::muparser
     webui
-    muparser
 )
 
 add_executable(${TARGET} main.cpp ${SRC})
 target_link_libraries(${TARGET} PRIVATE ${LIBS})
-target_include_directories(${TARGET} PRIVATE ${INCLUDES})
+target_include_directories(${TARGET} PRIVATE ${CMAKE_BINARY_DIR} ${INCLUDES})
 target_precompile_headers(${TARGET} PRIVATE pch.h)
 
 if (WIN32)
@@ -70,6 +59,8 @@ if (WIN32)
     target_compile_options(${TARGET} PRIVATE /DWIN32 /D_WINDOWS)
     target_sources(${TARGET} PRIVATE ${CMAKE_SOURCE_DIR}/windows/resource.rc)
 endif()
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_BINARY_DIR}/config.h)
 
 if (ENABLE_TESTS)
     add_subdirectory(tests)

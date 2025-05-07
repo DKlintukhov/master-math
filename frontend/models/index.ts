@@ -1,1 +1,2 @@
-export * from './exercise.model';
+export * from './Exercise.model';
+export * from './AppInfo.model';

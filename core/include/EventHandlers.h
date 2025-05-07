@@ -27,17 +27,46 @@
 #define EVENT_HANDLERS_H
 
 #include <filesystem>
+#include <vector>
+#include <string>
 #include <webui.hpp>
 
-namespace Core
-{
-    inline const std::filesystem::path EXERCISES_DIR = std::filesystem::current_path() / "exercises";
+#include "Exercise.h"
+#include "ExpressionGenerator.h"
 
-    void GenerateExpressionsHandler(webui::window::event* event) noexcept;
-    void SolveExpressionsHandler(webui::window::event* event) noexcept;
-    void SaveExerciseHandler(webui::window::event* event) noexcept;
-    void LoadExercisesHandler(webui::window::event* event) noexcept;
-    void DeleteExerciseHandler(webui::window::event* event) noexcept;
+namespace Core::EventHandlers
+{
+    inline const char* EXERCISE_FILE_EXT = ".json";
+    inline const std::filesystem::path EXERCISES_DIR = std::filesystem::current_path() / "exercises";
+    using Expressions = std::unordered_map<std::string, std::string>;
+
+    struct AppInfo
+    {
+        std::string name;
+        std::string version;
+        std::string homepage;
+        std::string bugreport;
+        std::string releases;
+    };
+
+    ExpressionGenerator::Config ParseConfig(const boost::json::value& json);
+
+    Expressions GenerateExpressions(ExpressionGenerator::Config conf, size_t amount);
+    boost::json::object ExpressionsToJson(const Expressions& expressions);
+
+    AppInfo GetAppInfo();
+    boost::json::object AppInfoToJson(const AppInfo& appInfo);
+
+    std::vector<Exercise> LoadExercises();
+    bool SaveExercise(const Exercise& exercise);
+    bool DeleteExercise(const std::string& filename);
+
+    void GenerateExpressionsHandler(webui::window::event* event);
+    void SolveExpressionsHandler(webui::window::event* event);
+    void SaveExerciseHandler(webui::window::event* event);
+    void LoadExercisesHandler(webui::window::event* event);
+    void DeleteExerciseHandler(webui::window::event* event);
+    void GetAppInfoHandler(webui::window::event* event);
 }
 
 #endif

@@ -1,4 +1,4 @@
-import { Exercise } from "../models";
+import { AppInfo, Exercise } from "../models";
 
 export interface GenerateExpressionsConfig {
     name: string;
@@ -33,5 +33,10 @@ export interface DeleteExercisePayload {
 
 export interface LoadExercisesResponse {
     exercises: Exercise[];
+    error: string;
+}
+
+export interface GetAppInfoResponse {
+    appInfo: AppInfo;
     error: string;
 }

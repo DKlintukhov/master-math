@@ -30,50 +30,46 @@
 
 namespace Core::EventHandlers
 {
-    void SaveExerciseHandler(webui::window::event* event)
+    void GetAppInfoHandler(webui::window::event* event)
     {
         try
         {
-            const boost::json::value json = boost::json::parse(event->get_string(0));
-            const boost::json::object& exerciseJson = json.at("exercise").as_object();
+            const AppInfo appInfo = GetAppInfo();
+            const boost::json::object json = AppInfoToJson(appInfo);
 
-            const Exercise exercise(exerciseJson);
-            SaveExercise(exercise);
-
-            event->return_string("{}");
+            event->return_string(boost::json::serialize(json));
         }
         catch (const std::exception& e)
         {
             boost::json::object errJson;
             errJson["error"] = e.what();
-            std::string res = boost::json::serialize(errJson);
-            event->return_string(res);
         }
     }
 
-    bool SaveExercise(const Exercise& exercise)
+    AppInfo GetAppInfo()
     {
-        if (!std::filesystem::exists(EXERCISES_DIR))
-        {
-            std::filesystem::create_directories(EXERCISES_DIR);
-        }
+        return {
+            PACKAGE_NAME,
+            PACKAGE_VERSION,
+            PACKAGE_HOMEPAGE_URL,
+            PACKAGE_BUGREPORT_URL,
+            PACKAGE_RELEASES_URL
+        };
+    }
 
-        const std::string filename = exercise.GetName() + EXERCISE_FILE_EXT;
-        const std::filesystem::path path = EXERCISES_DIR / Encoding::ToWide(filename);
+    boost::json::object AppInfoToJson(const AppInfo& appInfo)
+    {
+        boost::json::object json;
+        boost::json::object appInfoJson;
 
-        boost::nowide::ofstream file(path);
-        if (!file.is_open())
-        {
-            throw std::runtime_error("Failed to open file for reading: " + path.string());
-        }
+        appInfoJson["name"] = appInfo.name;
+        appInfoJson["version"] = appInfo.version;
+        appInfoJson["homepage"] = appInfo.homepage;
+        appInfoJson["bugreport"] = appInfo.bugreport;
+        appInfoJson["releases"] = appInfo.releases;
 
-        file << boost::json::serialize(exercise.ToJson());
+        json["appInfo"] = appInfoJson;
 
-        if (!file.good())
-        {
-            throw std::runtime_error("Error writing to file: " + path.string());
-        }
-
-        return true;
+        return json;
     }
 }

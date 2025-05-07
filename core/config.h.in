@@ -1,0 +1,14 @@
+/* Name of package */
+#cmakedefine PACKAGE_NAME "@PACKAGE_NAME@"
+
+/* Version number of package */
+#cmakedefine PACKAGE_VERSION "@PACKAGE_VERSION@"
+
+/* Define to the address of the homepage. */
+#cmakedefine PACKAGE_HOMEPAGE_URL "@PACKAGE_HOMEPAGE_URL@"
+
+/* Define to the address where bug reports for this package should be sent. */
+#cmakedefine PACKAGE_BUGREPORT_URL "@PACKAGE_BUGREPORT_URL@"
+
+/* Define to the address of the releases. */
+#cmakedefine PACKAGE_RELEASES_URL "@PACKAGE_RELEASES_URL@"
