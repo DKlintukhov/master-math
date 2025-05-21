@@ -1,6 +1,14 @@
 # MasterMath
 MasterMath is an intuitive platform designed for math educators to effortlessly create, customize, and assign timed exercises, quizzes, and problem sets.
 
+## Customer-Specified Requirements
+
+The application must meet the following minimum requirements:
+
+* Operating System Compatibility: The application shall be compatible with Windows 7 (64-bit) and all subsequent versions of the Windows operating system.
+* Download Size Optimization: The application’s installation package shall be optimized for minimal size. The target download size shall be less than 5 MiB to ensure accessibility for users with limited bandwidth.
+* Russian language.
+
 ## Building MasterMath on Windows
 
 ### Prerequisites
