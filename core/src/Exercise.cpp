@@ -45,37 +45,37 @@ namespace Core
     {
     }
 
-    Exercise::Exercise(const boost::json::object& json) noexcept(false)
+    Exercise::Exercise(const boost::json::object& json)
     {
         FromJson(json);
     }
 
-    uint64_t Exercise::GetId() const noexcept
+    uint64_t Exercise::GetId() const
     {
         return m_id;
     }
 
-    const std::string& Exercise::GetName() const noexcept
+    const std::string& Exercise::GetName() const
     {
         return m_name;
     }
 
-    std::chrono::seconds Exercise::GetTimeout() const noexcept
+    std::chrono::seconds Exercise::GetTimeout() const
     {
         return m_timeout;
     }
 
-    const std::vector<std::string>& Exercise::GetProblems() const noexcept
+    const std::vector<std::string>& Exercise::GetProblems() const
     {
         return m_problems;
     }
 
-    const std::vector<std::string>& Exercise::GetAnswers() const noexcept
+    const std::vector<std::string>& Exercise::GetAnswers() const
     {
         return m_answers;
     }
 
-    const std::vector<std::string>& Exercise::GetSolution() const noexcept
+    const std::vector<std::string>& Exercise::GetSolution() const
     {
         return m_solution;
     }
@@ -112,7 +112,7 @@ namespace Core
         return json;
     }
 
-    void Exercise::FromJson(const boost::json::object& json) noexcept(false)
+    void Exercise::FromJson(const boost::json::object& json)
     {
         const boost::json::array& problemsJson = json.at("problems").as_array();
         const boost::json::array& answersJson = json.at("answers").as_array();
