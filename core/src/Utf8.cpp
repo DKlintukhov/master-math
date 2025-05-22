@@ -29,12 +29,12 @@
 
 namespace Core::Encoding
 {
-    std::wstring ToWide(const std::string& str) noexcept(false)
+    std::wstring ToWide(const std::string& str)
     {
         return CONVERTER.from_bytes(str);
     }
 
-    std::string ToUtf8(const std::wstring& str) noexcept(false)
+    std::string ToUtf8(const std::wstring& str)
     {
         return CONVERTER.to_bytes(str);
     }
