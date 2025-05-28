@@ -13,6 +13,7 @@ set(SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/LoadExercisesHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DeleteExerciseHandler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/GetAppInfoHandler.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/User.cpp
 )
 
 set(INCLUDES 
