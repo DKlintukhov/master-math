@@ -66,3 +66,14 @@ BOOST_AUTO_TEST_CASE(UsersToJsonTest)
     BOOST_CHECK_EQUAL(userJson2["score"].as_uint64(), user2.score);
     BOOST_CHECK_EQUAL(userJson2["name"].as_string(), user2.name);
 }
+
+BOOST_AUTO_TEST_CASE(HashUserTest)
+{
+    const std::string name = "John Doe";
+    const User user{ 1, 5, name };
+
+    size_t userHash = std::hash<User>{}(user);
+    size_t hash = std::hash<std::string>{}(name);
+
+    BOOST_CHECK_EQUAL(userHash, hash);
+}
