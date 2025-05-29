@@ -27,6 +27,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 #include <boost/json.hpp>
 
 namespace RatingSystem
@@ -43,5 +44,14 @@ namespace RatingSystem
     boost::json::object ToJson(const User& user);
     boost::json::object ToJson(const Users& users);
 }
+
+template<>
+struct std::hash<RatingSystem::User>
+{
+    size_t operator()(const RatingSystem::User& user) const noexcept
+    {
+        return std::hash<std::string>{}(user.name);
+    }
+};
 
 #endif
