@@ -44,7 +44,12 @@ if(ENABLE_TESTS)
     enable_testing()
 endif()
 
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Debug")
+endif()
+
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(DEBUG 1)
     add_definitions(-DWEBUI_LOG)
     if(MSVC)
         set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreadedDebug)

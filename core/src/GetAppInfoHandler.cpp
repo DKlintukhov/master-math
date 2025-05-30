@@ -53,7 +53,8 @@ namespace Core::EventHandlers
             PACKAGE_VERSION,
             PACKAGE_HOMEPAGE_URL,
             PACKAGE_BUGREPORT_URL,
-            PACKAGE_RELEASES_URL
+            PACKAGE_RELEASES_URL,
+            DEBUG,
         };
     }
 
@@ -67,6 +68,7 @@ namespace Core::EventHandlers
         appInfoJson["homepage"] = appInfo.homepage;
         appInfoJson["bugreport"] = appInfo.bugreport;
         appInfoJson["releases"] = appInfo.releases;
+        appInfoJson["debug"] = appInfo.debug;
 
         json["appInfo"] = appInfoJson;
 

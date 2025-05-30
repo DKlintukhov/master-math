@@ -12,3 +12,6 @@
 
 /* Define to the address of the releases. */
 #cmakedefine PACKAGE_RELEASES_URL "@PACKAGE_RELEASES_URL@"
+
+/* Define to indicate debug mode. */
+#cmakedefine DEBUG @DEBUG@
