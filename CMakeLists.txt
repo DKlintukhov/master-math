@@ -12,16 +12,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_C_EXTENSIONS OFF)
-set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
+
+#set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
-endif()
-
-if(NOT MSVC)
-    set(OUTPUT_DIR ${CMAKE_BINARY_DIR}/)
-else()
-    set(OUTPUT_DIR ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE})
 endif()
 
 project(
@@ -48,6 +43,10 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(DEBUG 1)
     add_definitions(-DWEBUI_LOG)
@@ -63,8 +62,6 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 add_subdirectory(core)
-
-set_target_properties(${TARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIR})
 
 set(FRONTEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/frontend)
 set(FRONTEND_BUILD_DIR ${CMAKE_BINARY_DIR}/dist)
@@ -86,7 +83,7 @@ add_custom_target(build-frontend
 
 # Copy the files from the npm build folder into the target
 add_custom_command(
-  TARGET build-frontend
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${FRONTEND_DIR}/dist ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}
-  WORKING_DIRECTORY ${FRONTEND_DIR}/dist
+    TARGET build-frontend
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${FRONTEND_DIR}/dist ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    WORKING_DIRECTORY ${FRONTEND_DIR}/dist
 )

@@ -10,6 +10,7 @@ add_executable(${TARGET_TESTS}
     UsersTest.cpp
     ${SRC}
 )
+
 target_include_directories(${TARGET_TESTS} PRIVATE ${INCLUDES})
 target_link_libraries(${TARGET_TESTS} PRIVATE ${LIBS})
 target_precompile_headers(${TARGET_TESTS} REUSE_FROM ${TARGET})
