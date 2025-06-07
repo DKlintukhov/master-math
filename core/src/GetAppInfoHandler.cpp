@@ -54,7 +54,11 @@ namespace Core::EventHandlers
             PACKAGE_HOMEPAGE_URL,
             PACKAGE_BUGREPORT_URL,
             PACKAGE_RELEASES_URL,
-            DEBUG,
+#ifdef DEBUG
+            true,
+#else
+            false
+#endif
         };
     }
 

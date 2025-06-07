@@ -78,13 +78,17 @@ BOOST_AUTO_TEST_CASE(GenerateExpressionsHandler)
 BOOST_AUTO_TEST_CASE(GetAppInfoHandler)
 {
     const EventHandlers::AppInfo appInfo = EventHandlers::GetAppInfo();
-
+#ifdef DEBUG
+    bool debug = true,
+#else
+    bool debug = false
+#endif
     BOOST_CHECK_EQUAL(appInfo.name, PACKAGE_NAME);
     BOOST_CHECK_EQUAL(appInfo.version, PACKAGE_VERSION);
     BOOST_CHECK_EQUAL(appInfo.homepage, PACKAGE_HOMEPAGE_URL);
     BOOST_CHECK_EQUAL(appInfo.bugreport, PACKAGE_BUGREPORT_URL);
     BOOST_CHECK_EQUAL(appInfo.releases, PACKAGE_RELEASES_URL);
-    BOOST_CHECK_EQUAL(appInfo.debug, DEBUG);
+    BOOST_CHECK_EQUAL(appInfo.debug, debug);
 
     const boost::json::object json = EventHandlers::AppInfoToJson(appInfo);
 
