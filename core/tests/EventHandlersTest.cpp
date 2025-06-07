@@ -79,9 +79,9 @@ BOOST_AUTO_TEST_CASE(GetAppInfoHandler)
 {
     const EventHandlers::AppInfo appInfo = EventHandlers::GetAppInfo();
 #ifdef DEBUG
-    bool debug = true,
+    bool debug = true;
 #else
-    bool debug = false
+    bool debug = false;
 #endif
     BOOST_CHECK_EQUAL(appInfo.name, PACKAGE_NAME);
     BOOST_CHECK_EQUAL(appInfo.version, PACKAGE_VERSION);
