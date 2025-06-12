@@ -24,28 +24,51 @@ set(INCLUDES
     ${WebUILibrary_SOURCE_DIR}/include
 )
 
-include(FetchContent)
+if (WIN32)
+    set(WEBUI_LIB ${CMAKE_BINARY_DIR}/core/webui/src/webui-build/${CMAKE_BUILD_TYPE}/webui-2.lib)
+    set(LIBS ${LIBS} msvcrt)
+    set(CMAKE_ARGS ${CMAKE_ARGS}
+        -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        -DCMAKE_MSVC_RUNTIME_LIBRARY=${CMAKE_MSVC_RUNTIME_LIBRARY}
+    )
+else()
+    set(WEBUI_LIB ${CMAKE_BINARY_DIR}/core/webui/src/webui-build/webui-2.a)
+    set(CMAKE_ARGS ${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+endif()
+set(INCLUDES ${INCLUDES} ${CMAKE_BINARY_DIR}/core/webui/src/webui/include)
+
+include(ExternalProject)
 set(FETCHCONTENT_QUIET OFF)
 
-FetchContent_Declare(
+ExternalProject_Add(
     webui
-    GIT_REPOSITORY https://github.com/webui-dev/webui.git
-    GIT_TAG        main
-    TLS_VERIFY 	   TRUE
-    GIT_SHALLOW    TRUE
-    GIT_PROGRESS   TRUE
+    PREFIX           webui
+    GIT_REPOSITORY   https://github.com/webui-dev/webui.git
+    GIT_TAG          2.5.0-beta.3
+    GIT_SHALLOW      TRUE
+    TLS_VERIFY       TRUE
+    BUILD_BYPRODUCTS ${WEBUI_LIB}
+    CMAKE_ARGS		 ${CMAKE_ARGS}
+    INSTALL_COMMAND  ""
+    LOG_DOWNLOAD     ON
+    LOG_UPDATE       ON
+    LOG_CONFIGURE    ON
+    LOG_BUILD        ON
+    LOG_INSTALL      ON
 )
-FetchContent_MakeAvailable(webui)
 
-set(LIBS
+set(LIBS ${LIBS}
     Threads::Threads
     Boost::json
     Boost::nowide
     muparser::muparser
-    webui
+    ${WEBUI_LIB}
 )
 
 add_executable(${TARGET} main.cpp ${SRC})
+add_dependencies(${TARGET} webui)
+
 target_link_libraries(${TARGET} PRIVATE ${LIBS})
 target_include_directories(${TARGET} PRIVATE ${CMAKE_BINARY_DIR} ${INCLUDES})
 target_precompile_headers(${TARGET} PRIVATE pch.h)

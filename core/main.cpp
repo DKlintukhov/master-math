@@ -31,7 +31,14 @@ using namespace Core;
 
 int main(int, char const**)
 {
-    std::locale::global(std::locale(""));
+    try
+    {
+        std::locale::global(std::locale(""));
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
 
     webui::window win;
 
