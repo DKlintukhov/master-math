@@ -22,30 +22,36 @@
 * SOFTWARE.
 */
 
+#ifndef USER_H
+#define USER_H
 
-#ifndef PCH_H
-#define PCH_H
-
-#include <config.h>
-
-#include <locale>
-#include <codecvt>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <chrono>
-#include <random>
 #include <string>
-#include <string_view>
-#include <unordered_map>
-#include <filesystem>
-#include <fstream>
+#include <vector>
 #include <utility>
-#include <ranges>
-
 #include <boost/json.hpp>
-#include <boost/nowide/fstream.hpp>
-#include <muParser.h>
+
+namespace RatingSystem
+{
+    struct User
+    {
+        size_t id;
+        uint32_t score;
+        std::string name;
+    };
+
+    using Users = std::vector<User>;
+
+    boost::json::object ToJson(const User& user);
+    boost::json::object ToJson(const Users& users);
+}
+
+template<>
+struct std::hash<RatingSystem::User>
+{
+    size_t operator()(const RatingSystem::User& user) const noexcept
+    {
+        return std::hash<std::string>{}(user.name);
+    }
+};
 
 #endif

@@ -47,6 +47,7 @@ namespace Core::EventHandlers
         std::string homepage;
         std::string bugreport;
         std::string releases;
+        bool debug;
     };
 
     ExpressionGenerator::Config ParseConfig(const boost::json::value& json);

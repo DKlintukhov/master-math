@@ -22,30 +22,31 @@
 * SOFTWARE.
 */
 
+#include "pch.h"
 
-#ifndef PCH_H
-#define PCH_H
+#include "User.h"
 
-#include <config.h>
+namespace RatingSystem
+{
+    boost::json::object ToJson(const User& user)
+    {
+        boost::json::object json;
+        json["id"] = user.id;
+        json["score"] = user.score;
+        json["name"] = user.name;
+        return json;
+    }
 
-#include <locale>
-#include <codecvt>
-#include <algorithm>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <chrono>
-#include <random>
-#include <string>
-#include <string_view>
-#include <unordered_map>
-#include <filesystem>
-#include <fstream>
-#include <utility>
-#include <ranges>
+    boost::json::object ToJson(const Users& users)
+    {
+        boost::json::object json;
+        boost::json::array usersArr;
+        for (const auto& user : users)
+        {
+            usersArr.push_back(ToJson(user));
+        }
 
-#include <boost/json.hpp>
-#include <boost/nowide/fstream.hpp>
-#include <muParser.h>
-
-#endif
+        json["users"] = std::move(usersArr);
+        return json;
+    }
+}

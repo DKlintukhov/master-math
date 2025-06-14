@@ -1,6 +1,14 @@
 # MasterMath
 MasterMath is an intuitive platform designed for math educators to effortlessly create, customize, and assign timed exercises, quizzes, and problem sets.
 
+## Customer-Specified Requirements
+
+The application must meet the following minimum requirements:
+
+* Operating System Compatibility: The application shall be compatible with Windows 7 and Linux 64-bit.
+* Download Size Optimization: The application’s installation package shall be optimized for minimal size. The target download size shall be less than 5 MiB to ensure accessibility for users with limited bandwidth.
+* Russian language.
+
 ## Building MasterMath on Windows
 
 ### Prerequisites
@@ -45,7 +53,9 @@ vcpkg install muparser:x64-windows-static
 vcpkg install boost-test:x64-windows-static
 ```
 
-3. CMake Configuration and Building
+3. Install [nodejs](https://nodejs.org/)
+
+4. CMake Configuration and Building
 Create a build directory (if you haven’t already):
 
 ```bash
@@ -69,8 +79,26 @@ cmake --build . --config Release
 ```
 
 ## Building MasterMath on POSIX
+### Linux Debian 12 (bookworm)
 
-> comming soon...
+``` bash
+sudo apt install libboost-json1.81-dev libboost-nowide1.81-dev libmuparser-dev
+sudo apt install nodejs npm
+sudo apt install libboost-test1.81-dev # (optional: for testing)
+```
+
+### Linux Debian 13 (trixie)
+``` bash
+sudo apt install libboost-json-dev libboost-nowide-dev libmuparser-dev
+sudo apt install nodejs npm
+sudo apt install libboost-test-dev # (optional: for testing)
+```
+
+### Arch Linux
+``` bash
+sudo pacman -S muparser boost
+sudo pacman -S nodejs npm
+```
 
 # Building the Frontend
 The project includes a frontend component that requires specific build steps. These are defined as CMake targets.

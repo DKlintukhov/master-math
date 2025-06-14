@@ -78,12 +78,17 @@ BOOST_AUTO_TEST_CASE(GenerateExpressionsHandler)
 BOOST_AUTO_TEST_CASE(GetAppInfoHandler)
 {
     const EventHandlers::AppInfo appInfo = EventHandlers::GetAppInfo();
-
+#ifdef DEBUG
+    bool debug = true;
+#else
+    bool debug = false;
+#endif
     BOOST_CHECK_EQUAL(appInfo.name, PACKAGE_NAME);
     BOOST_CHECK_EQUAL(appInfo.version, PACKAGE_VERSION);
     BOOST_CHECK_EQUAL(appInfo.homepage, PACKAGE_HOMEPAGE_URL);
     BOOST_CHECK_EQUAL(appInfo.bugreport, PACKAGE_BUGREPORT_URL);
     BOOST_CHECK_EQUAL(appInfo.releases, PACKAGE_RELEASES_URL);
+    BOOST_CHECK_EQUAL(appInfo.debug, debug);
 
     const boost::json::object json = EventHandlers::AppInfoToJson(appInfo);
 
@@ -96,12 +101,14 @@ BOOST_AUTO_TEST_CASE(GetAppInfoHandler)
     BOOST_REQUIRE(appInfoJson.contains("homepage"));
     BOOST_REQUIRE(appInfoJson.contains("bugreport"));
     BOOST_REQUIRE(appInfoJson.contains("releases"));
+    BOOST_REQUIRE(appInfoJson.contains("debug"));
 
     BOOST_CHECK_EQUAL(appInfoJson.at("name").as_string(), appInfo.name);
     BOOST_CHECK_EQUAL(appInfoJson.at("version").as_string(), appInfo.version);
     BOOST_CHECK_EQUAL(appInfoJson.at("homepage").as_string(), appInfo.homepage);
     BOOST_CHECK_EQUAL(appInfoJson.at("bugreport").as_string(), appInfo.bugreport);
     BOOST_CHECK_EQUAL(appInfoJson.at("releases").as_string(), appInfo.releases);
+    BOOST_CHECK_EQUAL(appInfoJson.at("debug").as_bool(), appInfo.debug);
 }
 
 BOOST_AUTO_TEST_CASE(SaveExerciseHandler)
